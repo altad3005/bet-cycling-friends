@@ -1,0 +1,11 @@
+
+
+> api@0.0.0 test /home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api
+> node ace test
+
+c[ [34minfo[39m ] loading hooks...
+[ [34minfo[39m ] generating indexes...
+[ [34minfo[39m ] codegen: created 5 file(s)
+[ [34minfo[39m ] booting application to run tests...
+
+[43m[30m NO TESTS EXECUTED [49m[39m

@@ -80,22 +80,26 @@ def get_stage_results(slug: str, year: int, stage_number: int) -> list[StageResu
         return []
 
 def get_race_results(slug: str, year: int) -> list[StageResultModel]:
-    try:
-        html = fetch_html(f"race/{slug}/{year}/result")
-        stage = Stage(f"race/{slug}/{year}/result", html=html, update_html=False)
-        results = stage.results()
-        return [
-            StageResultModel(
-                rider_name=r.get("rider_name", ""),
-                rider_url=r.get("rider_url", ""),
-                rank=r.get("rank", 0),
-                team_name=r.get("team_name"),
-                nationality=r.get("nationality"),
-                time=r.get("time"),
-            )
-            for r in results
-            if r.get("rank") and r.get("rank") <= 10
-        ]
-    except Exception as e:
-        logger.error(f"Error fetching race results {slug}/{year}: {e}")
-        return []
+    # One-day races use /result, stage races (GC) use /gc
+    for path_suffix in ("result", "gc"):
+        path = f"race/{slug}/{year}/{path_suffix}"
+        try:
+            html = fetch_html(path)
+            stage = Stage(path, html=html, update_html=False)
+            results = stage.results()
+            return [
+                StageResultModel(
+                    rider_name=r.get("rider_name", ""),
+                    rider_url=r.get("rider_url", ""),
+                    rank=r.get("rank", 0),
+                    team_name=r.get("team_name"),
+                    nationality=r.get("nationality"),
+                    time=r.get("time"),
+                )
+                for r in results
+                if r.get("rank") and r.get("rank") <= 10
+            ]
+        except Exception as e:
+            logger.warning(f"Could not fetch {path}: {e}")
+    logger.error(f"Error fetching race results {slug}/{year}: all paths failed")
+    return []

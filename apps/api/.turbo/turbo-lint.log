@@ -1,0 +1,92 @@
+
+
+> api@0.0.0 lint /home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api
+> eslint .
+
+[0m
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/adonisrc.ts[24m
+  [2m31:44[22m  [31merror[39m  Insert `,`  [2mprettier/prettier[22m
+  [2m58:49[22m  [31merror[39m  Insert `,`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/app/transformers/user_transformer.ts[24m
+  [2m6:38[22m  [31merror[39m  Replace `⏎······'id',⏎······'pseudo',⏎······'email',⏎······'createdAt',⏎······'updatedAt',⏎······'initials',⏎····` with `'id',·'pseudo',·'email',·'createdAt',·'updatedAt',·'initials'`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/config/ally.ts[24m
+  [2m16:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/config/database.ts[24m
+  [2m26:24[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/config/mail.ts[24m
+  [2m25:22[22m  [31merror[39m  Insert `,`                   [2mprettier/prettier[22m
+  [2m33:13[22m  [31merror[39m  Delete `·`                   [2mprettier/prettier[22m
+  [2m37:1[22m   [31merror[39m  Replace `↹↹↹` with `······`  [2mprettier/prettier[22m
+  [2m47:1[22m   [31merror[39m  Delete `↹↹·····⏎`            [2mprettier/prettier[22m
+  [2m55:2[22m   [31merror[39m  Insert `⏎`                   [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002437707_create_seasons_table.ts[24m
+  [2m16:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002439280_create_users_table.ts[24m
+  [2m22:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002440000_create_access_tokens_table.ts[24m
+   [2m9:12[22m  [31merror[39m  Replace `⏎········.uuid('tokenable_id')⏎········.notNullable()⏎········.references('id')⏎········.inTable('users')⏎········` with `.uuid('tokenable_id').notNullable().references('id').inTable('users')`  [2mprettier/prettier[22m
+  [2m29:2[22m   [31merror[39m  Insert `⏎`                                                                                                                                                                                                 [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002441005_create_leagues_table.ts[24m
+  [2m11:12[22m  [31merror[39m  Replace `.integer('season').notNullable().references('year').inTable('seasons')` with `⏎········.integer('season')⏎········.notNullable()⏎········.references('year')⏎········.inTable('seasons')⏎········`  [2mprettier/prettier[22m
+  [2m20:2[22m   [31merror[39m  Insert `⏎`                                                                                                                                                                                                   [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002442611_create_league_members_table.ts[24m
+  [2m21:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002444368_create_riders_table.ts[24m
+  [2m19:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002446215_create_races_table.ts[24m
+   [2m9:12[22m  [31merror[39m  Replace `.integer('season_year').notNullable().references('year').inTable('seasons')` with `⏎········.integer('season_year')⏎········.notNullable()⏎········.references('year')⏎········.inTable('seasons')⏎········`  [2mprettier/prettier[22m
+  [2m28:2[22m   [31merror[39m  Insert `⏎`                                                                                                                                                                                                             [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002447895_create_league_races_table.ts[24m
+  [2m19:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002449428_create_bets_classics_table.ts[24m
+  [2m11:12[22m  [31merror[39m  Replace `.uuid('favorite_rider_id').notNullable().references('id').inTable('riders')` with `⏎········.uuid('favorite_rider_id')⏎········.notNullable()⏎········.references('id')⏎········.inTable('riders')⏎········`  [2mprettier/prettier[22m
+  [2m12:12[22m  [31merror[39m  Replace `.uuid('bonus_rider_id').notNullable().references('id').inTable('riders')` with `⏎········.uuid('bonus_rider_id')⏎········.notNullable()⏎········.references('id')⏎········.inTable('riders')⏎········`        [2mprettier/prettier[22m
+  [2m23:2[22m   [31merror[39m  Insert `⏎`                                                                                                                                                                                                             [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002451443_create_bets_grand_tours_table.ts[24m
+  [2m21:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002453127_create_bets_grand_tour_riders_table.ts[24m
+   [2m9:12[22m  [31merror[39m  Replace `.uuid('bet_id').notNullable().references('id').inTable('bets_grand_tour')` with `⏎········.uuid('bet_id')⏎········.notNullable()⏎········.references('id')⏎········.inTable('bets_grand_tour')⏎········`  [2mprettier/prettier[22m
+  [2m18:2[22m   [31merror[39m  Insert `⏎`                                                                                                                                                                                                         [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002454658_create_scores_table.ts[24m
+  [2m22:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002456299_create_stage_results_table.ts[24m
+  [2m23:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/migrations/1774002457982_create_push_subscriptions_table.ts[24m
+  [2m21:2[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/database/schema.ts[24m
+   [2m11:22[22m  [31merror[39m  Replace `'abilities',·'createdAt',·'expiresAt',·'hash',·'id',·'lastUsedAt',·'name',·'tokenableId',·'type',·'updatedAt'` with `⏎····'abilities',⏎····'createdAt',⏎····'expiresAt',⏎····'hash',⏎····'id',⏎····'lastUsedAt',⏎····'name',⏎····'tokenableId',⏎····'type',⏎····'updatedAt',⏎··`                                                                                                                                      [2mprettier/prettier[22m
+   [2m36:22[22m  [31merror[39m  Replace `'bonusRiderId',·'createdAt',·'favoriteRiderId',·'id',·'placedAt',·'raceId',·'status',·'updatedAt',·'userId'` with `⏎····'bonusRiderId',⏎····'createdAt',⏎····'favoriteRiderId',⏎····'id',⏎····'placedAt',⏎····'raceId',⏎····'status',⏎····'updatedAt',⏎····'userId',⏎··`                                                                                                                                              [2mprettier/prettier[22m
+   [2m59:22[22m  [31merror[39m  Replace `'createdAt',·'id',·'placedAt',·'raceId',·'status',·'updatedAt',·'userId'` with `⏎····'createdAt',⏎····'id',⏎····'placedAt',⏎····'raceId',⏎····'status',⏎····'updatedAt',⏎····'userId',⏎··`                                                                                                                                                                                                                            [2mprettier/prettier[22m
+   [2m89:22[22m  [31merror[39m  Replace `'createdAt',·'id',·'isAdmin',·'joinedAt',·'leagueId',·'updatedAt',·'userId'` with `⏎····'createdAt',⏎····'id',⏎····'isAdmin',⏎····'joinedAt',⏎····'leagueId',⏎····'updatedAt',⏎····'userId',⏎··`                                                                                                                                                                                                                      [2mprettier/prettier[22m
+  [2m140:22[22m  [31merror[39m  Replace `'auth',·'createdAt',·'endpoint',·'id',·'p256Dh',·'updatedAt',·'userId'` with `⏎····'auth',⏎····'createdAt',⏎····'endpoint',⏎····'id',⏎····'p256Dh',⏎····'updatedAt',⏎····'userId',⏎··`                                                                                                                                                                                                                                [2mprettier/prettier[22m
+  [2m159:22[22m  [31merror[39m  Replace `'createdAt',·'endAt',·'id',·'isGrandTour',·'lastSyncedAt',·'multiplierType',·'name',·'raceType',·'resultsFinal',·'seasonYear',·'slug',·'startAt',·'status',·'updatedAt'` with `⏎····'createdAt',⏎····'endAt',⏎····'id',⏎····'isGrandTour',⏎····'lastSyncedAt',⏎····'multiplierType',⏎····'name',⏎····'raceType',⏎····'resultsFinal',⏎····'seasonYear',⏎····'slug',⏎····'startAt',⏎····'status',⏎····'updatedAt',⏎··`  [2mprettier/prettier[22m
+  [2m209:22[22m  [31merror[39m  Replace `'id',·'leagueId',·'maxPossible',·'points',·'raceId',·'updatedAt',·'userId'` with `⏎····'id',⏎····'leagueId',⏎····'maxPossible',⏎····'points',⏎····'raceId',⏎····'updatedAt',⏎····'userId',⏎··`                                                                                                                                                                                                                        [2mprettier/prettier[22m
+  [2m239:22[22m  [31merror[39m  Replace `'createdAt',·'id',·'raceId',·'rank',·'resultAt',·'resultType',·'riderId',·'stageNumber',·'updatedAt'` with `⏎····'createdAt',⏎····'id',⏎····'raceId',⏎····'rank',⏎····'resultAt',⏎····'resultType',⏎····'riderId',⏎····'stageNumber',⏎····'updatedAt',⏎··`                                                                                                                                                            [2mprettier/prettier[22m
+  [2m262:22[22m  [31merror[39m  Replace `'createdAt',·'email',·'googleId',·'icon',·'id',·'notificationsEnabled',·'passwordHash',·'pseudo',·'updatedAt'` with `⏎····'createdAt',⏎····'email',⏎····'googleId',⏎····'icon',⏎····'id',⏎····'notificationsEnabled',⏎····'passwordHash',⏎····'pseudo',⏎····'updatedAt',⏎··`                                                                                                                                          [2mprettier/prettier[22m
+
+[4m/home/altad/Code/Project/BetCyclingFriends/bet-cycling-friends/apps/api/start/env.ts[24m
+  [2m33:3[22m  [31merror[39m  Insert `⏎`  [2mprettier/prettier[22m
+
+[31m[1m✖ 40 problems (40 errors, 0 warnings)[22m[39m
+[31m[1m  40 errors and 0 warnings potentially fixable with the `--fix` option.[22m[39m
+[0m
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m
