@@ -14,4 +14,5 @@ export const controllers = {
   PasswordReset: () => import('#controllers/password_reset_controller'),
   Profile: () => import('#controllers/profile_controller'),
   Race: () => import('#controllers/race_controller'),
+  Standings: () => import('#controllers/standings_controller'),
 }

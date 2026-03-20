@@ -69,5 +69,16 @@ router
     router
       .get('/leagues/:id/races/:raceId/bets', [controllers.Bet, 'leagueBets'])
       .use(middleware.auth())
+
+    router
+      .group(() => {
+        router.get('/:id/standings', [controllers.Standings, 'leagueStandings'])
+        router.get('/:id/races/:raceId/standings', [controllers.Standings, 'raceStandings'])
+        router.get('/:id/races/:raceId/stage/:n/standings', [controllers.Standings, 'stageStandings'])
+      })
+      .prefix('leagues')
+      .use(middleware.auth())
+
+    router.get('/standings/global', [controllers.Standings, 'globalStandings'])
   })
   .prefix('/api')
