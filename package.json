@@ -12,6 +12,7 @@
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down"
   },
+  "packageManager": "pnpm@9.15.9",
   "devDependencies": {
     "turbo": "^2.0.0",
     "typescript": "^5.4.0"
