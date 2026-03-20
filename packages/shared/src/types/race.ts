@@ -1,4 +1,4 @@
-import { RaceType, MultiplierType, RaceStatus } from '../enums'
+import { RaceType, MultiplierType, RaceStatus } from '../enums.js'
 
 export interface RaceResponse {
   id: string

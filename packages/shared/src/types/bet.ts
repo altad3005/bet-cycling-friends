@@ -1,4 +1,4 @@
-import { BetStatus } from '../enums'
+import { BetStatus } from '../enums.js'
 
 export interface BetClassicResponse {
   id: string

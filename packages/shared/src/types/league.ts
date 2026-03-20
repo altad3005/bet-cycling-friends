@@ -1,4 +1,4 @@
-import { UserResponse } from './user'
+import { UserResponse } from './user.js'
 
 export interface LeagueResponse {
   id: string

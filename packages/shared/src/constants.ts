@@ -1,4 +1,4 @@
-import { MultiplierType } from './enums'
+import { MultiplierType } from './enums.js'
 
 export const SCORING_TABLE: Record<number, number> = {
   1: 100,

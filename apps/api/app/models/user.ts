@@ -11,7 +11,10 @@ import BetGrandTour from '#models/bet_grand_tour'
 import Score from '#models/score'
 import PushSubscription from '#models/push_subscription'
 
-export default class User extends compose(UserSchema, withAuthFinder(hash)) {
+export default class User extends compose(
+  UserSchema,
+  withAuthFinder(hash, { uids: ['email'], passwordColumnName: 'passwordHash' })
+) {
   static accessTokens = DbAccessTokensProvider.forModel(User)
   declare currentAccessToken?: AccessToken
 
