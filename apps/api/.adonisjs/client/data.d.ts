@@ -5,11 +5,22 @@
 
 /// <reference path="./manifest.d.ts" />
 import type { InferData, InferVariants } from '@adonisjs/core/types/transformers'
+import type BetClassicTransformer from '#transformers/bet_classic_transformer'
+import type BetGrandTourTransformer from '#transformers/bet_grand_tour_transformer'
 import type LeagueMemberTransformer from '#transformers/league_member_transformer'
 import type LeagueTransformer from '#transformers/league_transformer'
+import type RaceTransformer from '#transformers/race_transformer'
 import type UserTransformer from '#transformers/user_transformer'
 
 export namespace Data {
+  export type BetClassic = InferData<BetClassicTransformer>
+  export namespace BetClassic {
+    export type Variants = InferVariants<BetClassicTransformer>
+  }
+  export type BetGrandTour = InferData<BetGrandTourTransformer>
+  export namespace BetGrandTour {
+    export type Variants = InferVariants<BetGrandTourTransformer>
+  }
   export type LeagueMember = InferData<LeagueMemberTransformer>
   export namespace LeagueMember {
     export type Variants = InferVariants<LeagueMemberTransformer>
@@ -17,6 +28,10 @@ export namespace Data {
   export type League = InferData<LeagueTransformer>
   export namespace League {
     export type Variants = InferVariants<LeagueTransformer>
+  }
+  export type Race = InferData<RaceTransformer>
+  export namespace Race {
+    export type Variants = InferVariants<RaceTransformer>
   }
   export type User = InferData<UserTransformer>
   export namespace User {

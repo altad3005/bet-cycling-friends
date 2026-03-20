@@ -80,5 +80,9 @@ router
       .use(middleware.auth())
 
     router.get('/standings/global', [controllers.Standings, 'globalStandings'])
+
+    router
+      .post('/admin/races/:id/sync', [controllers.RaceSync, 'sync'])
+      .use(middleware.auth())
   })
   .prefix('/api')
