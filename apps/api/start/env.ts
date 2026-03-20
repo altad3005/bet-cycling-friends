@@ -30,4 +30,6 @@ export default await Env.create(new URL('../', import.meta.url), {
   VAPID_SUBJECT: Env.schema.string.optional(),
 
   PCS_SERVICE_URL: Env.schema.string(),
+
+  FRONTEND_URL: Env.schema.string(),
 })

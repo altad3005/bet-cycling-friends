@@ -5,6 +5,10 @@
 
 export const controllers = {
   AccessToken: () => import('#controllers/access_token_controller'),
+  GoogleAuth: () => import('#controllers/google_auth_controller'),
+  League: () => import('#controllers/league_controller'),
+  LeagueMember: () => import('#controllers/league_member_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
+  PasswordReset: () => import('#controllers/password_reset_controller'),
   Profile: () => import('#controllers/profile_controller'),
 }
