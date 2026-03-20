@@ -2,11 +2,15 @@
   "name": "betcyclingfriends",
   "private": true,
   "scripts": {
-    "dev": "turbo dev",
+    "dev": "docker compose -f docker-compose.dev.yml up -d && turbo dev",
+    "dev:infra": "docker compose -f docker-compose.dev.yml up -d",
+    "dev:infra:down": "docker compose -f docker-compose.dev.yml down",
     "build": "turbo build",
     "test": "turbo test",
     "lint": "turbo lint",
-    "migrate": "pnpm --filter api node ace migration:run"
+    "migrate": "pnpm --filter @bcf/api exec node ace migration:run",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
   },
   "devDependencies": {
     "turbo": "^2.0.0",
