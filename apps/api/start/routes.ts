@@ -56,5 +56,18 @@ router
       .use(middleware.auth())
 
     router.get('/races/preview', [controllers.Race, 'preview']).use(middleware.auth())
+
+    router
+      .group(() => {
+        router.get('/:id/bet', [controllers.Bet, 'show'])
+        router.post('/:id/bet', [controllers.Bet, 'storeClassic'])
+        router.post('/:id/bet/grandtour', [controllers.Bet, 'storeGrandTour'])
+      })
+      .prefix('races')
+      .use(middleware.auth())
+
+    router
+      .get('/leagues/:id/races/:raceId/bets', [controllers.Bet, 'leagueBets'])
+      .use(middleware.auth())
   })
   .prefix('/api')
