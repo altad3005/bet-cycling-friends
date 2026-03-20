@@ -48,8 +48,13 @@ router
         router.get('/:id/members', [controllers.LeagueMember, 'index'])
         router.patch('/:id/members/:userId', [controllers.LeagueMember, 'update'])
         router.delete('/:id/members/:userId', [controllers.LeagueMember, 'destroy'])
+        router.get('/:id/races', [controllers.LeagueRace, 'index'])
+        router.post('/:id/races', [controllers.LeagueRace, 'store'])
+        router.delete('/:id/races/:raceId', [controllers.LeagueRace, 'destroy'])
       })
       .prefix('leagues')
       .use(middleware.auth())
+
+    router.get('/races/preview', [controllers.Race, 'preview']).use(middleware.auth())
   })
   .prefix('/api')

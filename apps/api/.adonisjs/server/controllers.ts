@@ -8,7 +8,9 @@ export const controllers = {
   GoogleAuth: () => import('#controllers/google_auth_controller'),
   League: () => import('#controllers/league_controller'),
   LeagueMember: () => import('#controllers/league_member_controller'),
+  LeagueRace: () => import('#controllers/league_race_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   PasswordReset: () => import('#controllers/password_reset_controller'),
   Profile: () => import('#controllers/profile_controller'),
+  Race: () => import('#controllers/race_controller'),
 }
