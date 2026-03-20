@@ -25,26 +25,258 @@ export class AuthAccessTokenSchema extends BaseModel {
   @column()
   declare name: string | null
   @column()
-  declare tokenableId: number
+  declare tokenableId: string
   @column()
   declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
 
+export class BetsClassicSchema extends BaseModel {
+  static $columns = ['bonusRiderId', 'createdAt', 'favoriteRiderId', 'id', 'placedAt', 'raceId', 'status', 'updatedAt', 'userId'] as const
+  $columns = BetsClassicSchema.$columns
+  @column()
+  declare bonusRiderId: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare favoriteRiderId: string
+  @column({ isPrimary: true })
+  declare id: string
+  @column.dateTime()
+  declare placedAt: DateTime
+  @column()
+  declare raceId: string
+  @column()
+  declare status: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: string
+}
+
+export class BetsGrandTourSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'placedAt', 'raceId', 'status', 'updatedAt', 'userId'] as const
+  $columns = BetsGrandTourSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column.dateTime()
+  declare placedAt: DateTime
+  @column()
+  declare raceId: string
+  @column()
+  declare status: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: string
+}
+
+export class BetsGrandTourRiderSchema extends BaseModel {
+  static $columns = ['betId', 'id', 'riderId'] as const
+  $columns = BetsGrandTourRiderSchema.$columns
+  @column()
+  declare betId: string
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare riderId: string
+}
+
+export class LeagueMemberSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'isAdmin', 'joinedAt', 'leagueId', 'updatedAt', 'userId'] as const
+  $columns = LeagueMemberSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare isAdmin: boolean
+  @column.dateTime()
+  declare joinedAt: DateTime
+  @column()
+  declare leagueId: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: string
+}
+
+export class LeagueRaceSchema extends BaseModel {
+  static $columns = ['addedAt', 'id', 'leagueId', 'raceId'] as const
+  $columns = LeagueRaceSchema.$columns
+  @column.dateTime()
+  declare addedAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare leagueId: string
+  @column()
+  declare raceId: string
+}
+
+export class LeagueSchema extends BaseModel {
+  static $columns = ['code', 'createdAt', 'createdBy', 'id', 'name', 'season', 'updatedAt'] as const
+  $columns = LeagueSchema.$columns
+  @column()
+  declare code: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare createdBy: string
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare name: string
+  @column()
+  declare season: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class PushSubscriptionSchema extends BaseModel {
+  static $columns = ['auth', 'createdAt', 'endpoint', 'id', 'p256Dh', 'updatedAt', 'userId'] as const
+  $columns = PushSubscriptionSchema.$columns
+  @column()
+  declare auth: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare endpoint: string
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare p256Dh: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: string
+}
+
+export class RaceSchema extends BaseModel {
+  static $columns = ['createdAt', 'endAt', 'id', 'isGrandTour', 'lastSyncedAt', 'multiplierType', 'name', 'raceType', 'resultsFinal', 'seasonYear', 'slug', 'startAt', 'status', 'updatedAt'] as const
+  $columns = RaceSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare endAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare isGrandTour: boolean
+  @column.dateTime()
+  declare lastSyncedAt: DateTime | null
+  @column()
+  declare multiplierType: string
+  @column()
+  declare name: string
+  @column()
+  declare raceType: string
+  @column()
+  declare resultsFinal: boolean
+  @column()
+  declare seasonYear: number
+  @column()
+  declare slug: string
+  @column.dateTime()
+  declare startAt: DateTime | null
+  @column()
+  declare status: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class RiderSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'name', 'nationality', 'pcsUrl', 'updatedAt'] as const
+  $columns = RiderSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare name: string
+  @column()
+  declare nationality: string | null
+  @column()
+  declare pcsUrl: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class ScoreSchema extends BaseModel {
+  static $columns = ['id', 'leagueId', 'maxPossible', 'points', 'raceId', 'updatedAt', 'userId'] as const
+  $columns = ScoreSchema.$columns
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare leagueId: string
+  @column()
+  declare maxPossible: number
+  @column()
+  declare points: number
+  @column()
+  declare raceId: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: string
+}
+
+export class SeasonSchema extends BaseModel {
+  static $columns = ['createdAt', 'updatedAt', 'year'] as const
+  $columns = SeasonSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column({ isPrimary: true })
+  declare year: number
+}
+
+export class StageResultSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'raceId', 'rank', 'resultAt', 'resultType', 'riderId', 'stageNumber', 'updatedAt'] as const
+  $columns = StageResultSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare raceId: string
+  @column()
+  declare rank: number
+  @column.dateTime()
+  declare resultAt: DateTime | null
+  @column()
+  declare resultType: string
+  @column()
+  declare riderId: string
+  @column()
+  declare stageNumber: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = ['createdAt', 'email', 'googleId', 'icon', 'id', 'notificationsEnabled', 'passwordHash', 'pseudo', 'updatedAt'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
   declare email: string
   @column()
-  declare fullName: string | null
+  declare googleId: string | null
+  @column()
+  declare icon: string
   @column({ isPrimary: true })
-  declare id: number
-  @column({ serializeAs: null })
-  declare password: string
+  declare id: string
+  @column()
+  declare notificationsEnabled: boolean
+  @column()
+  declare passwordHash: string | null
+  @column()
+  declare pseudo: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
+  declare updatedAt: DateTime
 }

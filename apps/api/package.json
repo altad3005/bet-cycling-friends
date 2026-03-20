@@ -73,6 +73,7 @@
     "bullmq": "^5.71.0",
     "ioredis": "^5.10.1",
     "luxon": "^3.7.2",
+    "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
     "web-push": "^3.6.7"
   },
