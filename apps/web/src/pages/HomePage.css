@@ -312,6 +312,50 @@
 
 .content { padding: 1.5rem 1.75rem; flex: 1; overflow-y: auto; }
 
+/* ── Next race banner ─────────────────────────── */
+.next-race-banner {
+  background: #131318;
+  border: 0.5px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 14px 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.next-race-banner:hover { border-color: rgba(255, 255, 255, 0.12); }
+.next-race-banner.live {
+  background: rgba(74, 222, 128, 0.05);
+  border-color: rgba(74, 222, 128, 0.25);
+}
+
+.next-race-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.next-race-dot.live     { background: #4ade80; box-shadow: 0 0 6px rgba(74, 222, 128, 0.5); }
+.next-race-dot.upcoming { background: rgba(232, 201, 109, 0.7); }
+.next-race-dot.done     { background: rgba(255, 255, 255, 0.15); }
+
+.next-race-info { flex: 1; min-width: 0; }
+.next-race-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #f0ede8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.next-race-date {
+  font-size: 11px;
+  color: rgba(240, 237, 232, 0.3);
+  margin-top: 2px;
+}
+
 /* ── Alerts ───────────────────────────────────── */
 .urgent-bar {
   background: rgba(232, 100, 80, 0.07);
