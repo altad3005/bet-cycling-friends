@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { MultiplierType } from '@bcf/shared'
+import { MultiplierType, RaceStatus } from '@bcf/shared'
 import { leaguesApi } from '../api/leagues'
-import { racesApi, type RacePreview } from '../api/races'
+import { racesApi, type RacePreview, type RaceResponse } from '../api/races'
 import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
 import AppShell from '../components/AppShell'
@@ -132,6 +132,88 @@ function MembersTab({ leagueId }: { leagueId: string }) {
   )
 }
 
+// ── Sync panel (per race) ─────────────────────────────────────────────────
+
+function SyncPanel({ race }: { race: RaceResponse }) {
+  const queryClient = useQueryClient()
+  const [open, setOpen] = useState(false)
+
+  const { data: stagesData } = useQuery({
+    queryKey: ['stages', race.id],
+    queryFn: () => racesApi.stages(race.id).then((r) => r.data.data),
+    enabled: race.isGrandTour && open,
+  })
+
+  const syncMutation = useMutation({
+    mutationFn: (stageNumber?: number) => racesApi.sync(race.id, stageNumber),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stages', race.id] })
+      queryClient.invalidateQueries({ queryKey: ['races', 'league'] })
+    },
+  })
+
+  const canSync = race.status === RaceStatus.LIVE || race.status === RaceStatus.FINISHED
+
+  if (!canSync) return null
+
+  if (!race.isGrandTour) {
+    return (
+      <button
+        className="amr-btn ghost"
+        onClick={() => syncMutation.mutate(undefined)}
+        disabled={syncMutation.isPending}
+        title="Synchroniser les résultats depuis PCS"
+      >
+        {syncMutation.isPending ? 'Envoi…' : syncMutation.isSuccess ? '✓ Envoyé' : 'Syncer'}
+      </button>
+    )
+  }
+
+  return (
+    <div className="sync-gt-wrap">
+      <button className="amr-btn ghost" onClick={() => setOpen((v) => !v)}>
+        {open ? 'Fermer' : 'Syncer étapes'}
+      </button>
+      {open && (
+        <div className="sync-gt-panel">
+          {!stagesData ? (
+            <div className="admin-loading" style={{ padding: '0.5rem' }}>Chargement…</div>
+          ) : (
+            <>
+              <div className="sync-gt-list">
+                {stagesData.stages.map((s) => (
+                  <div key={s.number} className="sync-gt-row">
+                    <span className="sync-gt-num">{s.number}</span>
+                    <span className="sync-gt-name">{s.name}</span>
+                    {s.synced && <span className="sync-badge done">✓</span>}
+                    <button
+                      className="amr-btn ghost"
+                      style={{ fontSize: 11, padding: '2px 10px' }}
+                      onClick={() => syncMutation.mutate(s.number)}
+                      disabled={syncMutation.isPending}
+                    >
+                      Syncer
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="sync-gt-gc-row">
+                <button
+                  className="amr-btn ghost"
+                  onClick={() => syncMutation.mutate()}
+                  disabled={syncMutation.isPending}
+                >
+                  {syncMutation.isPending ? 'Envoi…' : 'Syncer GC final'}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Calendar tab ─────────────────────────────────────────────────────────
 
 function CalendarTab({ leagueId }: { leagueId: string }) {
@@ -238,25 +320,28 @@ function CalendarTab({ leagueId }: { leagueId: string }) {
                 <div className={`race-mult ${multClass(race.multiplierType)}`}>
                   {multLabel(race.multiplierType)}
                 </div>
-                {isRemoving ? (
-                  <div className="arr-actions">
-                    <span className="amr-confirm-txt">Retirer ?</span>
-                    <button
-                      className="amr-btn danger"
-                      onClick={() => removeMutation.mutate(race.id)}
-                      disabled={removeMutation.isPending}
-                    >
-                      Confirmer
+                <div className="arr-actions">
+                  <SyncPanel race={race} />
+                  {isRemoving ? (
+                    <>
+                      <span className="amr-confirm-txt">Retirer ?</span>
+                      <button
+                        className="amr-btn danger"
+                        onClick={() => removeMutation.mutate(race.id)}
+                        disabled={removeMutation.isPending}
+                      >
+                        Confirmer
+                      </button>
+                      <button className="amr-btn ghost" onClick={() => setConfirmRemove(null)}>
+                        Annuler
+                      </button>
+                    </>
+                  ) : (
+                    <button className="amr-btn danger-ghost" onClick={() => setConfirmRemove(race.id)}>
+                      Retirer
                     </button>
-                    <button className="amr-btn ghost" onClick={() => setConfirmRemove(null)}>
-                      Annuler
-                    </button>
-                  </div>
-                ) : (
-                  <button className="amr-btn danger-ghost" onClick={() => setConfirmRemove(race.id)}>
-                    Retirer
-                  </button>
-                )}
+                  )}
+                </div>
               </div>
             )
           })}

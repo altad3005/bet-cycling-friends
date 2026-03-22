@@ -100,6 +100,12 @@ export default function RacePage() {
     enabled: !!activeLeague && !!raceId && selectedStage !== null,
   })
 
+  const { data: raceResults } = useQuery({
+    queryKey: ['results', raceId],
+    queryFn: () => racesApi.results(raceId!).then((r) => r.data.data.results),
+    enabled: !!raceId && race?.status === RaceStatus.FINISHED,
+  })
+
   if (!race) return null
 
   const type   = typeLabel(race)
@@ -206,6 +212,23 @@ export default function RacePage() {
                   })}
                 </div>
               )}
+            </section>
+          )}
+
+          {/* ── Résultats de la course ── */}
+          {race.status === RaceStatus.FINISHED && raceResults && raceResults.length > 0 && (
+            <section className="race-section">
+              <div className="race-section-title">
+                {race.isGrandTour ? 'Classement général final' : 'Top 10'}
+              </div>
+              <div className="race-results">
+                {raceResults.map((r) => (
+                  <div key={r.riderId} className="race-result-row">
+                    <div className="rr-rank">{r.rank}</div>
+                    <div className="rr-name">{r.name}</div>
+                  </div>
+                ))}
+              </div>
             </section>
           )}
 

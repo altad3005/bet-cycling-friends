@@ -295,6 +295,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/race_controller').default['stages']>>>
     }
   }
+  'race.results': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/races/:id/results'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/race_controller').default['results']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/race_controller').default['results']>>>
+    }
+  }
   'bet.show': {
     methods: ["GET","HEAD"]
     pattern: '/api/races/:id/bet'

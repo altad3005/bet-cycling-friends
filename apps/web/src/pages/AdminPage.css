@@ -225,3 +225,67 @@
   .admin-add-race-form { flex-direction: column; align-items: stretch; }
   .admin-preview-card { flex-direction: column; align-items: flex-start; }
 }
+
+/* ── Sync panel ── */
+.sync-gt-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.sync-gt-panel {
+  background: #0e0e13;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 300px;
+}
+
+.sync-gt-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.sync-gt-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+}
+
+.sync-gt-row:last-child {
+  border-bottom: none;
+}
+
+.sync-gt-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(240, 237, 232, 0.25);
+  min-width: 16px;
+  text-align: right;
+}
+
+.sync-gt-name {
+  flex: 1;
+  font-size: 12px;
+  color: rgba(240, 237, 232, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sync-badge.done {
+  font-size: 10px;
+  color: #5cb85c;
+}
+
+.sync-gt-gc-row {
+  padding: 8px 10px;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: flex-end;
+}

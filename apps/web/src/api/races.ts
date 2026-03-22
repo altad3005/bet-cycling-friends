@@ -58,4 +58,10 @@ export const racesApi = {
 
   stages: (raceId: string) =>
     api.get<{ data: { stageCount: number; stages: RaceStage[] } }>(`/races/${raceId}/stages`),
+
+  sync: (raceId: string, stageNumber?: number) =>
+    api.post(`/admin/races/${raceId}/sync`, stageNumber !== undefined ? { stageNumber } : {}),
+
+  results: (raceId: string) =>
+    api.get<{ data: { results: { rank: number; riderId: string; name: string }[] } }>(`/races/${raceId}/results`),
 }

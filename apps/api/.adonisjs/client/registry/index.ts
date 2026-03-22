@@ -150,6 +150,12 @@ const routes = {
     tokens: [{"old":"/api/races/:id/stages","type":0,"val":"api","end":""},{"old":"/api/races/:id/stages","type":0,"val":"races","end":""},{"old":"/api/races/:id/stages","type":1,"val":"id","end":""},{"old":"/api/races/:id/stages","type":0,"val":"stages","end":""}],
     types: placeholder as Registry['race.stages']['types'],
   },
+  'race.results': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/races/:id/results',
+    tokens: [{"old":"/api/races/:id/results","type":0,"val":"api","end":""},{"old":"/api/races/:id/results","type":0,"val":"races","end":""},{"old":"/api/races/:id/results","type":1,"val":"id","end":""},{"old":"/api/races/:id/results","type":0,"val":"results","end":""}],
+    types: placeholder as Registry['race.results']['types'],
+  },
   'bet.show': {
     methods: ["GET","HEAD"],
     pattern: '/api/races/:id/bet',

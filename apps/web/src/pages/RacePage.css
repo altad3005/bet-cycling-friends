@@ -471,3 +471,37 @@
   color: rgba(240, 237, 232, 0.3);
   font-weight: 400;
 }
+
+/* ── Race results ── */
+.race-results {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.race-result-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rr-rank {
+  min-width: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: rgba(240, 237, 232, 0.4);
+  text-align: right;
+}
+
+.race-result-row:nth-child(1) .rr-rank { color: #e8c96d; }
+.race-result-row:nth-child(2) .rr-rank { color: rgba(240, 237, 232, 0.7); }
+.race-result-row:nth-child(3) .rr-rank { color: #c07b4a; }
+
+.rr-name {
+  font-size: 13px;
+  color: rgba(240, 237, 232, 0.85);
+}
