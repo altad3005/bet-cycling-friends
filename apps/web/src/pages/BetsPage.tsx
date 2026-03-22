@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { RaceStatus, BetStatus, MultiplierType } from '@bcf/shared'
 import { racesApi, type RaceResponse } from '../api/races'
 import { betsApi, type BetClassicResponse, type BetGrandTourResponse } from '../api/bets'
@@ -7,6 +7,7 @@ import { standingsApi } from '../api/standings'
 import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
 import AppShell from '../components/AppShell'
+import BetModal from '../components/betting/BetModal'
 import './HomePage.css'
 import './BetsPage.css'
 
@@ -90,11 +91,18 @@ function BetDetail({ race }: { race: RaceResponse }) {
 
 // ── Race bet card ──────────────────────────────────────────────────────
 
-function BetCard({ race, tab }: { race: RaceResponse; tab: Tab }) {
+function BetCard({ race, tab, onBet }: { race: RaceResponse; tab: Tab; onBet?: () => void }) {
   const [expanded, setExpanded] = useState(false)
   const urgent = isUrgent(race)
   const mult = multProps(race)
   const canExpand = tab !== 'upcoming'
+
+  const { data: existingBet } = useQuery({
+    queryKey: ['bet', race.id],
+    queryFn: () => betsApi.myBet(race.id).then((r) => r.data.data.bet),
+    enabled: tab === 'upcoming',
+  })
+  const hasBet = !!existingBet
 
   const dotClass = tab === 'live' ? 'live' : tab === 'upcoming' ? 'upcoming' : 'done'
   const nameClass = tab === 'finished' ? 'dim' : ''
@@ -121,10 +129,12 @@ function BetCard({ race, tab }: { race: RaceResponse; tab: Tab }) {
 
         {tab === 'upcoming' && (
           <button
-            className={`bet-cta ${urgent ? 'urgent' : 'primary'}`}
-            onClick={(e) => e.stopPropagation()}
+            className={`bet-cta ${urgent && !hasBet ? 'urgent' : hasBet ? 'ghost' : 'primary'}`}
+            onClick={(e) => { e.stopPropagation(); onBet?.() }}
           >
-            {urgent ? 'Urgent — Parier' : 'Parier'}
+            {hasBet
+              ? urgent ? '⚠ Modifier avant départ' : 'Modifier mon pari'
+              : urgent ? 'Urgent — Parier' : 'Parier'}
           </button>
         )}
 
@@ -158,6 +168,7 @@ export default function BetsPage() {
   const user = useAuthStore((s) => s.user)
   const { activeLeague } = useLeague()
   const [tab, setTab] = useState<Tab>('upcoming')
+  const [selectedRace, setSelectedRace] = useState<RaceResponse | null>(null)
 
   const { data: races } = useQuery({
     queryKey: ['races', 'league', activeLeague?.id],
@@ -188,6 +199,7 @@ export default function BetsPage() {
   ]
 
   return (
+    <>
     <AppShell activePage="bets" pageTitle="Mes pronostics">
 
       {/* ── Stats ── */}
@@ -251,10 +263,15 @@ export default function BetsPage() {
         </div>
       ) : (
         grouped[tab].map((race) => (
-          <BetCard key={race.id} race={race} tab={tab} />
+          <BetCard key={race.id} race={race} tab={tab} onBet={() => setSelectedRace(race)} />
         ))
       )}
 
     </AppShell>
+
+    {selectedRace && (
+      <BetModal race={selectedRace} onClose={() => setSelectedRace(null)} />
+    )}
+    </>
   )
 }

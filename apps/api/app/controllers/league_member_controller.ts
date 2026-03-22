@@ -10,7 +10,7 @@ export default class LeagueMemberController {
       .where('league_id', params.id)
       .preload('user')
       .orderBy('joined_at', 'asc')
-    return serialize({ members: members.map((m) => LeagueMemberTransformer.transform(m)) })
+    return serialize({ members: LeagueMemberTransformer.transform(members) })
   }
 
   async update({ params, request, auth, serialize }: HttpContext) {

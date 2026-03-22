@@ -90,9 +90,9 @@
   flex-shrink: 0;
   justify-self: center;
 }
-.cal-dot.upcoming { background: rgba(255, 255, 255, 0.15); }
+.cal-dot.upcoming { background: rgba(232, 201, 109, 0.7); }
 .cal-dot.live { background: #4ade80; box-shadow: 0 0 6px rgba(74, 222, 128, 0.5); }
-.cal-dot.finished { background: rgba(255, 255, 255, 0.06); }
+.cal-dot.finished { background: rgba(255, 255, 255, 0.1); }
 
 /* ── Race info ────────────────────────────────── */
 .cal-info { min-width: 0; }

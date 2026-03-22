@@ -1,3 +1,4 @@
+import Race from '#models/race'
 import RaceService from '#services/race_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -10,5 +11,11 @@ export default class RaceController {
 
     const raceInfo = await new RaceService().preview(slug)
     return response.ok({ race: raceInfo })
+  }
+
+  async startlist({ params, serialize }: HttpContext) {
+    const race = await Race.findOrFail(params.id)
+    const riders = await new RaceService().getStartlist(race)
+    return serialize({ riders })
   }
 }

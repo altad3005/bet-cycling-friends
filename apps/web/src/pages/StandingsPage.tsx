@@ -56,8 +56,8 @@ export default function StandingsPage() {
     return Math.max(...(rawRows as LeagueStanding[]).map((r) => r.totalPoints), 1)
   }, [rawRows, isGlobal])
 
-  // Top 3 + ma position pour le hero
-  const top3 = rawRows?.slice(0, 3) ?? []
+  // Top 3 + ma position pour le hero (uniquement joueurs ayant au moins 1 course scorée)
+  const top3 = (rawRows?.filter((r) => r.racesPlayed > 0) ?? []).slice(0, 3)
   const myRow = rawRows?.find((r) => r.userId === user?.id)
   const myVal = myRow && (isGlobal ? (myRow as GlobalStanding).percentage : (myRow as LeagueStanding).totalPoints)
 
@@ -143,7 +143,7 @@ export default function StandingsPage() {
 
         {filtered.length === 0 ? (
           <div className="empty-results">
-            {search ? `Aucun joueur trouvé pour « ${search} »` : 'Aucune donnée disponible.'}
+            {search ? `Aucun joueur trouvé pour « ${search} »` : 'Aucun joueur enregistré.'}
           </div>
         ) : (
           filtered.map((row, i) => {

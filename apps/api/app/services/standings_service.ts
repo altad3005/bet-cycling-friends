@@ -7,18 +7,21 @@ import LeagueMember from '#models/league_member'
 export default class StandingsService {
   async getLeagueStandings(leagueId: string) {
     const rows = await db
-      .from('scores')
-      .join('users', 'users.id', 'scores.user_id')
-      .where('scores.league_id', leagueId)
-      .groupBy('scores.user_id', 'users.pseudo', 'users.icon')
+      .from('league_members as lm')
+      .join('users', 'users.id', 'lm.user_id')
+      .leftJoin('scores', (q) =>
+        q.on('scores.user_id', 'lm.user_id').andOnVal('scores.league_id', leagueId)
+      )
+      .where('lm.league_id', leagueId)
+      .groupBy('lm.user_id', 'users.pseudo', 'users.icon')
       .select([
-        'scores.user_id as user_id',
+        'lm.user_id as user_id',
         'users.pseudo',
         'users.icon',
-        db.raw('SUM(scores.points) as total_points'),
+        db.raw('COALESCE(SUM(scores.points), 0) as total_points'),
         db.raw('COUNT(scores.race_id) as races_played'),
       ])
-      .orderByRaw('SUM(scores.points) DESC, COUNT(scores.race_id) DESC')
+      .orderByRaw('COALESCE(SUM(scores.points), 0) DESC, COUNT(scores.race_id) DESC')
 
     return this.withSharedRanks(
       rows.map((row) => ({
@@ -118,21 +121,25 @@ export default class StandingsService {
       rows: { user_id: string; pseudo: string; icon: string; total_points: number; total_max: number; races_played: number }[]
     }>(`
       SELECT
-        u.id         AS user_id,
+        u.id                          AS user_id,
         u.pseudo,
         u.icon,
-        SUM(s.points)       AS total_points,
-        SUM(s.max_possible) AS total_max,
-        COUNT(*)            AS races_played
-      FROM (
-        SELECT DISTINCT ON (user_id, race_id) user_id, race_id, points, max_possible
+        COALESCE(SUM(s.points), 0)       AS total_points,
+        COALESCE(SUM(s.max_possible), 0) AS total_max,
+        COUNT(DISTINCT s.race_id)        AS races_played
+      FROM users u
+      LEFT JOIN LATERAL (
+        SELECT DISTINCT ON (race_id) race_id, points, max_possible
         FROM scores
-        ORDER BY user_id, race_id
-      ) s
-      JOIN users u ON u.id = s.user_id
-      WHERE s.max_possible > 0
+        WHERE user_id = u.id
+        ORDER BY race_id
+      ) s ON true
+      WHERE EXISTS (SELECT 1 FROM league_members lm WHERE lm.user_id = u.id)
       GROUP BY u.id, u.pseudo, u.icon
-      ORDER BY (SUM(s.points) / NULLIF(SUM(s.max_possible), 0)) DESC, COUNT(*) DESC
+      ORDER BY
+        (COALESCE(SUM(s.points), 0) / NULLIF(COALESCE(SUM(s.max_possible), 0), 0)) DESC NULLS LAST,
+        COUNT(DISTINCT s.race_id) DESC,
+        u.pseudo ASC
     `)
 
     return this.withSharedRanks(

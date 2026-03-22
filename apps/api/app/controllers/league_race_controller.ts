@@ -15,7 +15,7 @@ export default class LeagueRaceController {
     }
 
     const races = await Race.query().whereIn('id', raceIds).orderBy('start_at', 'asc')
-    return serialize({ races: races.map((r) => RaceTransformer.transform(r)) })
+    return serialize({ races: RaceTransformer.transform(races) })
   }
 
   async store({ params, request, auth, response, serialize }: HttpContext) {

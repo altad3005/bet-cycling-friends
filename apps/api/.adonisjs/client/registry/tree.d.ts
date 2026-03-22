@@ -44,6 +44,7 @@ export interface ApiDefinition {
   }
   race: {
     preview: typeof routes['race.preview']
+    startlist: typeof routes['race.startlist']
   }
   bet: {
     show: typeof routes['bet.show']

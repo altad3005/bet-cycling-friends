@@ -43,9 +43,11 @@ export default function StatGrid({ myStanding, leaderStanding, memberCount, user
             : '—'}
         </div>
         <div className="stat-sub">
-          {leaderStanding && leaderStanding.userId !== userId
-            ? `${leaderStanding.pseudo} · ${leaderStanding.totalPoints.toLocaleString('fr-FR')} pts`
-            : 'Tu mènes la ligue'}
+          {!leaderStanding
+            ? 'Aucun pari scoré'
+            : leaderStanding.userId !== userId
+              ? `${leaderStanding.pseudo} · ${leaderStanding.totalPoints.toLocaleString('fr-FR')} pts`
+              : 'Tu mènes la ligue'}
         </div>
       </div>
     </div>

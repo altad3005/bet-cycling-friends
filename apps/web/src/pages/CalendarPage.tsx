@@ -39,13 +39,17 @@ function monthLabel(key: string): string {
 }
 
 function typeLabel(race: RaceResponse): { label: string; cls: string } {
+  if (race.raceType === 'classic') {
+    if (race.multiplierType === 'monument')   return { label: 'Monument',   cls: 'monument' }
+    if (race.multiplierType === 'wt_classic') return { label: 'WorldTour',  cls: 'wt-classic' }
+    return { label: 'Classique', cls: 'classic' }
+  }
   switch (race.raceType) {
-    case 'classic':    return { label: 'Classique',    cls: 'classic' }
-    case 'grand_tour': return { label: 'Grand Tour',   cls: 'grand-tour' }
+    case 'grand_tour': return { label: 'Grand Tour',      cls: 'grand-tour' }
     case 'stage_race': return { label: 'Tour par étapes', cls: 'stage-race' }
-    case 'national':   return { label: 'National',     cls: 'national' }
-    case 'worlds':     return { label: 'Championnats', cls: 'worlds' }
-    default:           return { label: race.raceType,  cls: 'national' }
+    case 'national':   return { label: 'National',        cls: 'national' }
+    case 'worlds':     return { label: 'Championnats',    cls: 'worlds' }
+    default:           return { label: race.raceType,     cls: 'national' }
   }
 }
 

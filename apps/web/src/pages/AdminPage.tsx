@@ -177,7 +177,7 @@ function CalendarTab({ leagueId }: { leagueId: string }) {
         <div className="admin-add-race-form">
           <input
             className="empty-input"
-            placeholder="Slug PCS (ex: tour-de-france/2026)"
+            placeholder="Slug PCS (ex: fleche-wallonne)"
             value={slug}
             onChange={(e) => { setSlug(e.target.value); setPreview(null); setPreviewError(null) }}
             onKeyDown={(e) => e.key === 'Enter' && slug && previewMutation.mutate(slug)}

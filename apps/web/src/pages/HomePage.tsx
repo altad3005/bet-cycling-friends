@@ -28,7 +28,7 @@ export default function HomePage() {
   })
 
   const { data: leagueRaces = [] } = useQuery({
-    queryKey: ['league-races', activeLeague?.id],
+    queryKey: ['races', 'league', activeLeague?.id],
     queryFn: () => racesApi.leagueRaces(activeLeague!.id).then((r) => r.data.data.races),
     enabled: !!activeLeague,
   })
@@ -91,7 +91,7 @@ export default function HomePage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <UpcomingRacesPanel races={leagueRaces} />
-          {leagueStandings.length > 0 && (
+          {leagueStandings.some((s) => s.racesPlayed > 0) && (
             <Top4Panel standings={leagueStandings} userId={user?.id ?? ''} />
           )}
         </div>

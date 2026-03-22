@@ -68,12 +68,10 @@ export default class BetController {
         .preload('user')
         .preload('betRiders', (q) => q.preload('rider'))
         .orderBy('placed_at', 'asc')
-      return serialize({
-        bets: bets.map((b) =>
-          masked ? BetGrandTourTransformer.transformMasked(b) : BetGrandTourTransformer.transform(b)
-        ),
-        raceStarted: !masked,
-      })
+      const gtBets = masked
+        ? bets.map((b) => BetGrandTourTransformer.transformMasked(b))
+        : BetGrandTourTransformer.transform(bets)
+      return serialize({ bets: gtBets, raceStarted: !masked })
     }
 
     const bets = await BetClassic.query()
@@ -83,11 +81,9 @@ export default class BetController {
       .preload('favoriteRider')
       .preload('bonusRider')
       .orderBy('placed_at', 'asc')
-    return serialize({
-      bets: bets.map((b) =>
-        masked ? BetClassicTransformer.transformMasked(b) : BetClassicTransformer.transform(b)
-      ),
-      raceStarted: !masked,
-    })
+    const classicBets = masked
+      ? bets.map((b) => BetClassicTransformer.transformMasked(b))
+      : BetClassicTransformer.transform(bets)
+    return serialize({ bets: classicBets, raceStarted: !masked })
   }
 }

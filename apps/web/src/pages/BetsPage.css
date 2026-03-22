@@ -91,7 +91,7 @@
   border-radius: 50%;
   justify-self: center;
 }
-.bet-dot.upcoming { background: rgba(232, 100, 80, 0.7); }
+.bet-dot.upcoming { background: rgba(232, 201, 109, 0.7); }
 .bet-dot.live     { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.5); }
 .bet-dot.done     { background: rgba(255, 255, 255, 0.1); }
 

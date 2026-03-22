@@ -25,6 +25,7 @@ export type ScannedRoutes = {
     'league_race.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league_race.destroy': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'race.preview': { paramsTuple?: []; params?: {} }
+    'race.startlist': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.store_classic': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.store_grand_tour': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -45,6 +46,7 @@ export type ScannedRoutes = {
     'league_member.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league_race.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'race.preview': { paramsTuple?: []; params?: {} }
+    'race.startlist': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.league_bets': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -62,6 +64,7 @@ export type ScannedRoutes = {
     'league_member.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league_race.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'race.preview': { paramsTuple?: []; params?: {} }
+    'race.startlist': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.league_bets': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

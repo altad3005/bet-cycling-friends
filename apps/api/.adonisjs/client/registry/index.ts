@@ -132,6 +132,12 @@ const routes = {
     tokens: [{"old":"/api/races/preview","type":0,"val":"api","end":""},{"old":"/api/races/preview","type":0,"val":"races","end":""},{"old":"/api/races/preview","type":0,"val":"preview","end":""}],
     types: placeholder as Registry['race.preview']['types'],
   },
+  'race.startlist': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/races/:id/startlist',
+    tokens: [{"old":"/api/races/:id/startlist","type":0,"val":"api","end":""},{"old":"/api/races/:id/startlist","type":0,"val":"races","end":""},{"old":"/api/races/:id/startlist","type":1,"val":"id","end":""},{"old":"/api/races/:id/startlist","type":0,"val":"startlist","end":""}],
+    types: placeholder as Registry['race.startlist']['types'],
+  },
   'bet.show': {
     methods: ["GET","HEAD"],
     pattern: '/api/races/:id/bet',

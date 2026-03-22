@@ -31,4 +31,15 @@ export type BetResponse = BetClassicResponse | BetGrandTourResponse
 export const betsApi = {
   myBet: (raceId: string) =>
     api.get<{ data: { bet: BetResponse | null } }>(`/races/${raceId}/bet`),
+
+  placeClassic: (raceId: string, favoriteRiderId: string, bonusRiderId: string) =>
+    api.post<{ data: { bet: BetClassicResponse } }>(`/races/${raceId}/bet`, {
+      favoriteRiderId,
+      bonusRiderId,
+    }),
+
+  placeGrandTour: (raceId: string, riderIds: string[]) =>
+    api.post<{ data: { bet: BetGrandTourResponse } }>(`/races/${raceId}/bet/grandtour`, {
+      riderIds,
+    }),
 }

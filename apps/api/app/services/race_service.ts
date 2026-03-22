@@ -1,7 +1,8 @@
-import { RaceType, MultiplierType } from '@bcf/shared'
+import { RaceType, MultiplierType, RaceStatus } from '@bcf/shared'
 import { Exception } from '@adonisjs/core/exceptions'
 import { DateTime } from 'luxon'
 import Race from '#models/race'
+import Rider from '#models/rider'
 import LeagueRace from '#models/league_race'
 import LeagueMember from '#models/league_member'
 import Season from '#models/season'
@@ -11,7 +12,7 @@ import type User from '#models/user'
 const MONUMENT_SLUGS = [
   'paris-roubaix',
   'ronde-van-vlaanderen',
-  'milan-sanremo',
+  'milano-sanremo',
   'liege-bastogne-liege',
   'il-lombardia',
 ]
@@ -19,6 +20,13 @@ const MONUMENT_SLUGS = [
 const GRAND_TOUR_SLUGS = ['tour-de-france', 'giro-d-italia', 'vuelta-a-espana']
 
 const WORLDS_SLUGS = ['world-championship', 'campeonato-del-mundo', 'championnats-du-monde']
+
+function computeStatus(startAt: DateTime | null, endAt: DateTime | null): RaceStatus {
+  const now = DateTime.now()
+  if (endAt && endAt < now) return RaceStatus.FINISHED
+  if (startAt && startAt < now) return RaceStatus.LIVE
+  return RaceStatus.UPCOMING
+}
 
 function determineRaceAttrs(
   slug: string,
@@ -44,7 +52,7 @@ function determineRaceAttrs(
     }
   }
 
-  if (info.is_one_day_race && info.category === '1.UWT') {
+  if (info.is_one_day_race && info.uci_tour === '1.UWT') {
     return {
       raceType: RaceType.CLASSIC,
       multiplierType: MultiplierType.WT_CLASSIC,
@@ -89,21 +97,28 @@ export default class RaceService {
     await Season.firstOrCreate({ year: info.year }, { year: info.year })
 
     const attrs = determineRaceAttrs(slug, info)
+    const startAt = info.start_date ? DateTime.fromISO(info.start_date) : null
+    const endAt = info.end_date ? DateTime.fromISO(info.end_date) : null
+
     const race = await Race.firstOrCreate(
       { slug, seasonYear: info.year },
       {
         slug,
-        name: info.name,
         seasonYear: info.year,
+        name: info.name,
         raceType: attrs.raceType,
         multiplierType: attrs.multiplierType,
         isGrandTour: attrs.isGrandTour,
-        status: 'upcoming',
+        status: computeStatus(startAt, endAt),
         resultsFinal: false,
-        startAt: info.start_date ? DateTime.fromISO(info.start_date) : null,
-        endAt: info.end_date ? DateTime.fromISO(info.end_date) : null,
+        startAt,
+        endAt,
       }
     )
+
+    // Always refresh metadata from PCS and recompute status from dates
+    race.merge({ name: info.name, raceType: attrs.raceType, multiplierType: attrs.multiplierType, isGrandTour: attrs.isGrandTour, startAt, endAt, status: computeStatus(startAt, endAt) })
+    await race.save()
 
     const existing = await LeagueRace.query()
       .where('league_id', leagueId)
@@ -121,6 +136,19 @@ export default class RaceService {
     })
 
     return race
+  }
+
+  async getStartlist(race: Race): Promise<{ id: string; name: string }[]> {
+    const pcsRiders = await this.pcs.getStartlist(race.slug, race.seasonYear)
+    const riders = await Promise.all(
+      pcsRiders.map((r) =>
+        Rider.firstOrCreate(
+          { pcsUrl: r.pcs_url },
+          { name: r.name, nationality: r.nationality ?? null, pcsUrl: r.pcs_url }
+        )
+      )
+    )
+    return riders.map((r) => ({ id: r.id, name: r.name }))
   }
 
   async removeFromLeague(user: User, leagueId: string, raceId: string): Promise<void> {

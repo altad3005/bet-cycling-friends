@@ -64,7 +64,7 @@ export default function LeagueStandingsPanel({ standings, userId, season }: Prop
         </>
       ) : (
         <div style={{ padding: '2rem 1.25rem', textAlign: 'center', fontSize: 13, color: 'rgba(240,237,232,0.25)' }}>
-          Aucun résultat pour l'instant.
+          Aucun membre dans cette ligue.
         </div>
       )}
     </div>
