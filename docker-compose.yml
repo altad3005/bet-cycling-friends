@@ -39,6 +39,7 @@ services:
       dockerfile: apps/api/Dockerfile
     environment:
       - NODE_ENV=production
+      - LOG_LEVEL=${LOG_LEVEL:-info}
       - PORT=3333
       - HOST=0.0.0.0
       - APP_KEY=${APP_KEY}
