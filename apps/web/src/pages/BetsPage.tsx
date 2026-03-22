@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { RaceStatus, BetStatus, MultiplierType } from '@bcf/shared'
 import { racesApi, type RaceResponse } from '../api/races'
@@ -43,7 +44,7 @@ function multProps(race: RaceResponse): { label: string; cls: string } {
 
 function BetDetail({ race }: { race: RaceResponse }) {
   const { data: bet, isLoading } = useQuery({
-    queryKey: ['bet', race.id],
+    queryKey: ['bet-detail', race.id],
     queryFn: () => betsApi.myBet(race.id).then((r) => r.data.data.bet),
   })
 
@@ -91,21 +92,23 @@ function BetDetail({ race }: { race: RaceResponse }) {
 
 // ── Race bet card ──────────────────────────────────────────────────────
 
-function BetCard({ race, tab, onBet }: { race: RaceResponse; tab: Tab; onBet?: () => void }) {
+function BetCard({ race, tab, onBet, onNavigate }: { race: RaceResponse; tab: Tab; onBet?: () => void; onNavigate?: () => void }) {
   const [expanded, setExpanded] = useState(false)
   const urgent = isUrgent(race)
   const mult = multProps(race)
-  const canExpand = tab !== 'upcoming'
 
   const { data: existingBet } = useQuery({
     queryKey: ['bet', race.id],
     queryFn: () => betsApi.myBet(race.id).then((r) => r.data.data.bet),
-    enabled: tab === 'upcoming',
   })
   const hasBet = !!existingBet
 
   const dotClass = tab === 'live' ? 'live' : tab === 'upcoming' ? 'upcoming' : 'done'
   const nameClass = tab === 'finished' ? 'dim' : ''
+
+  function handleClick() {
+    if (hasBet) setExpanded((v) => !v)
+  }
 
   return (
     <div
@@ -113,9 +116,9 @@ function BetCard({ race, tab, onBet }: { race: RaceResponse; tab: Tab; onBet?: (
         'bet-card',
         urgent ? 'urgent' : '',
         tab === 'live' ? 'live' : '',
-        canExpand ? 'expandable' : '',
+        hasBet && tab !== 'upcoming' ? 'expandable' : '',
       ].filter(Boolean).join(' ')}
-      onClick={canExpand ? () => setExpanded((v) => !v) : undefined}
+      onClick={hasBet && tab !== 'upcoming' ? handleClick : undefined}
     >
       <div className="bet-card-head">
         <div className={`bet-dot ${dotClass}`} />
@@ -139,14 +142,18 @@ function BetCard({ race, tab, onBet }: { race: RaceResponse; tab: Tab; onBet?: (
         )}
 
         {tab === 'live' && (
-          <button className="bet-cta ghost" disabled>Verrouillé</button>
+          <span className={`bet-placed-badge${hasBet ? ' yes' : ' no'}`}>
+            {hasBet ? 'Pari placé' : 'Aucun pari'}
+          </span>
         )}
 
         {tab === 'finished' && (
-          <button className="bet-cta ghost" disabled>Scoré</button>
+          <span className={`bet-placed-badge${hasBet ? ' yes' : ' no'}`}>
+            {hasBet ? 'Pari placé' : 'Aucun pari'}
+          </span>
         )}
 
-        {canExpand && (
+        {hasBet && tab !== 'upcoming' && (
           <div className={`bet-chevron${expanded ? ' open' : ''}`}>
             <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" /></svg>
           </div>
@@ -165,6 +172,7 @@ function BetCard({ race, tab, onBet }: { race: RaceResponse; tab: Tab; onBet?: (
 // ── Page ──────────────────────────────────────────────────────────────
 
 export default function BetsPage() {
+  const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const { activeLeague } = useLeague()
   const [tab, setTab] = useState<Tab>('upcoming')
@@ -263,7 +271,7 @@ export default function BetsPage() {
         </div>
       ) : (
         grouped[tab].map((race) => (
-          <BetCard key={race.id} race={race} tab={tab} onBet={() => setSelectedRace(race)} />
+          <BetCard key={race.id} race={race} tab={tab} onBet={() => setSelectedRace(race)} onNavigate={() => navigate(`/races/${race.id}`)} />
         ))
       )}
 

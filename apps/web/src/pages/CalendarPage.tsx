@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { RaceStatus } from '@bcf/shared'
 import { racesApi, type RaceResponse } from '../api/races'
@@ -74,6 +75,7 @@ function actionProps(race: RaceResponse): { label: string; cls: string } {
 // ── Component ──────────────────────────────────────
 
 export default function CalendarPage() {
+  const navigate = useNavigate()
   const { activeLeague } = useLeague()
   const [filter, setFilter] = useState<Filter>('all')
   const [betRace, setBetRace] = useState<RaceResponse | null>(null)
@@ -162,7 +164,7 @@ export default function CalendarPage() {
               const isDone = race.status === RaceStatus.FINISHED
 
               return (
-                <div key={race.id} className={`cal-row${race.status === RaceStatus.LIVE ? ' live' : ''}`}>
+                <div key={race.id} className={`cal-row${race.status === RaceStatus.LIVE ? ' live' : ''}`} onClick={() => navigate(`/races/${race.id}`)} style={{ cursor: 'pointer' }}>
                   <div className={`cal-dot ${race.status}`} />
 
                   <div className="cal-info">
@@ -176,7 +178,7 @@ export default function CalendarPage() {
                   <button
                     className={`cal-action ${action.cls}`}
                     disabled={action.cls !== 'bet'}
-                    onClick={() => action.cls === 'bet' && setBetRace(race)}
+                    onClick={(e) => { e.stopPropagation(); action.cls === 'bet' && setBetRace(race) }}
                   >
                     {action.label}
                   </button>

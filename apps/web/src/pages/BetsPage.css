@@ -161,6 +161,23 @@
 }
 
 /* ── Expand chevron ───────────────────────────── */
+.bet-placed-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.bet-placed-badge.yes {
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
+}
+.bet-placed-badge.no {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(240, 237, 232, 0.25);
+}
+
 .bet-chevron {
   color: rgba(240,237,232,0.2);
   transition: transform 0.18s;

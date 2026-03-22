@@ -11,6 +11,7 @@ import CalendarPage from './pages/CalendarPage'
 import BetsPage from './pages/BetsPage'
 import MembersPage from './pages/MembersPage'
 import AdminPage from './pages/AdminPage'
+import RacePage from './pages/RacePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useBootstrap } from './hooks/useBootstrap'
 
@@ -74,6 +75,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <AdminPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/races/:raceId"
+        element={
+          <ProtectedRoute>
+            <RacePage />
           </ProtectedRoute>
         }
       />
