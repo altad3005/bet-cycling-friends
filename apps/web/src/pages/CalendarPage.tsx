@@ -5,7 +5,6 @@ import { RaceStatus } from '@bcf/shared'
 import { racesApi, type RaceResponse } from '../api/races'
 import { useLeague } from '../hooks/useLeague'
 import AppShell from '../components/AppShell'
-import BetModal from '../components/betting/BetModal'
 import './CalendarPage.css'
 
 type Filter = 'all' | 'upcoming' | 'live' | 'finished'
@@ -66,11 +65,6 @@ function multBadge(race: RaceResponse): { label: string; cls: string } {
   }
 }
 
-function actionProps(race: RaceResponse): { label: string; cls: string } {
-  if (race.status === RaceStatus.LIVE)     return { label: 'En cours', cls: 'live' }
-  if (race.status === RaceStatus.FINISHED) return { label: race.resultsFinal ? 'Scoré' : 'Terminé', cls: 'done' }
-  return { label: 'Parier', cls: 'bet' }
-}
 
 // ── Component ──────────────────────────────────────
 
@@ -78,7 +72,6 @@ export default function CalendarPage() {
   const navigate = useNavigate()
   const { activeLeague } = useLeague()
   const [filter, setFilter] = useState<Filter>('all')
-  const [betRace, setBetRace] = useState<RaceResponse | null>(null)
 
   const { data: races, isLoading } = useQuery({
     queryKey: ['races', 'league', activeLeague?.id],
@@ -118,8 +111,6 @@ export default function CalendarPage() {
   ]
 
   return (
-    <>
-    {betRace && <BetModal race={betRace} onClose={() => setBetRace(null)} />}
     <AppShell
       activePage="calendar"
       pageTitle="Calendrier"
@@ -160,7 +151,6 @@ export default function CalendarPage() {
             {monthRaces.map((race) => {
               const type   = typeLabel(race)
               const mult   = multBadge(race)
-              const action = actionProps(race)
               const isDone = race.status === RaceStatus.FINISHED
 
               return (
@@ -174,14 +164,6 @@ export default function CalendarPage() {
 
                   <div className={`cal-type ${type.cls}`}>{type.label}</div>
                   <div className={`cal-mult ${mult.cls}`}>{mult.label}</div>
-
-                  <button
-                    className={`cal-action ${action.cls}`}
-                    disabled={action.cls !== 'bet'}
-                    onClick={(e) => { e.stopPropagation(); action.cls === 'bet' && setBetRace(race) }}
-                  >
-                    {action.label}
-                  </button>
                 </div>
               )
             })}
@@ -189,6 +171,5 @@ export default function CalendarPage() {
         ))
       )}
     </AppShell>
-    </>
   )
 }

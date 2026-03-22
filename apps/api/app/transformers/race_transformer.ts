@@ -19,6 +19,7 @@ export default class RaceTransformer extends BaseTransformer<Race> {
       'raceType',
       'multiplierType',
       'isGrandTour',
+      'stageCount',
       'resultsFinal',
       'startAt',
       'endAt',

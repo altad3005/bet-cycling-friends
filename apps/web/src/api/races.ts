@@ -8,11 +8,20 @@ export interface RaceResponse {
   raceType: RaceType
   multiplierType: MultiplierType
   isGrandTour: boolean
+  stageCount: number | null
   status: RaceStatus
   resultsFinal: boolean
   startAt: string | null
   endAt: string | null
   seasonYear: number
+}
+
+export interface RaceStage {
+  number: number
+  name: string
+  date: string | null
+  profileIcon: string | null
+  synced: boolean
 }
 
 export interface RacePreview {
@@ -46,4 +55,7 @@ export const racesApi = {
 
   removeFromLeague: (leagueId: string, raceId: string) =>
     api.delete(`/leagues/${leagueId}/races/${raceId}`),
+
+  stages: (raceId: string) =>
+    api.get<{ data: { stageCount: number; stages: RaceStage[] } }>(`/races/${raceId}/stages`),
 }

@@ -298,3 +298,176 @@
   padding: 1px 6px;
   letter-spacing: 0.3px;
 }
+
+/* ── Grand Tour stages ── */
+.gt-stage-list {
+  display: flex;
+  flex-direction: column;
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.gt-stage-row-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border: none;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+  padding: 0.55rem 1rem;
+  cursor: default;
+  font-family: 'DM Sans', sans-serif;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.gt-stage-row-btn:last-child { border-bottom: none; }
+
+.gt-stage-row-btn.synced { cursor: pointer; }
+.gt-stage-row-btn.synced:hover { background: rgba(255, 255, 255, 0.04); }
+.gt-stage-row-btn.active { background: rgba(232, 201, 109, 0.06); }
+
+.gt-stage-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(240, 237, 232, 0.25);
+  min-width: 18px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.gt-stage-name {
+  flex: 1;
+  font-size: 13px;
+  color: rgba(240, 237, 232, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gt-stage-date {
+  font-size: 11px;
+  color: rgba(240, 237, 232, 0.25);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.gt-stage-profile {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.gt-profile-bar {
+  width: 3px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.gt-profile-bar:nth-child(1) { height: 4px; }
+.gt-profile-bar:nth-child(2) { height: 7px; }
+.gt-profile-bar:nth-child(3) { height: 10px; }
+.gt-profile-bar:nth-child(4) { height: 13px; }
+.gt-profile-bar:nth-child(5) { height: 16px; }
+.gt-profile-bar.filled { background: rgba(232, 201, 109, 0.45); }
+
+.gt-stage-status {
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 2px 7px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.gt-stage-status.synced { background: rgba(92, 184, 92, 0.12); color: #5cb85c; }
+.gt-stage-status.pending { background: rgba(255, 255, 255, 0.04); color: rgba(240, 237, 232, 0.2); }
+
+.gt-stage-panel {
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.gt-stage-panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(240, 237, 232, 0.4);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 0.75rem 1rem;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+}
+
+.gt-stage-standings {
+  display: flex;
+  flex-direction: column;
+}
+
+.gt-stage-row {
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+  padding: 0.75rem 1rem;
+}
+
+.gt-stage-row:last-child {
+  border-bottom: none;
+}
+
+.gt-stage-row.me {
+  background: rgba(232, 201, 109, 0.04);
+}
+
+.gt-stage-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.5rem;
+}
+
+.gt-rider-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 2.5rem;
+}
+
+.gt-rider-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(240, 237, 232, 0.4);
+}
+
+.gt-rider-line.scored {
+  color: rgba(240, 237, 232, 0.75);
+}
+
+.gt-rider-name {
+  flex: 1;
+}
+
+.gt-rider-rank {
+  min-width: 28px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.gt-rider-rank.muted {
+  color: rgba(240, 237, 232, 0.25);
+}
+
+.gt-rider-pts {
+  min-width: 44px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: #e8c96d;
+  font-weight: 600;
+}
+
+.gt-rider-line:not(.scored) .gt-rider-pts {
+  color: rgba(240, 237, 232, 0.3);
+  font-weight: 400;
+}

@@ -62,6 +62,7 @@ router
     router
       .group(() => {
         router.get('/:id/startlist', [controllers.Race, 'startlist'])
+        router.get('/:id/stages', [controllers.Race, 'stages'])
         router.get('/:id/bet', [controllers.Bet, 'show'])
         router.post('/:id/bet', [controllers.Bet, 'storeClassic'])
         router.post('/:id/bet/grandtour', [controllers.Bet, 'storeGrandTour'])

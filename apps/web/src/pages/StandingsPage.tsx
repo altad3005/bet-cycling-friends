@@ -57,7 +57,7 @@ export default function StandingsPage() {
   }, [rawRows, isGlobal])
 
   // Top 3 + ma position pour le hero (uniquement joueurs ayant au moins 1 course scorée)
-  const top3 = (rawRows?.filter((r) => r.racesPlayed > 0) ?? []).slice(0, 3)
+  const top3 = (rawRows ?? []).slice(0, 3)
   const myRow = rawRows?.find((r) => r.userId === user?.id)
   const myVal = myRow && (isGlobal ? (myRow as GlobalStanding).percentage : (myRow as LeagueStanding).totalPoints)
 

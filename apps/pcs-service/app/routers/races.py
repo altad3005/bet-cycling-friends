@@ -4,8 +4,9 @@ from app.services import (
     get_startlist,
     get_stage_results,
     get_race_results,
+    get_stages_info,
 )
-from app.models import RaceInfoModel, RiderModel, StageResultModel
+from app.models import RaceInfoModel, RiderModel, StageResultModel, StageInfoModel
 import datetime
 
 router = APIRouter()
@@ -30,6 +31,12 @@ async def race_results(slug: str, year: int = None) -> list[StageResultModel]:
     if not year:
         year = datetime.datetime.now().year
     return get_race_results(slug, year)
+
+@router.get("/{slug}/stages")
+async def stages(slug: str, year: int = None) -> list[StageInfoModel]:
+    if not year:
+        year = datetime.datetime.now().year
+    return get_stages_info(slug, year)
 
 @router.get("/{slug}/stage/{stage_number}")
 async def stage_results(slug: str, stage_number: int, year: int = None) -> list[StageResultModel]:

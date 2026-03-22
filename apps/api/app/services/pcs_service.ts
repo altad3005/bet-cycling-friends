@@ -52,6 +52,19 @@ export default class PcsService {
     }
   }
 
+  async getStagesInfo(slug: string, year = DateTime.now().year): Promise<{ number: number; name: string; date: string | null; profileIcon: string | null }[]> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/internal/races/${slug}/stages?year=${year}`
+      )
+      if (!response.ok) return []
+      const data = await response.json() as { number: number; name: string; date: string | null; profile_icon: string | null }[]
+      return data.map((s) => ({ number: s.number, name: s.name, date: s.date ?? null, profileIcon: s.profile_icon ?? null }))
+    } catch {
+      return []
+    }
+  }
+
   async getStageResults(
     slug: string,
     year: number,

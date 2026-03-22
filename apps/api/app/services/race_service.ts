@@ -2,6 +2,7 @@ import { RaceType, MultiplierType, RaceStatus } from '@bcf/shared'
 import { Exception } from '@adonisjs/core/exceptions'
 import { DateTime } from 'luxon'
 import Race from '#models/race'
+import Stage from '#models/stage'
 import Rider from '#models/rider'
 import LeagueRace from '#models/league_race'
 import LeagueMember from '#models/league_member'
@@ -99,6 +100,8 @@ export default class RaceService {
     const attrs = determineRaceAttrs(slug, info)
     const startAt = info.start_date ? DateTime.fromISO(info.start_date) : null
     const endAt = info.end_date ? DateTime.fromISO(info.end_date) : null
+    const stagesInfo = attrs.isGrandTour ? await this.pcs.getStagesInfo(slug, info.year) : []
+    const stageCount = stagesInfo.length || null
 
     const race = await Race.firstOrCreate(
       { slug, seasonYear: info.year },
@@ -109,6 +112,7 @@ export default class RaceService {
         raceType: attrs.raceType,
         multiplierType: attrs.multiplierType,
         isGrandTour: attrs.isGrandTour,
+        stageCount,
         status: computeStatus(startAt, endAt),
         resultsFinal: false,
         startAt,
@@ -117,8 +121,18 @@ export default class RaceService {
     )
 
     // Always refresh metadata from PCS and recompute status from dates
-    race.merge({ name: info.name, raceType: attrs.raceType, multiplierType: attrs.multiplierType, isGrandTour: attrs.isGrandTour, startAt, endAt, status: computeStatus(startAt, endAt) })
+    race.merge({ name: info.name, raceType: attrs.raceType, multiplierType: attrs.multiplierType, isGrandTour: attrs.isGrandTour, stageCount: stageCount ?? race.stageCount, startAt, endAt, status: computeStatus(startAt, endAt) })
     await race.save()
+
+    // Upsert stages in DB for GT
+    if (stagesInfo.length > 0) {
+      for (const s of stagesInfo) {
+        await Stage.updateOrCreate(
+          { raceId: race.id, number: s.number },
+          { name: s.name, date: s.date, profileIcon: s.profileIcon }
+        )
+      }
+    }
 
     const existing = await LeagueRace.query()
       .where('league_id', leagueId)

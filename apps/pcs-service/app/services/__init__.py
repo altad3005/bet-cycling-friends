@@ -1,6 +1,6 @@
 from procyclingstats import Race, RaceStartlist, Stage
 from procyclingstats.errors import ExpectedParsingError
-from app.models import RaceInfoModel, RiderModel, StageResultModel
+from app.models import RaceInfoModel, RiderModel, StageResultModel, StageInfoModel
 from typing import Optional
 import requests
 import logging
@@ -56,6 +56,30 @@ def get_startlist(slug: str, year: int) -> list[RiderModel]:
         ]
     except Exception as e:
         logger.error(f"Error fetching startlist {slug}/{year}: {e}")
+        return []
+
+def get_stages_info(slug: str, year: int) -> list[StageInfoModel]:
+    try:
+        html = fetch_html(f"race/{slug}/{year}")
+        race = Race(f"race/{slug}/{year}", html=html, update_html=False)
+        stages = race.stages()
+        result = []
+        for i, s in enumerate(stages):
+            # Extract stage number from URL e.g. "race/tour-de-france/2022/stage-3" → 3
+            url = s.get("stage_url", "")
+            try:
+                number = int(url.rstrip("/").split("-")[-1])
+            except (ValueError, IndexError):
+                number = i + 1
+            result.append(StageInfoModel(
+                number=number,
+                name=s.get("stage_name", f"Étape {number}"),
+                date=s.get("date"),
+                profile_icon=s.get("profile_icon"),
+            ))
+        return result
+    except Exception as e:
+        logger.error(f"Error fetching stages info {slug}/{year}: {e}")
         return []
 
 def get_stage_results(slug: str, year: int, stage_number: int) -> list[StageResultModel]:

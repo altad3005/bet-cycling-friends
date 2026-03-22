@@ -2,7 +2,9 @@ import { SCORING_TABLE, MULTIPLIERS, MultiplierType } from '@bcf/shared'
 import db from '@adonisjs/lucid/services/db'
 import StageResult from '#models/stage_result'
 import BetGrandTour from '#models/bet_grand_tour'
+import BetGrandTourRider from '#models/bet_grand_tour_rider'
 import LeagueMember from '#models/league_member'
+import Rider from '#models/rider'
 
 export default class StandingsService {
   async getLeagueStandings(leagueId: string) {
@@ -102,21 +104,34 @@ export default class StandingsService {
       .preload('user')
       .preload('betRiders')
 
+    // Fetch rider names for all riders involved
+    const allRiderIds = bets.flatMap((b) => b.betRiders.map((br) => br.riderId))
+    const riders = allRiderIds.length
+      ? await Rider.query().whereIn('id', [...new Set(allRiderIds)])
+      : []
+    const riderNameMap = new Map(riders.map((r) => [r.id, r.name]))
+
     const standings = bets
       .map((bet) => {
         let points = 0
-        for (const betRider of bet.betRiders) {
+        const riderBreakdown = bet.betRiders.map((betRider) => {
           const rank = rankMap.get(betRider.riderId)
-          if (rank && SCORING_TABLE[rank]) {
-            points += SCORING_TABLE[rank] * MULTIPLIERS[MultiplierType.GT_STAGE]
+          const riderPoints = rank && SCORING_TABLE[rank] ? SCORING_TABLE[rank] * MULTIPLIERS[MultiplierType.GT_STAGE] : 0
+          points += riderPoints
+          return {
+            riderId: betRider.riderId,
+            name: riderNameMap.get(betRider.riderId) ?? '—',
+            stageRank: rank ?? null,
+            points: riderPoints,
           }
-        }
+        })
         return {
           userId: bet.userId,
           pseudo: bet.user?.pseudo,
           icon: bet.user?.icon,
           points,
           placedAt: bet.placedAt,
+          riders: riderBreakdown,
         }
       })
       .sort((a, b) => b.points - a.points || a.placedAt.toMillis() - b.placedAt.toMillis())

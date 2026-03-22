@@ -13,6 +13,7 @@ export default class extends BaseSchema {
       table.string('multiplier_type', 50).notNullable()
       table.string('status', 50).notNullable().defaultTo('upcoming')
       table.boolean('is_grand_tour').notNullable().defaultTo(false)
+      table.integer('stage_count').nullable()
       table.boolean('results_final').notNullable().defaultTo(false)
       table.timestamp('start_at', { useTz: true }).nullable()
       table.timestamp('end_at', { useTz: true }).nullable()

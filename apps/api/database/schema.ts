@@ -171,7 +171,7 @@ export class PushSubscriptionSchema extends BaseModel {
 }
 
 export class RaceSchema extends BaseModel {
-  static $columns = ['createdAt', 'endAt', 'id', 'isGrandTour', 'lastSyncedAt', 'multiplierType', 'name', 'raceType', 'resultsFinal', 'seasonYear', 'slug', 'startAt', 'status', 'updatedAt'] as const
+  static $columns = ['createdAt', 'endAt', 'id', 'isGrandTour', 'lastSyncedAt', 'multiplierType', 'name', 'raceType', 'resultsFinal', 'seasonYear', 'slug', 'stageCount', 'startAt', 'status', 'updatedAt'] as const
   $columns = RaceSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -195,6 +195,8 @@ export class RaceSchema extends BaseModel {
   declare seasonYear: number
   @column()
   declare slug: string
+  @column()
+  declare stageCount: number | null
   @column.dateTime()
   declare startAt: DateTime | null
   @column()

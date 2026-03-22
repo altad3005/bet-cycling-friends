@@ -32,3 +32,9 @@ class StageModel(BaseModel):
     stage_url: str
     date: Optional[str] = None
     results: list[StageResultModel] = []
+
+class StageInfoModel(BaseModel):
+    number: int
+    name: str
+    date: Optional[str] = None
+    profile_icon: Optional[str] = None
