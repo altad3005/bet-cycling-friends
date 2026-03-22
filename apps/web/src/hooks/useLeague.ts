@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { leaguesApi, type League } from '../api/leagues'
-
-const STORAGE_KEY = 'bcf-active-league'
+import { leaguesApi } from '../api/leagues'
+import { useLeagueStore } from '../stores/league'
 
 export function useLeague() {
   const queryClient = useQueryClient()
-  const [activeLeague, setActiveLeagueState] = useState<League | null>(null)
+  const { activeLeague, setActiveLeague, initFromList } = useLeagueStore()
 
   const { data: myLeagues, isLoading } = useQuery({
     queryKey: ['my-leagues'],
@@ -14,16 +13,8 @@ export function useLeague() {
   })
 
   useEffect(() => {
-    if (!myLeagues || myLeagues.length === 0) return
-    const savedId = localStorage.getItem(STORAGE_KEY)
-    const saved = savedId ? myLeagues.find((l) => l.id === savedId) : null
-    setActiveLeagueState(saved ?? myLeagues[0])
+    if (myLeagues) initFromList(myLeagues)
   }, [myLeagues])
-
-  function setActiveLeague(league: League) {
-    localStorage.setItem(STORAGE_KEY, league.id)
-    setActiveLeagueState(league)
-  }
 
   const createMutation = useMutation({
     mutationFn: (name: string) => leaguesApi.create(name),

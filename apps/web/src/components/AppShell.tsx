@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { authApi } from '../api/auth'
 import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
+import { useLeagueStore } from '../stores/league'
 import { standingsApi, type LeagueStanding } from '../api/standings'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { initials, avatarColor } from '../utils/ui'
 import '../pages/HomePage.css'
 
@@ -31,6 +32,8 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
 
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  const queryClient = useQueryClient()
+  const resetLeague = useLeagueStore((s) => s.reset)
   const { activeLeague, setActiveLeague, myLeagues, createMutation, joinMutation } = useLeague()
 
   const { data: leagueStandings } = useQuery({
@@ -56,6 +59,8 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
   async function handleLogout() {
     await authApi.logout().catch(() => {})
     clearAuth()
+    resetLeague()
+    queryClient.clear()
     navigate('/login')
   }
 

@@ -9,7 +9,7 @@ import './BetModal.css'
 
 const MULT_LABELS: Partial<Record<string, string>> = {
   [MultiplierType.MONUMENT]:   'Monument · ×2',
-  [MultiplierType.WT_CLASSIC]: 'WorldTour · ×1,5',
+  [MultiplierType.WT_CLASSIC]: 'Classique · ×1,5',
   [MultiplierType.STAGE_RACE]: 'Étapes · ×1',
   [MultiplierType.GT_STAGE]:   'Grand Tour',
   [MultiplierType.GT_GC]:      'Grand Tour',

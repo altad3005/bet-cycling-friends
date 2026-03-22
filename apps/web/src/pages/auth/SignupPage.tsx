@@ -13,11 +13,16 @@ export default function SignupPage() {
   const [pseudo, setPseudo] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (password !== confirm) {
+      setError('Les mots de passe ne correspondent pas.')
+      return
+    }
     setError('')
     setLoading(true)
     try {
@@ -75,6 +80,17 @@ export default function SignupPage() {
               placeholder="••••••••"
               required
               minLength={8}
+            />
+          </div>
+          <div className="auth-field">
+            <label className="auth-label">Confirmer le mot de passe</label>
+            <input
+              className="auth-input"
+              type="password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              placeholder="••••••••"
+              required
             />
           </div>
           {error && <div className="auth-error">{error}</div>}

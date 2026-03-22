@@ -42,7 +42,7 @@ function monthLabel(key: string): string {
 function typeLabel(race: RaceResponse): { label: string; cls: string } {
   if (race.raceType === 'classic') {
     if (race.multiplierType === 'monument')   return { label: 'Monument',   cls: 'monument' }
-    if (race.multiplierType === 'wt_classic') return { label: 'WorldTour',  cls: 'wt-classic' }
+    if (race.multiplierType === 'wt_classic') return { label: 'Classique',  cls: 'wt-classic' }
     return { label: 'Classique', cls: 'classic' }
   }
   switch (race.raceType) {

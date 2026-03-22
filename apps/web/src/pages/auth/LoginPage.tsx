@@ -65,6 +65,11 @@ export default function LoginPage() {
             />
           </div>
           {error && <div className="auth-error">{error}</div>}
+          <div style={{ textAlign: 'right', marginTop: '-0.5rem' }}>
+            <Link to="/forgot-password" style={{ fontSize: 12, color: 'rgba(240,237,232,0.35)', textDecoration: 'none' }}>
+              Mot de passe oublié ?
+            </Link>
+          </div>
           <button type="submit" className="auth-submit" disabled={loading}>
             {loading ? 'Connexion…' : 'Se connecter'}
           </button>

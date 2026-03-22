@@ -5,7 +5,7 @@ const MONTHS_FR = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'a
 
 const TYPE_LABEL: Partial<Record<string, string>> = {
   monument:   'Monument',
-  wt_classic: 'WorldTour',
+  wt_classic: 'Classique',
   stage_race: 'Étapes',
 }
 

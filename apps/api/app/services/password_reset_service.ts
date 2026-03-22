@@ -1,7 +1,6 @@
 import env from '#start/env'
 import User from '#models/user'
 import PasswordResetMail from '#mails/password_reset_mail'
-import hash from '@adonisjs/core/services/hash'
 import mail from '@adonisjs/mail/services/main'
 import db from '@adonisjs/lucid/services/db'
 import { randomBytes } from 'node:crypto'
@@ -36,7 +35,7 @@ export default class PasswordResetService {
     if (!record) return false
 
     const user = await User.findByOrFail('email', record.email)
-    user.passwordHash = await hash.make(newPassword)
+    user.passwordHash = newPassword
     await user.save()
 
     await db.from('password_reset_tokens').where('token', token).delete()
