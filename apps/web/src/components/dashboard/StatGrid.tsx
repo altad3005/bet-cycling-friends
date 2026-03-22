@@ -32,7 +32,7 @@ export default function StatGrid({ myStanding, leaderStanding, memberCount, user
       <div className="stat-card">
         <div className="stat-label">Courses jouées</div>
         <div className="stat-val">{myStanding?.racesPlayed ?? '—'}</div>
-        <div className="stat-sub">pronostics placés</div>
+        <div className="stat-sub">paris placés</div>
       </div>
 
       <div className="stat-card">

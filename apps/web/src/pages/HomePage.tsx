@@ -12,7 +12,6 @@ import NextRaceBanner from '../components/dashboard/NextRaceBanner'
 import StatGrid from '../components/dashboard/StatGrid'
 import LeagueStandingsPanel from '../components/dashboard/LeagueStandingsPanel'
 import UpcomingRacesPanel from '../components/dashboard/UpcomingRacesPanel'
-import Top4Panel from '../components/dashboard/Top4Panel'
 import BetModal from '../components/betting/BetModal'
 import './HomePage.css'
 
@@ -96,12 +95,7 @@ export default function HomePage() {
           season={activeLeague.season}
         />
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <UpcomingRacesPanel races={leagueRaces} />
-          {leagueStandings.some((s) => s.racesPlayed > 0) && (
-            <Top4Panel standings={leagueStandings} userId={user?.id ?? ''} />
-          )}
-        </div>
+        <UpcomingRacesPanel races={leagueRaces} />
       </div>
 
     </AppShell>

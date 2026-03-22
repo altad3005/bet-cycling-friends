@@ -6,25 +6,33 @@ import LeagueMember from '#models/league_member'
 
 export default class StandingsService {
   async getLeagueStandings(leagueId: string) {
-    const rows = await db
-      .from('league_members as lm')
-      .join('users', 'users.id', 'lm.user_id')
-      .leftJoin('scores', (q) =>
-        q.on('scores.user_id', 'lm.user_id').andOnVal('scores.league_id', leagueId)
-      )
-      .where('lm.league_id', leagueId)
-      .groupBy('lm.user_id', 'users.pseudo', 'users.icon')
-      .select([
-        'lm.user_id as user_id',
-        'users.pseudo',
-        'users.icon',
-        db.raw('COALESCE(SUM(scores.points), 0) as total_points'),
-        db.raw('COUNT(scores.race_id) as races_played'),
-      ])
-      .orderByRaw('COALESCE(SUM(scores.points), 0) DESC, COUNT(scores.race_id) DESC')
+    const result = await db.rawQuery<{
+      rows: { user_id: string; pseudo: string; icon: string; total_points: number; races_played: number }[]
+    }>(
+      `SELECT
+        lm.user_id,
+        u.pseudo,
+        u.icon,
+        COALESCE(SUM(s.points), 0) AS total_points,
+        (SELECT COUNT(*)
+         FROM league_races lr
+         WHERE lr.league_id = ?
+           AND (
+             EXISTS (SELECT 1 FROM bets_classic bc WHERE bc.user_id = lm.user_id AND bc.race_id = lr.race_id)
+             OR EXISTS (SELECT 1 FROM bets_grand_tour bgt WHERE bgt.user_id = lm.user_id AND bgt.race_id = lr.race_id)
+           )
+        ) AS races_played
+      FROM league_members lm
+      JOIN users u ON u.id = lm.user_id
+      LEFT JOIN scores s ON s.user_id = lm.user_id AND s.league_id = ?
+      WHERE lm.league_id = ?
+      GROUP BY lm.user_id, u.pseudo, u.icon
+      ORDER BY total_points DESC`,
+      [leagueId, leagueId, leagueId]
+    )
 
     return this.withSharedRanks(
-      rows.map((row) => ({
+      result.rows.map((row) => ({
         userId: row.user_id,
         pseudo: row.pseudo,
         icon: row.icon,
