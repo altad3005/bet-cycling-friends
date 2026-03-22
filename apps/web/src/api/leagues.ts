@@ -40,4 +40,10 @@ export const leaguesApi = {
 
   members: (id: string) =>
     api.get<{ data: { members: LeagueMember[] } }>(`/leagues/${id}/members`),
+
+  updateMember: (leagueId: string, userId: string, isAdmin: boolean) =>
+    api.patch(`/leagues/${leagueId}/members/${userId}`, { isAdmin }),
+
+  kickMember: (leagueId: string, userId: string) =>
+    api.delete(`/leagues/${leagueId}/members/${userId}`),
 }

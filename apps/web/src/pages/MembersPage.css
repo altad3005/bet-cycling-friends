@@ -1,0 +1,190 @@
+/* ── League info strip ─────────────────────────── */
+.members-strip {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: #131318;
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.members-strip-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.members-strip-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f0ede8;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.members-strip-code {
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 16px;
+  color: #e8c96d;
+  letter-spacing: 2px;
+}
+
+.members-strip-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(240, 237, 232, 0.25);
+}
+
+.members-strip-sep {
+  width: 0.5px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.07);
+  margin: 0 1rem;
+}
+
+/* ── Member list ───────────────────────────────── */
+.members-loading,
+.members-empty {
+  padding: 4rem 2rem;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(240, 237, 232, 0.25);
+}
+
+.members-list {
+  background: #131318;
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.members-col-head {
+  display: grid;
+  grid-template-columns: 40px 44px 1fr 60px 80px 160px;
+  padding: 8px 1.25rem;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(240, 237, 232, 0.2);
+  align-items: center;
+  gap: 12px;
+}
+
+.members-row {
+  display: grid;
+  grid-template-columns: 40px 44px 1fr 60px 80px 160px;
+  padding: 12px 1.25rem;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.12s;
+}
+.members-row:last-child { border-bottom: none; }
+.members-row:hover { background: rgba(255, 255, 255, 0.02); }
+.members-row.me { background: rgba(232, 201, 109, 0.04); }
+.members-row.me:hover { background: rgba(232, 201, 109, 0.06); }
+
+/* ── Columns ───────────────────────────────────── */
+.mcol-rank {
+  text-align: center;
+}
+
+.rank-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  color: rgba(240, 237, 232, 0.35);
+}
+.rank-num.g { color: #e8c96d; }
+.rank-num.s { color: #b0b8c8; }
+.rank-num.b { color: #cd7f32; }
+
+.m-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.mcol-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.m-pseudo {
+  font-size: 13px;
+  font-weight: 500;
+  color: #f0ede8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #e8c96d;
+  background: rgba(232, 201, 109, 0.1);
+  border: 0.5px solid rgba(232, 201, 109, 0.2);
+  border-radius: 3px;
+  padding: 2px 6px;
+  flex-shrink: 0;
+}
+
+.mcol-races {
+  font-size: 13px;
+  color: rgba(240, 237, 232, 0.45);
+  text-align: center;
+}
+
+.mcol-pts {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f0ede8;
+  text-align: right;
+}
+
+.mcol-joined {
+  font-size: 11px;
+  color: rgba(240, 237, 232, 0.3);
+  text-align: right;
+}
+
+/* ── Responsive ────────────────────────────────── */
+@media (max-width: 900px) {
+  .members-col-head,
+  .members-row {
+    grid-template-columns: 36px 40px 1fr 60px 80px;
+  }
+  .mcol-joined { display: none; }
+}
+
+@media (max-width: 640px) {
+  .members-col-head,
+  .members-row {
+    grid-template-columns: 32px 36px 1fr 70px;
+    gap: 8px;
+    padding: 10px 1rem;
+  }
+  .mcol-races { display: none; }
+  .mcol-pts { font-size: 12px; }
+  .members-strip-sep { display: none; }
+  .members-strip { gap: 0.75rem; }
+}

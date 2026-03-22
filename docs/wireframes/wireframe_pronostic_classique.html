@@ -1,0 +1,161 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.phone{width:375px;margin:0 auto;background:var(--color-background-tertiary);border-radius:32px;border:1px solid var(--color-border-secondary);overflow:hidden;font-family:var(--font-sans)}
+.bar{background:var(--color-background-primary);padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.back-btn{width:28px;height:28px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.bar-info{flex:1}
+.bar-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.bar-sub{font-size:11px;color:var(--color-text-secondary)}
+.content{padding:16px;display:flex;flex-direction:column;gap:14px}
+.race-hero{background:#1D9E75;border-radius:var(--border-radius-lg);padding:14px}
+.hero-name{font-size:17px;font-weight:500;color:white}
+.hero-meta{font-size:12px;color:#9FE1CB;margin-top:3px}
+.hero-chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.chip{font-size:10px;padding:3px 8px;border-radius:20px;background:rgba(255,255,255,0.15);color:white}
+.deadline{display:flex;align-items:center;gap:6px;background:#FAEEDA;border-radius:var(--border-radius-md);padding:8px 12px}
+.deadline-txt{font-size:12px;color:#633806}
+.deadline-val{font-size:12px;font-weight:500;color:#412402;margin-left:auto}
+.section-label{font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.5px}
+.slot{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden}
+.slot-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.slot-type{font-size:12px;font-weight:500}
+.slot-type.fav{color:#0F6E56}
+.slot-type.bon{color:#3C3489}
+.slot-badge-fav{font-size:10px;background:#E1F5EE;color:#085041;padding:2px 8px;border-radius:20px}
+.slot-badge-bon{font-size:10px;background:#EEEDFE;color:#3C3489;padding:2px 8px;border-radius:20px}
+.slot-body{padding:12px 14px}
+.search-input{width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:13px;color:var(--color-text-primary);background:var(--color-background-secondary)}
+.rider-list{margin-top:8px;display:flex;flex-direction:column;gap:2px}
+.rider-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--border-radius-md);cursor:pointer;border:0.5px solid transparent}
+.rider-row:hover{background:var(--color-background-secondary)}
+.rider-row.selected{border-color:#1D9E75;background:#E1F5EE}
+.rider-flag{font-size:14px;width:20px;text-align:center}
+.rider-name{flex:1;font-size:13px;color:var(--color-text-primary)}
+.rider-team{font-size:11px;color:var(--color-text-secondary)}
+.rider-check{width:18px;height:18px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center}
+.pts-preview{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:12px 14px}
+.pts-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.pts-row+.pts-row{border-top:0.5px solid var(--color-border-tertiary)}
+.pts-label{font-size:12px;color:var(--color-text-secondary)}
+.pts-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.pts-note{font-size:11px;color:var(--color-text-secondary);margin-top:6px;font-style:italic}
+.cta-btn{background:#1D9E75;color:white;border:none;border-radius:var(--border-radius-lg);padding:13px;font-size:15px;font-weight:500;width:100%;cursor:pointer;text-align:center}
+.cta-btn:disabled{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.nav{background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0 12px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--color-text-secondary)}
+.nav-item.active{color:#1D9E75}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:#1D9E75;margin-top:2px}
+svg.icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<div style="padding:24px 0;background:var(--color-background-tertiary)">
+<div class="phone">
+
+  <div class="bar">
+    <div class="back-btn">
+      <svg class="icon" style="width:14px;height:14px" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+    <div class="bar-info">
+      <div class="bar-title">Mon pronostic</div>
+      <div class="bar-sub">Milan–San Remo 2026</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="race-hero">
+      <div class="hero-name">Milan–San Remo</div>
+      <div class="hero-meta">22 mars 2026 · 288 km · Italie</div>
+      <div class="hero-chips">
+        <span class="chip">Monument</span>
+        <span class="chip">×2,0</span>
+        <span class="chip">198 coureurs</span>
+      </div>
+    </div>
+
+    <div class="deadline">
+      <svg style="width:14px;height:14px;stroke:#854F0B;fill:none;stroke-width:1.5;flex-shrink:0" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span class="deadline-txt">Fermeture des paris</span>
+      <span class="deadline-val">Dans 6h 42min</span>
+    </div>
+
+    <div class="slot">
+      <div class="slot-header">
+        <span class="slot-type fav">Favori</span>
+        <span class="slot-badge-fav">×1,0 — points pleins</span>
+      </div>
+      <div class="slot-body">
+        <input class="search-input" placeholder="Rechercher un coureur..." value="Pog" readonly/>
+        <div class="rider-list">
+          <div class="rider-row selected">
+            <span class="rider-flag">🇸🇮</span>
+            <div style="flex:1">
+              <div class="rider-name">Tadej Pogacar</div>
+              <div class="rider-team">UAE Team Emirates</div>
+            </div>
+            <div class="rider-check">
+              <svg style="width:10px;height:10px;stroke:white;fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="rider-row">
+            <span class="rider-flag">🇸🇮</span>
+            <div style="flex:1">
+              <div class="rider-name">Jan Polanc</div>
+              <div class="rider-team">UAE Team Emirates</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-header">
+        <span class="slot-type bon">Bonus</span>
+        <span class="slot-badge-bon">×0,5 — points divisés</span>
+      </div>
+      <div class="slot-body">
+        <input class="search-input" placeholder="Rechercher un coureur..." readonly/>
+        <div style="text-align:center;padding:16px 0;color:var(--color-text-secondary);font-size:13px">
+          Sélectionnez votre coureur bonus
+        </div>
+      </div>
+    </div>
+
+    <div class="pts-preview">
+      <div class="pts-row">
+        <span class="pts-label">Si Pogacar 1er</span>
+        <span class="pts-val">100 × 1,0 × 2,0 = 200 pts</span>
+      </div>
+      <div class="pts-row">
+        <span class="pts-label">Si Pogacar 2e</span>
+        <span class="pts-val">70 × 1,0 × 2,0 = 140 pts</span>
+      </div>
+      <div class="pts-note">Le bonus rapporte la moitié des points pour la même place</div>
+    </div>
+
+    <button class="cta-btn" disabled>Choisir un bonus pour valider</button>
+
+  </div>
+
+  <div class="nav">
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Accueil
+    </div>
+    <div class="nav-item active">
+      <svg class="icon" viewBox="0 0 24 24" stroke="#1D9E75"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Ligue
+      <div class="nav-dot"></div>
+    </div>
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Global
+    </div>
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Profil
+    </div>
+  </div>
+
+</div>
+</div>

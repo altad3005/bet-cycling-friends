@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth'
 import { useAuthStore } from '../../stores/auth'
+import './auth.css'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -18,7 +19,7 @@ export default function LoginPage() {
     try {
       const res = await authApi.login(email, password)
       setAuth(res.data.data.token, res.data.data.user)
-      navigate('/')
+      navigate('/dashboard')
     } catch (err: unknown) {
       const data = (err as { response?: { data?: unknown } })?.response?.data as
         | { errors?: { message: string }[]; message?: string }
@@ -30,45 +31,47 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">Connexion</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+    <div className="auth-root">
+      <Link to="/" className="auth-logo">BCF</Link>
+
+      <div className="auth-card">
+        <div className="auth-title">Connexion</div>
+        <div className="auth-subtitle">Content de te revoir dans le peloton.</div>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="auth-field">
+            <label className="auth-label">Email</label>
             <input
+              className="auth-input"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="toi@exemple.fr"
               required
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Mot de passe</label>
+          <div className="auth-field">
+            <label className="auth-label">Mot de passe</label>
             <input
+              className="auth-input"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
               required
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-          >
+          {error && <div className="auth-error">{error}</div>}
+          <button type="submit" className="auth-submit" disabled={loading}>
             {loading ? 'Connexion…' : 'Se connecter'}
           </button>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-4">
+
+        <div className="auth-divider" />
+        <div className="auth-footer">
           Pas encore de compte ?{' '}
-          <Link to="/signup" className="text-blue-600 hover:underline">
-            S'inscrire
-          </Link>
-        </p>
+          <Link to="/signup">S'inscrire</Link>
+        </div>
       </div>
     </div>
   )

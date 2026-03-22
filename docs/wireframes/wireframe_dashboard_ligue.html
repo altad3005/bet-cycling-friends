@@ -1,0 +1,202 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.phone{width:375px;margin:0 auto;background:var(--color-background-tertiary);border-radius:32px;border:1px solid var(--color-border-secondary);overflow:hidden;font-family:var(--font-sans)}
+.bar{background:var(--color-background-primary);padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between}
+.bar-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.bar-icon{width:32px;height:32px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#04342C}
+.content{padding:16px;display:flex;flex-direction:column;gap:12px}
+.league-header{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:14px}
+.league-name{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.league-meta{font-size:12px;color:var(--color-text-secondary)}
+.league-code{display:inline-block;margin-top:8px;font-size:11px;background:#E1F5EE;color:#085041;padding:3px 8px;border-radius:6px;font-family:var(--font-mono)}
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center}
+.stat-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.stat-lbl{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.5px}
+.race-card{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:12px;display:flex;align-items:center;gap:12px}
+.race-date{min-width:36px;text-align:center}
+.race-day{font-size:18px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.race-mon{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
+.race-info{flex:1}
+.race-name{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.race-type{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
+.badge-todo{background:#FAEEDA;color:#633806}
+.badge-done{background:#E1F5EE;color:#085041}
+.badge-live{background:#FCEBEB;color:#791F1F}
+.badge-gt{background:#EEEDFE;color:#3C3489}
+.divider{height:0.5px;background:var(--color-border-tertiary)}
+.standing-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.standing-row:last-child{border-bottom:none}
+.rank{font-size:13px;font-weight:500;color:var(--color-text-secondary);min-width:20px;text-align:center}
+.rank.me{color:#1D9E75}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;font-size:14px}
+.avatar.me{border:1.5px solid #1D9E75}
+.standing-name{flex:1;font-size:13px;color:var(--color-text-primary)}
+.standing-name.me{font-weight:500;color:#0F6E56}
+.standing-pts{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.standing-pct{font-size:11px;color:var(--color-text-secondary);text-align:right}
+.bet-cta{background:#1D9E75;color:#E1F5EE;border:none;border-radius:var(--border-radius-md);padding:9px 14px;font-size:13px;font-weight:500;cursor:pointer;min-width:70px;text-align:center}
+.nav{background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0 12px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--color-text-secondary);cursor:pointer}
+.nav-item.active{color:#1D9E75}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:#1D9E75;margin-top:2px}
+svg.icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<div style="padding:24px 0;background:var(--color-background-tertiary)">
+<div class="phone">
+
+  <div class="bar">
+    <div>
+      <div style="font-size:11px;color:var(--color-text-secondary)">Ma ligue</div>
+      <div class="bar-title">Les Baroudeurs</div>
+    </div>
+    <div class="bar-icon">AB</div>
+  </div>
+
+  <div class="content">
+
+    <div class="league-header">
+      <div class="league-name">Les Baroudeurs</div>
+      <div class="league-meta">Saison 2026 · 8 membres · Admin : toi</div>
+      <div class="league-code">Code : BCF-4X7K</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">3</div>
+        <div class="stat-lbl">Ta position</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">1 240</div>
+        <div class="stat-lbl">Tes points</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">68%</div>
+        <div class="stat-lbl">Score global</div>
+      </div>
+    </div>
+
+    <div class="section-title">Prochaines courses</div>
+
+    <div class="race-card">
+      <div class="race-date">
+        <div class="race-day">22</div>
+        <div class="race-mon">Mar</div>
+      </div>
+      <div class="race-info">
+        <div class="race-name">Milan–San Remo</div>
+        <div class="race-type">Monument · ×2,0</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <span class="badge badge-todo">À parier</span>
+        <button class="bet-cta" onclick="sendPrompt('Montrez-moi l\'interface de pronostic pour Milan-San Remo')">Parier</button>
+      </div>
+    </div>
+
+    <div class="race-card">
+      <div class="race-date">
+        <div class="race-day">30</div>
+        <div class="race-mon">Mar</div>
+      </div>
+      <div class="race-info">
+        <div class="race-name">Tour des Flandres</div>
+        <div class="race-type">Monument · ×2,0</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <span class="badge badge-done">Parié</span>
+        <div style="font-size:11px;color:var(--color-text-secondary)">Pogacar / Van Aert</div>
+      </div>
+    </div>
+
+    <div class="race-card">
+      <div class="race-date">
+        <div class="race-day">1</div>
+        <div class="race-mon">Jul</div>
+      </div>
+      <div class="race-info">
+        <div class="race-name">Tour de France</div>
+        <div class="race-type">Grand Tour · 21 étapes</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <span class="badge badge-gt">Grand Tour</span>
+        <button class="bet-cta" onclick="sendPrompt('Montrez-moi l\'interface de sélection d\'équipe pour le Tour de France')">Équipe</button>
+      </div>
+    </div>
+
+    <div class="section-title">Classement de la ligue</div>
+
+    <div style="background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:0 12px">
+      <div class="standing-row">
+        <div class="rank">1</div>
+        <div class="avatar">🚴</div>
+        <div class="standing-name">Pierrot</div>
+        <div>
+          <div class="standing-pts">1 580 pts</div>
+          <div class="standing-pct">74%</div>
+        </div>
+      </div>
+      <div class="standing-row">
+        <div class="rank">2</div>
+        <div class="avatar">⛰️</div>
+        <div class="standing-name">Sophie</div>
+        <div>
+          <div class="standing-pts">1 410 pts</div>
+          <div class="standing-pct">71%</div>
+        </div>
+      </div>
+      <div class="standing-row">
+        <div class="rank me">3</div>
+        <div class="avatar me">AB</div>
+        <div class="standing-name me">Toi (Alex)</div>
+        <div>
+          <div class="standing-pts">1 240 pts</div>
+          <div class="standing-pct">68%</div>
+        </div>
+      </div>
+      <div class="standing-row">
+        <div class="rank">4</div>
+        <div class="avatar">🏆</div>
+        <div class="standing-name">Marco</div>
+        <div>
+          <div class="standing-pts">1 100 pts</div>
+          <div class="standing-pct">62%</div>
+        </div>
+      </div>
+      <div class="standing-row">
+        <div class="rank">5</div>
+        <div class="avatar">🌟</div>
+        <div class="standing-name">Julie</div>
+        <div>
+          <div class="standing-pts">980 pts</div>
+          <div class="standing-pct">58%</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="nav">
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Accueil
+    </div>
+    <div class="nav-item active">
+      <svg class="icon" viewBox="0 0 24 24" stroke="#1D9E75"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Ligue
+      <div class="nav-dot"></div>
+    </div>
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Global
+    </div>
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Profil
+    </div>
+  </div>
+
+</div>
+</div>

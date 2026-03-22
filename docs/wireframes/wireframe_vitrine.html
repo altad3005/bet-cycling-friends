@@ -1,0 +1,193 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.phone{width:375px;margin:0 auto;background:var(--color-background-tertiary);border-radius:32px;border:1px solid var(--color-border-secondary);overflow:hidden;font-family:var(--font-sans)}
+.content{display:flex;flex-direction:column}
+
+.hero{background:#111111;padding:32px 20px 28px}
+.hero-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.hero-bcf{font-size:22px;font-weight:500;color:white;letter-spacing:-0.5px}
+.hero-bcf span{color:#1D9E75}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:#1D9E75}
+.hero-tagline{font-size:20px;font-weight:500;color:white;line-height:1.35;margin-bottom:10px}
+.hero-sub{font-size:13px;color:#888;line-height:1.6;margin-bottom:24px}
+.hero-ctas{display:flex;gap:10px}
+.btn-primary{background:#1D9E75;color:white;border:none;border-radius:var(--border-radius-md);padding:11px 20px;font-size:14px;font-weight:500;cursor:pointer;flex:1;text-align:center}
+.btn-outline{background:transparent;color:white;border:0.5px solid rgba(255,255,255,0.3);border-radius:var(--border-radius-md);padding:11px 20px;font-size:14px;cursor:pointer;flex:1;text-align:center}
+
+.features{padding:20px;display:flex;flex-direction:column;gap:10px;background:var(--color-background-primary)}
+.feat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px;display:flex;gap:12px;align-items:flex-start}
+.feat-icon{width:36px;height:36px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.feat-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.feat-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+
+.section-header{padding:20px 20px 10px;background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary)}
+.section-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.section-sub{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+
+.standings{padding:0 20px 20px;background:var(--color-background-primary)}
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.podium-card{border-radius:var(--border-radius-lg);padding:12px 8px;text-align:center;border:0.5px solid var(--color-border-tertiary)}
+.podium-card.first{background:#E1F5EE;border-color:#1D9E75;order:-1}
+.podium-rank{font-size:18px;font-weight:500;margin-bottom:6px}
+.podium-rank.gold{color:#BA7517}
+.podium-rank.silver{color:#888780}
+.podium-rank.bronze{color:#993C1D}
+.podium-avatar{width:36px;height:36px;border-radius:50%;background:var(--color-background-secondary);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:16px;border:0.5px solid var(--color-border-tertiary)}
+.podium-card.first .podium-avatar{border-color:#1D9E75;border-width:1.5px}
+.podium-name{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.podium-pct{font-size:13px;font-weight:500;color:#1D9E75;margin-top:2px}
+.podium-pct.gray{color:var(--color-text-secondary)}
+
+.standing-list{display:flex;flex-direction:column}
+.standing-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.standing-row:last-child{border-bottom:none}
+.srank{font-size:13px;font-weight:500;color:var(--color-text-secondary);min-width:20px;text-align:center}
+.savatar{width:28px;height:28px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:13px;border:0.5px solid var(--color-border-tertiary)}
+.sname{flex:1;font-size:13px;color:var(--color-text-primary)}
+.spct{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:40px;text-align:right}
+.scourses{font-size:11px;color:var(--color-text-secondary);min-width:52px;text-align:right}
+
+.join-banner{margin:0 20px 20px;background:#111;border-radius:var(--border-radius-lg);padding:16px;text-align:center}
+.join-title{font-size:14px;font-weight:500;color:white;margin-bottom:6px}
+.join-sub{font-size:12px;color:#888;margin-bottom:14px;line-height:1.5}
+.join-btn{background:#1D9E75;color:white;border:none;border-radius:var(--border-radius-md);padding:10px 24px;font-size:13px;font-weight:500;cursor:pointer;width:100%}
+
+.footer{padding:16px 20px;border-top:0.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;align-items:center;background:var(--color-background-primary)}
+.footer-logo{font-size:13px;font-weight:500;color:var(--color-text-secondary)}
+.footer-logo span{color:#1D9E75}
+.footer-links{display:flex;gap:14px}
+.footer-link{font-size:11px;color:var(--color-text-secondary)}
+
+svg.icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<div style="padding:24px 0;background:var(--color-background-tertiary)">
+<div class="phone">
+<div class="content">
+
+  <div class="hero">
+    <div class="hero-logo">
+      <div style="background:#1D9E75;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#04342C">BCF</div>
+      <div class="hero-bcf">Bet<span>Cycling</span>Friends</div>
+    </div>
+    <div class="hero-tagline">Les pronostics cyclistes entre amis</div>
+    <div class="hero-sub">Pariez sur les Classiques et les Grands Tours UCI WorldTour. Créez votre ligue privée, défiez vos amis, grimpez au classement.</div>
+    <div class="hero-ctas">
+      <button class="btn-primary">Créer un compte</button>
+      <button class="btn-outline">Se connecter</button>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#E1F5EE">
+        <svg class="icon" style="stroke:#0F6E56" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <div>
+        <div class="feat-title">Ligues privées</div>
+        <div class="feat-desc">Créez votre groupe, invitez vos amis via un code unique. Max 20 joueurs.</div>
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#EEEDFE">
+        <svg class="icon" style="stroke:#534AB7" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div>
+        <div class="feat-title">Classiques & Grands Tours</div>
+        <div class="feat-desc">Favori + Bonus pour les Classiques. Équipe de 8 pour les 3 semaines.</div>
+      </div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#FAEEDA">
+        <svg class="icon" style="stroke:#854F0B" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+      </div>
+      <div>
+        <div class="feat-title">Multiplicateurs de prestige</div>
+        <div class="feat-desc">Les Monuments valent ×2,0. Chaque course a son propre poids.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="section-title">Classement global</div>
+    <div class="section-sub">Tous les joueurs · Saison 2026 · Score normalisé</div>
+  </div>
+
+  <div class="standings">
+    <div class="podium">
+      <div class="podium-card" style="margin-top:16px">
+        <div class="podium-rank silver">2</div>
+        <div class="podium-avatar">🚴</div>
+        <div class="podium-name">Pierrot</div>
+        <div class="podium-pct gray">74%</div>
+      </div>
+      <div class="podium-card first">
+        <div class="podium-rank gold">1</div>
+        <div class="podium-avatar">⛰️</div>
+        <div class="podium-name">MarieCycles</div>
+        <div class="podium-pct">81%</div>
+      </div>
+      <div class="podium-card" style="margin-top:24px">
+        <div class="podium-rank bronze">3</div>
+        <div class="podium-avatar">🏆</div>
+        <div class="podium-name">Sébas</div>
+        <div class="podium-pct gray">71%</div>
+      </div>
+    </div>
+
+    <div class="standing-list">
+      <div class="standing-row">
+        <div class="srank">4</div>
+        <div class="savatar">🌟</div>
+        <div class="sname">TourFanatic</div>
+        <div class="scourses">12 courses</div>
+        <div class="spct">68%</div>
+      </div>
+      <div class="standing-row">
+        <div class="srank">5</div>
+        <div class="savatar">🎯</div>
+        <div class="sname">VeloKing</div>
+        <div class="scourses">9 courses</div>
+        <div class="spct">65%</div>
+      </div>
+      <div class="standing-row">
+        <div class="srank">6</div>
+        <div class="savatar">💨</div>
+        <div class="sname">Sophie_B</div>
+        <div class="scourses">14 courses</div>
+        <div class="spct">63%</div>
+      </div>
+      <div class="standing-row">
+        <div class="srank">7</div>
+        <div class="savatar">🦅</div>
+        <div class="sname">AlpeDHuez</div>
+        <div class="scourses">8 courses</div>
+        <div class="spct">61%</div>
+      </div>
+      <div class="standing-row">
+        <div class="srank">8</div>
+        <div class="savatar">🚵</div>
+        <div class="sname">GrandBoucle</div>
+        <div class="scourses">11 courses</div>
+        <div class="spct">58%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="join-banner">
+    <div class="join-title">Rejoins la communauté</div>
+    <div class="join-sub">Déjà 142 joueurs actifs cette saison sur 18 ligues privées.</div>
+    <button class="join-btn">Créer mon compte gratuitement</button>
+  </div>
+
+  <div class="footer">
+    <div class="footer-logo">Bet<span>Cycling</span>Friends</div>
+    <div class="footer-links">
+      <span class="footer-link">À propos</span>
+      <span class="footer-link">Contact</span>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>

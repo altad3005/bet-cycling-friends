@@ -1,0 +1,136 @@
+.auth-root {
+  min-height: 100vh;
+  background: #0a0a0f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  padding: 2rem;
+}
+
+.auth-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: #e8c96d;
+  margin-bottom: 2.5rem;
+  text-decoration: none;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 0.5px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  padding: 2.5rem;
+}
+
+.auth-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 1px;
+  color: #f0ede8;
+  margin-bottom: 0.375rem;
+}
+
+.auth-subtitle {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(240, 237, 232, 0.4);
+  margin-bottom: 2rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: rgba(240, 237, 232, 0.5);
+  text-transform: uppercase;
+}
+
+.auth-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #f0ede8;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-input::placeholder {
+  color: rgba(240, 237, 232, 0.2);
+}
+
+.auth-input:focus {
+  border-color: rgba(232, 201, 109, 0.5);
+}
+
+.auth-error {
+  font-size: 13px;
+  color: #f28b82;
+  padding: 8px 12px;
+  background: rgba(242, 139, 130, 0.08);
+  border: 0.5px solid rgba(242, 139, 130, 0.2);
+  border-radius: 6px;
+}
+
+.auth-submit {
+  background: #e8c96d;
+  color: #0a0a0f;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: opacity 0.15s;
+}
+
+.auth-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.auth-footer {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(240, 237, 232, 0.3);
+  margin-top: 1.5rem;
+}
+
+.auth-footer a {
+  color: #e8c96d;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+.auth-divider {
+  height: 0.5px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 1.5rem 0;
+}

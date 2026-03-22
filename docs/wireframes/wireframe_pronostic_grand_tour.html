@@ -1,0 +1,223 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.phone{width:375px;margin:0 auto;background:var(--color-background-tertiary);border-radius:32px;border:1px solid var(--color-border-secondary);overflow:hidden;font-family:var(--font-sans)}
+.bar{background:var(--color-background-primary);padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.back-btn{width:28px;height:28px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.bar-info{flex:1}
+.bar-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.bar-sub{font-size:11px;color:var(--color-text-secondary)}
+.content{padding:16px;display:flex;flex-direction:column;gap:14px}
+.race-hero{background:#111111;border-radius:var(--border-radius-lg);padding:14px}
+.hero-name{font-size:17px;font-weight:500;color:white}
+.hero-meta{font-size:12px;color:#888;margin-top:3px}
+.hero-chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.chip{font-size:10px;padding:3px 8px;border-radius:20px;background:rgba(255,255,255,0.1);color:#ccc}
+.chip.green{background:#1D9E75;color:white}
+.deadline{display:flex;align-items:center;gap:6px;background:#FCEBEB;border-radius:var(--border-radius-md);padding:8px 12px}
+.deadline-txt{font-size:12px;color:#791F1F}
+.deadline-val{font-size:12px;font-weight:500;color:#501313;margin-left:auto}
+.slots-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.slot-pill{border-radius:var(--border-radius-md);padding:8px 10px;display:flex;align-items:center;gap:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);cursor:pointer}
+.slot-pill.filled{border-color:#1D9E75;background:#E1F5EE}
+.slot-pill.empty{border-style:dashed}
+.slot-num{font-size:10px;color:var(--color-text-secondary);min-width:14px}
+.slot-name{font-size:12px;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slot-name.empty{color:var(--color-text-secondary);font-style:italic}
+.slot-x{font-size:12px;color:#A32D2D;margin-left:auto;cursor:pointer}
+.progress-bar-wrap{background:var(--color-background-secondary);border-radius:20px;height:6px;overflow:hidden}
+.progress-bar-fill{background:#1D9E75;height:100%;border-radius:20px;width:62.5%}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.search-input{width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:13px;color:var(--color-text-primary);background:var(--color-background-secondary)}
+.filter-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.filter-chip{font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);white-space:nowrap;cursor:pointer;flex-shrink:0}
+.filter-chip.active{background:#1D9E75;color:white;border-color:#1D9E75}
+.rider-list{display:flex;flex-direction:column;gap:2px}
+.rider-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--border-radius-md);cursor:pointer;border:0.5px solid transparent}
+.rider-row:hover{background:var(--color-background-secondary)}
+.rider-row.selected{border-color:#1D9E75;background:#E1F5EE;opacity:.6}
+.rider-flag{font-size:14px;width:20px;text-align:center}
+.rider-name{flex:1;font-size:13px;color:var(--color-text-primary)}
+.rider-team{font-size:11px;color:var(--color-text-secondary)}
+.rider-add{width:24px;height:24px;border-radius:50%;background:#E1F5EE;border:0.5px solid #1D9E75;display:flex;align-items:center;justify-content:center;color:#1D9E75;font-size:16px;font-weight:300}
+.rider-added{width:24px;height:24px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center}
+.warning{display:flex;gap:8px;background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px}
+.warning-txt{font-size:11px;color:#633806;line-height:1.5}
+.cta-btn{background:#1D9E75;color:white;border:none;border-radius:var(--border-radius-lg);padding:13px;font-size:15px;font-weight:500;width:100%;cursor:pointer;text-align:center}
+.cta-btn:disabled{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.nav{background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0 12px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--color-text-secondary)}
+.nav-item.active{color:#1D9E75}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:#1D9E75;margin-top:2px}
+svg.icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<div style="padding:24px 0;background:var(--color-background-tertiary)">
+<div class="phone">
+
+  <div class="bar">
+    <div class="back-btn">
+      <svg class="icon" style="width:14px;height:14px" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+    <div class="bar-info">
+      <div class="bar-title">Mon équipe</div>
+      <div class="bar-sub">Tour de France 2026</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="race-hero">
+      <div class="hero-name">Tour de France 2026</div>
+      <div class="hero-meta">1 – 23 juillet · 21 étapes · France</div>
+      <div class="hero-chips">
+        <span class="chip green">Grand Tour</span>
+        <span class="chip">Étapes ×0,25</span>
+        <span class="chip">GC final ×2,0</span>
+        <span class="chip">Choix définitif</span>
+      </div>
+    </div>
+
+    <div class="deadline">
+      <svg style="width:14px;height:14px;stroke:#A32D2D;fill:none;stroke-width:1.5;flex-shrink:0" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span class="deadline-txt">Fermeture</span>
+      <span class="deadline-val">1 juil. à 11h00</span>
+    </div>
+
+    <div>
+      <div class="progress-label">
+        <span>Mon équipe</span>
+        <span>5 / 8 coureurs</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <div class="slots-grid">
+      <div class="slot-pill filled">
+        <span class="slot-num">1</span>
+        <span class="slot-name">Pogacar</span>
+        <span class="slot-x">×</span>
+      </div>
+      <div class="slot-pill filled">
+        <span class="slot-num">2</span>
+        <span class="slot-name">Vingegaard</span>
+        <span class="slot-x">×</span>
+      </div>
+      <div class="slot-pill filled">
+        <span class="slot-num">3</span>
+        <span class="slot-name">Evenepoel</span>
+        <span class="slot-x">×</span>
+      </div>
+      <div class="slot-pill filled">
+        <span class="slot-num">4</span>
+        <span class="slot-name">Van Aert</span>
+        <span class="slot-x">×</span>
+      </div>
+      <div class="slot-pill filled">
+        <span class="slot-num">5</span>
+        <span class="slot-name">Pedersen</span>
+        <span class="slot-x">×</span>
+      </div>
+      <div class="slot-pill empty">
+        <span class="slot-num">6</span>
+        <span class="slot-name empty">Vide</span>
+      </div>
+      <div class="slot-pill empty">
+        <span class="slot-num">7</span>
+        <span class="slot-name empty">Vide</span>
+      </div>
+      <div class="slot-pill empty">
+        <span class="slot-num">8</span>
+        <span class="slot-name empty">Vide</span>
+      </div>
+    </div>
+
+    <input class="search-input" placeholder="Rechercher un coureur..." readonly/>
+
+    <div class="filter-row">
+      <span class="filter-chip active">Tous</span>
+      <span class="filter-chip">Grimpeurs</span>
+      <span class="filter-chip">Sprinteurs</span>
+      <span class="filter-chip">Puncheurs</span>
+      <span class="filter-chip">Rouleurs</span>
+    </div>
+
+    <div class="rider-list">
+      <div class="rider-row selected">
+        <span class="rider-flag">🇸🇮</span>
+        <div style="flex:1">
+          <div class="rider-name">Tadej Pogacar</div>
+          <div class="rider-team">UAE Team Emirates</div>
+        </div>
+        <div class="rider-added">
+          <svg style="width:10px;height:10px;stroke:white;fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="rider-row selected">
+        <span class="rider-flag">🇩🇰</span>
+        <div style="flex:1">
+          <div class="rider-name">Jonas Vingegaard</div>
+          <div class="rider-team">Visma–Lease a Bike</div>
+        </div>
+        <div class="rider-added">
+          <svg style="width:10px;height:10px;stroke:white;fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="rider-row">
+        <span class="rider-flag">🇧🇪</span>
+        <div style="flex:1">
+          <div class="rider-name">Remco Evenepoel</div>
+          <div class="rider-team">Soudal Quick-Step</div>
+        </div>
+        <div class="rider-add">+</div>
+      </div>
+      <div class="rider-row">
+        <span class="rider-flag">🇧🇪</span>
+        <div style="flex:1">
+          <div class="rider-name">Wout Van Aert</div>
+          <div class="rider-team">Visma–Lease a Bike</div>
+        </div>
+        <div class="rider-add">+</div>
+      </div>
+      <div class="rider-row">
+        <span class="rider-flag">🇩🇰</span>
+        <div style="flex:1">
+          <div class="rider-name">Mads Pedersen</div>
+          <div class="rider-team">Lidl–Trek</div>
+        </div>
+        <div class="rider-add">+</div>
+      </div>
+    </div>
+
+    <div class="warning">
+      <svg style="width:16px;height:16px;stroke:#854F0B;fill:none;stroke-width:1.5;flex-shrink:0;margin-top:1px" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span class="warning-txt">Ton équipe est <strong>définitive</strong> dès le départ du Tour. Aucune modification ne sera possible pendant les 21 étapes.</span>
+    </div>
+
+    <button class="cta-btn" disabled>Sélectionner encore 3 coureurs</button>
+
+  </div>
+
+  <div class="nav">
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Accueil
+    </div>
+    <div class="nav-item active">
+      <svg class="icon" viewBox="0 0 24 24" stroke="#1D9E75"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Ligue
+      <div class="nav-dot"></div>
+    </div>
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Global
+    </div>
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Profil
+    </div>
+  </div>
+
+</div>
+</div>

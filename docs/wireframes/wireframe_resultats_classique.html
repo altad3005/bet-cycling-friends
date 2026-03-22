@@ -1,0 +1,168 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.phone{width:375px;margin:0 auto;background:var(--color-background-tertiary);border-radius:32px;border:1px solid var(--color-border-secondary);overflow:hidden;font-family:var(--font-sans)}
+.bar{background:var(--color-background-primary);padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.back-btn{width:28px;height:28px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.bar-info{flex:1}
+.bar-title{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.bar-sub{font-size:11px;color:var(--color-text-secondary)}
+.content{padding:16px;display:flex;flex-direction:column;gap:12px}
+.race-result-hero{background:#1D9E75;border-radius:var(--border-radius-lg);padding:14px;color:white}
+.hero-label{font-size:11px;color:#9FE1CB;margin-bottom:4px}
+.hero-winner{font-size:17px;font-weight:500;color:white}
+.hero-team{font-size:12px;color:#9FE1CB;margin-top:2px}
+.hero-mult{display:inline-block;margin-top:8px;font-size:11px;background:rgba(255,255,255,0.15);color:white;padding:3px 8px;border-radius:20px}
+.my-bet-card{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:1.5px solid #1D9E75;padding:12px}
+.my-bet-title{font-size:12px;color:#0F6E56;font-weight:500;margin-bottom:10px}
+.bet-row{display:flex;align-items:center;gap:10px;padding:6px 0}
+.bet-row+.bet-row{border-top:0.5px solid var(--color-border-tertiary)}
+.bet-type{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;min-width:52px;text-align:center}
+.bet-fav{background:#E1F5EE;color:#085041}
+.bet-bon{background:#EEEDFE;color:#3C3489}
+.bet-rider{flex:1;font-size:13px;color:var(--color-text-primary)}
+.bet-rank{font-size:12px;color:var(--color-text-secondary)}
+.bet-pts{font-size:14px;font-weight:500;color:#1D9E75;min-width:55px;text-align:right}
+.bet-pts.zero{color:var(--color-text-secondary)}
+.total-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary)}
+.total-label{font-size:13px;color:var(--color-text-secondary)}
+.total-val{font-size:18px;font-weight:500;color:#1D9E75}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.5px}
+.standing-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.standing-row:last-child{border-bottom:none}
+.rank{font-size:13px;font-weight:500;color:var(--color-text-secondary);min-width:18px;text-align:center}
+.rank.me{color:#1D9E75}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;font-size:13px}
+.avatar.me{border:1.5px solid #1D9E75}
+.sname{flex:1;font-size:13px;color:var(--color-text-primary)}
+.sname.me{font-weight:500;color:#0F6E56}
+.sbets{font-size:11px;color:var(--color-text-secondary);flex:1}
+.spts{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:48px;text-align:right}
+.reveal-note{font-size:11px;color:var(--color-text-secondary);text-align:center;padding:8px 0}
+.nav{background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0 12px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--color-text-secondary)}
+.nav-item.active{color:#1D9E75}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:#1D9E75;margin-top:2px}
+svg.icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<div style="padding:24px 0;background:var(--color-background-tertiary)">
+<div class="phone">
+
+  <div class="bar">
+    <div class="back-btn">
+      <svg class="icon" style="width:14px;height:14px" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+    <div class="bar-info">
+      <div class="bar-title">Milan–San Remo</div>
+      <div class="bar-sub">22 mars 2026 · Monument · ×2,0</div>
+    </div>
+    <div style="font-size:10px;padding:3px 8px;border-radius:20px;background:#E1F5EE;color:#085041;font-weight:500">Terminé</div>
+  </div>
+
+  <div class="content">
+
+    <div class="race-result-hero">
+      <div class="hero-label">Vainqueur</div>
+      <div class="hero-winner">Tadej Pogacar</div>
+      <div class="hero-team">UAE Team Emirates</div>
+      <div>
+        <span class="hero-mult">Monument ×2,0</span>
+        <span class="hero-mult" style="margin-left:6px">2. Van der Poel · 3. Pedersen</span>
+      </div>
+    </div>
+
+    <div class="my-bet-card">
+      <div class="my-bet-title">Mon pronostic</div>
+      <div class="bet-row">
+        <span class="bet-type bet-fav">Favori</span>
+        <span class="bet-rider">Tadej Pogacar</span>
+        <span class="bet-rank">1er</span>
+        <span class="bet-pts">+200 pts</span>
+      </div>
+      <div class="bet-row">
+        <span class="bet-type bet-bon">Bonus</span>
+        <span class="bet-rider">Mads Pedersen</span>
+        <span class="bet-rank">3e</span>
+        <span class="bet-pts">+50 pts</span>
+      </div>
+      <div class="total-row">
+        <span class="total-label">Total cette course</span>
+        <span class="total-val">+250 pts</span>
+      </div>
+    </div>
+
+    <div class="section-title">Classement de la course</div>
+
+    <div style="background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:0 12px">
+      <div class="standing-row">
+        <div class="rank">1</div>
+        <div class="avatar me">AB</div>
+        <div style="flex:1">
+          <div class="sname me">Toi (Alex)</div>
+          <div class="sbets">Pogacar / Pedersen</div>
+        </div>
+        <div class="spts">250 pts</div>
+      </div>
+      <div class="standing-row">
+        <div class="rank">2</div>
+        <div class="avatar">🚴</div>
+        <div style="flex:1">
+          <div class="sname">Pierrot</div>
+          <div class="sbets">Pogacar / Van der Poel</div>
+        </div>
+        <div class="spts">220 pts</div>
+      </div>
+      <div class="standing-row">
+        <div class="rank">3</div>
+        <div class="avatar">⛰️</div>
+        <div style="flex:1">
+          <div class="sname">Sophie</div>
+          <div class="sbets">Van der Poel / Pedersen</div>
+        </div>
+        <div class="spts">115 pts</div>
+      </div>
+      <div class="standing-row">
+        <div class="rank">4</div>
+        <div class="avatar">🏆</div>
+        <div style="flex:1">
+          <div class="sname">Marco</div>
+          <div class="sbets">Van Aert / Pogacar</div>
+        </div>
+        <div class="spts">100 pts</div>
+      </div>
+      <div class="standing-row">
+        <div class="rank">5</div>
+        <div class="avatar">🌟</div>
+        <div style="flex:1">
+          <div class="sname">Julie</div>
+          <div class="sbets">Laporte / Kung</div>
+        </div>
+        <div class="spts">0 pts</div>
+      </div>
+      <div class="reveal-note">Pronostics révélés après le départ de la course</div>
+    </div>
+
+  </div>
+
+  <div class="nav">
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Accueil
+    </div>
+    <div class="nav-item active">
+      <svg class="icon" viewBox="0 0 24 24" stroke="#1D9E75"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Ligue
+      <div class="nav-dot"></div>
+    </div>
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Global
+    </div>
+    <div class="nav-item">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Profil
+    </div>
+  </div>
+
+</div>
+</div>

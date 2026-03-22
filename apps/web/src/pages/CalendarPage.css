@@ -1,0 +1,193 @@
+/* ── Filter tabs ──────────────────────────────── */
+.cal-filters {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  padding: 3px;
+  width: fit-content;
+  margin-bottom: 1.5rem;
+}
+
+.cal-tab {
+  padding: 6px 16px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  color: rgba(240, 237, 232, 0.4);
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  background: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.cal-tab:hover { color: rgba(240, 237, 232, 0.7); }
+.cal-tab.active { background: rgba(255, 255, 255, 0.07); color: #f0ede8; }
+
+.cal-tab-count {
+  display: inline-block;
+  margin-left: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(240, 237, 232, 0.4);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+.cal-tab.active .cal-tab-count {
+  background: rgba(232, 201, 109, 0.15);
+  color: #e8c96d;
+}
+
+/* ── Month group ──────────────────────────────── */
+.cal-month {
+  margin-bottom: 1.5rem;
+}
+
+.cal-month-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: rgba(240, 237, 232, 0.25);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── Race row ─────────────────────────────────── */
+.cal-row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 1.25rem;
+  background: #131318;
+  border: 0.5px solid rgba(255, 255, 255, 0.05);
+  border-radius: 7px;
+  margin-bottom: 6px;
+  transition: border-color 0.15s, background 0.15s;
+  cursor: default;
+}
+
+.cal-row:hover { border-color: rgba(255, 255, 255, 0.1); background: #16161c; }
+
+.cal-row.live {
+  border-color: rgba(74, 222, 128, 0.2);
+  background: rgba(74, 222, 128, 0.03);
+}
+
+/* ── Status dot ───────────────────────────────── */
+.cal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  justify-self: center;
+}
+.cal-dot.upcoming { background: rgba(255, 255, 255, 0.15); }
+.cal-dot.live { background: #4ade80; box-shadow: 0 0 6px rgba(74, 222, 128, 0.5); }
+.cal-dot.finished { background: rgba(255, 255, 255, 0.06); }
+
+/* ── Race info ────────────────────────────────── */
+.cal-info { min-width: 0; }
+
+.cal-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f0ede8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cal-name.dim { color: rgba(240, 237, 232, 0.4); }
+
+.cal-meta {
+  font-size: 11px;
+  color: rgba(240, 237, 232, 0.3);
+  margin-top: 2px;
+}
+
+/* ── Badges ───────────────────────────────────── */
+.cal-type {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cal-type.classic   { background: rgba(232, 201, 109, 0.08); color: rgba(232, 201, 109, 0.7); }
+.cal-type.grand-tour { background: rgba(180, 120, 220, 0.1); color: #b478dc; }
+.cal-type.stage-race { background: rgba(94, 160, 220, 0.1); color: #5ea0dc; }
+.cal-type.national  { background: rgba(255, 255, 255, 0.05); color: rgba(240, 237, 232, 0.4); }
+.cal-type.worlds    { background: rgba(232, 100, 80, 0.1); color: #e86450; }
+
+.cal-mult {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 44px;
+  text-align: center;
+}
+.cal-mult.monument  { background: rgba(232, 201, 109, 0.14); color: #e8c96d; }
+.cal-mult.wt-classic { background: rgba(94, 160, 220, 0.12); color: #5ea0dc; }
+.cal-mult.stage-race { background: rgba(255, 255, 255, 0.05); color: rgba(240, 237, 232, 0.35); }
+.cal-mult.gt        { background: rgba(180, 120, 220, 0.12); color: #b478dc; }
+
+/* ── Action button ────────────────────────────── */
+.cal-action {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.3px;
+  transition: opacity 0.15s;
+}
+.cal-action:hover { opacity: 0.8; }
+
+.cal-action.bet    { background: #e8c96d; color: #0a0a0f; }
+.cal-action.live   { background: rgba(74, 222, 128, 0.12); color: #4ade80; cursor: default; }
+.cal-action.done   { background: rgba(255, 255, 255, 0.05); color: rgba(240, 237, 232, 0.3); cursor: default; }
+.cal-action.locked { background: rgba(255, 255, 255, 0.04); color: rgba(240, 237, 232, 0.2); cursor: default; }
+
+/* ── Empty state ──────────────────────────────── */
+.cal-empty {
+  padding: 4rem 2rem;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(240, 237, 232, 0.25);
+}
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 768px) {
+  .cal-row {
+    grid-template-columns: 16px 1fr auto auto;
+    gap: 10px;
+    padding: 11px 1rem;
+  }
+  .cal-type { display: none; }
+}
+
+@media (max-width: 480px) {
+  .cal-row {
+    grid-template-columns: 16px 1fr auto;
+    gap: 8px;
+  }
+  .cal-mult { display: none; }
+}

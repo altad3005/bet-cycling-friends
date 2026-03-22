@@ -1,0 +1,306 @@
+import { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { MultiplierType } from '@bcf/shared'
+import { leaguesApi } from '../api/leagues'
+import { racesApi, type RacePreview } from '../api/races'
+import { useAuthStore } from '../stores/auth'
+import { useLeague } from '../hooks/useLeague'
+import AppShell from '../components/AppShell'
+import { initials, avatarColor } from '../utils/ui'
+import './HomePage.css'
+import './AdminPage.css'
+
+type Tab = 'members' | 'calendar'
+
+const DATE_FMT = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
+
+function multLabel(mult: MultiplierType): string {
+  if (mult === MultiplierType.MONUMENT)   return '×2,0'
+  if (mult === MultiplierType.WT_CLASSIC) return '×1,5'
+  if (mult === MultiplierType.GT_STAGE || mult === MultiplierType.GT_GC) return 'GT'
+  return '×1,0'
+}
+
+function multClass(mult: MultiplierType): string {
+  if (mult === MultiplierType.MONUMENT)   return 'x2'
+  if (mult === MultiplierType.WT_CLASSIC) return 'x15'
+  if (mult === MultiplierType.GT_STAGE || mult === MultiplierType.GT_GC) return 'x1'
+  return ''
+}
+
+// ── Members tab ──────────────────────────────────────────────────────────
+
+function MembersTab({ leagueId }: { leagueId: string }) {
+  const user = useAuthStore((s) => s.user)
+  const queryClient = useQueryClient()
+  const [confirmKick, setConfirmKick] = useState<string | null>(null)
+
+  const { data: members, isLoading } = useQuery({
+    queryKey: ['members', leagueId],
+    queryFn: () => leaguesApi.members(leagueId).then((r) => r.data.data.members),
+  })
+
+  const promoteMutation = useMutation({
+    mutationFn: ({ userId, isAdmin }: { userId: string; isAdmin: boolean }) =>
+      leaguesApi.updateMember(leagueId, userId, isAdmin),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['members', leagueId] }),
+  })
+
+  const kickMutation = useMutation({
+    mutationFn: (userId: string) => leaguesApi.kickMember(leagueId, userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['members', leagueId] })
+      queryClient.invalidateQueries({ queryKey: ['my-leagues'] })
+      setConfirmKick(null)
+    },
+  })
+
+  if (isLoading) return <div className="admin-loading">Chargement…</div>
+  if (!members || members.length === 0) return <div className="admin-empty">Aucun membre.</div>
+
+  const adminCount = members.filter((m) => m.isAdmin).length
+
+  return (
+    <div className="admin-list">
+      {members.map((m, i) => {
+        const isMe = m.userId === user?.id
+        const col = avatarColor(i)
+        const isKicking = confirmKick === m.userId
+        const canDemote = m.isAdmin && adminCount > 1
+        const canKick = !isMe
+
+        return (
+          <div key={m.userId} className={`admin-member-row${isMe ? ' me' : ''}`}>
+            <div className="amr-avatar" style={{ background: col.bg, color: col.color }}>
+              {initials(m.pseudo ?? '?')}
+            </div>
+            <div className="amr-info">
+              <div className="amr-name">
+                {m.pseudo}
+                {isMe && <span className="me-badge">Moi</span>}
+                {m.isAdmin && (
+                  <span className="admin-badge-sm">
+                    <svg viewBox="0 0 24 24" width="9" height="9"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/></svg>
+                    Admin
+                  </span>
+                )}
+              </div>
+              <div className="amr-joined">
+                Membre depuis le {m.joinedAt ? DATE_FMT.format(new Date(m.joinedAt)) : '—'}
+              </div>
+            </div>
+
+            {!isMe && (
+              <div className="amr-actions">
+                {isKicking ? (
+                  <>
+                    <span className="amr-confirm-txt">Exclure ?</span>
+                    <button
+                      className="amr-btn danger"
+                      onClick={() => kickMutation.mutate(m.userId)}
+                      disabled={kickMutation.isPending}
+                    >
+                      Confirmer
+                    </button>
+                    <button className="amr-btn ghost" onClick={() => setConfirmKick(null)}>
+                      Annuler
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="amr-btn ghost"
+                      onClick={() => promoteMutation.mutate({ userId: m.userId, isAdmin: !m.isAdmin })}
+                      disabled={promoteMutation.isPending || (!canDemote && m.isAdmin)}
+                      title={!canDemote && m.isAdmin ? 'Dernier admin — impossible de rétrograder' : ''}
+                    >
+                      {m.isAdmin ? 'Rétrograder' : 'Promouvoir admin'}
+                    </button>
+                    {canKick && (
+                      <button className="amr-btn danger-ghost" onClick={() => setConfirmKick(m.userId)}>
+                        Exclure
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Calendar tab ─────────────────────────────────────────────────────────
+
+function CalendarTab({ leagueId }: { leagueId: string }) {
+  const queryClient = useQueryClient()
+  const [slug, setSlug] = useState('')
+  const [preview, setPreview] = useState<RacePreview | null>(null)
+  const [previewError, setPreviewError] = useState<string | null>(null)
+  const [confirmRemove, setConfirmRemove] = useState<string | null>(null)
+
+  const { data: races, isLoading } = useQuery({
+    queryKey: ['races', 'league', leagueId],
+    queryFn: () => racesApi.leagueRaces(leagueId).then((r) => r.data.data.races),
+  })
+
+  const previewMutation = useMutation({
+    mutationFn: (s: string) => racesApi.preview(s).then((r) => r.data.race),
+    onSuccess: (race) => { setPreview(race); setPreviewError(null) },
+    onError: () => { setPreviewError('Course introuvable. Vérifiez le slug PCS.'); setPreview(null) },
+  })
+
+  const addMutation = useMutation({
+    mutationFn: (s: string) => racesApi.addToLeague(leagueId, s),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['races', 'league', leagueId] })
+      setSlug('')
+      setPreview(null)
+    },
+  })
+
+  const removeMutation = useMutation({
+    mutationFn: (raceId: string) => racesApi.removeFromLeague(leagueId, raceId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['races', 'league', leagueId] })
+      setConfirmRemove(null)
+    },
+  })
+
+  return (
+    <div>
+      {/* ── Add race form ── */}
+      <div className="admin-add-race">
+        <div className="admin-section-title">Ajouter une course</div>
+        <div className="admin-add-race-form">
+          <input
+            className="empty-input"
+            placeholder="Slug PCS (ex: tour-de-france/2026)"
+            value={slug}
+            onChange={(e) => { setSlug(e.target.value); setPreview(null); setPreviewError(null) }}
+            onKeyDown={(e) => e.key === 'Enter' && slug && previewMutation.mutate(slug)}
+            style={{ flex: 1, margin: 0, fontFamily: 'monospace', fontSize: 12 }}
+          />
+          <button
+            className="btn-ghost-sm"
+            onClick={() => previewMutation.mutate(slug)}
+            disabled={!slug || previewMutation.isPending}
+          >
+            {previewMutation.isPending ? 'Recherche…' : 'Prévisualiser'}
+          </button>
+        </div>
+        {previewError && <div className="empty-error" style={{ marginTop: 8 }}>{previewError}</div>}
+
+        {preview && (
+          <div className="admin-preview-card">
+            <div className="admin-preview-name">{preview.name}</div>
+            <div className="admin-preview-meta">
+              {preview.start_date && DATE_FMT.format(new Date(preview.start_date))}
+              {preview.start_date && preview.end_date && ' – '}
+              {preview.end_date && DATE_FMT.format(new Date(preview.end_date))}
+              <span className={`race-mult ${multClass(preview.multiplierType)}`} style={{ marginLeft: 8 }}>
+                {multLabel(preview.multiplierType)}
+              </span>
+            </div>
+            <button
+              className="btn-primary"
+              style={{ fontSize: 12, padding: '6px 16px' }}
+              onClick={() => addMutation.mutate(slug)}
+              disabled={addMutation.isPending}
+            >
+              {addMutation.isPending ? 'Ajout…' : '+ Ajouter au calendrier'}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* ── Current races ── */}
+      <div className="admin-section-title" style={{ marginTop: '1.5rem' }}>Calendrier actuel</div>
+      {isLoading ? (
+        <div className="admin-loading">Chargement…</div>
+      ) : !races || races.length === 0 ? (
+        <div className="admin-empty">Aucune course dans le calendrier.</div>
+      ) : (
+        <div className="admin-race-list">
+          {races.map((race) => {
+            const isRemoving = confirmRemove === race.id
+            return (
+              <div key={race.id} className="admin-race-row">
+                <div className="arr-info">
+                  <div className="arr-name">{race.name}</div>
+                  <div className="arr-date">
+                    {race.startAt ? DATE_FMT.format(new Date(race.startAt)) : '—'}
+                    {race.endAt ? ` – ${DATE_FMT.format(new Date(race.endAt))}` : ''}
+                  </div>
+                </div>
+                <div className={`race-mult ${multClass(race.multiplierType)}`}>
+                  {multLabel(race.multiplierType)}
+                </div>
+                {isRemoving ? (
+                  <div className="arr-actions">
+                    <span className="amr-confirm-txt">Retirer ?</span>
+                    <button
+                      className="amr-btn danger"
+                      onClick={() => removeMutation.mutate(race.id)}
+                      disabled={removeMutation.isPending}
+                    >
+                      Confirmer
+                    </button>
+                    <button className="amr-btn ghost" onClick={() => setConfirmRemove(null)}>
+                      Annuler
+                    </button>
+                  </div>
+                ) : (
+                  <button className="amr-btn danger-ghost" onClick={() => setConfirmRemove(race.id)}>
+                    Retirer
+                  </button>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Page ─────────────────────────────────────────────────────────────────
+
+export default function AdminPage() {
+  const { activeLeague } = useLeague()
+  const [tab, setTab] = useState<Tab>('members')
+
+  const TABS: { key: Tab; label: string }[] = [
+    { key: 'members',  label: 'Membres' },
+    { key: 'calendar', label: 'Calendrier' },
+  ]
+
+  return (
+    <AppShell activePage="admin" pageTitle="Administration">
+
+      {/* ── Tabs ── */}
+      <div className="bets-tabs" style={{ marginBottom: '1.5rem' }}>
+        {TABS.map((t) => (
+          <button
+            key={t.key}
+            className={`bets-tab${tab === t.key ? ' active' : ''}`}
+            onClick={() => setTab(t.key)}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {!activeLeague ? (
+        <div className="admin-empty">Aucune ligue sélectionnée.</div>
+      ) : tab === 'members' ? (
+        <MembersTab leagueId={activeLeague.id} />
+      ) : (
+        <CalendarTab leagueId={activeLeague.id} />
+      )}
+
+    </AppShell>
+  )
+}

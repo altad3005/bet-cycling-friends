@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth'
 import { useAuthStore } from '../../stores/auth'
+import './auth.css'
 
 export default function SignupPage() {
   const navigate = useNavigate()
@@ -19,69 +20,71 @@ export default function SignupPage() {
     try {
       const res = await authApi.signup(pseudo, email, password)
       setAuth(res.data.data.token, res.data.data.user)
-      navigate('/')
+      navigate('/dashboard')
     } catch (err: unknown) {
       const data = (err as { response?: { data?: unknown } })?.response?.data as
         | { errors?: { message: string }[]; message?: string }
         | undefined
-      const msg = data?.errors?.[0]?.message ?? data?.message ?? 'Une erreur est survenue.'
-      setError(msg)
+      setError(data?.errors?.[0]?.message ?? data?.message ?? 'Une erreur est survenue.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">Inscription</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Pseudo</label>
+    <div className="auth-root">
+      <Link to="/" className="auth-logo">BCF</Link>
+
+      <div className="auth-card">
+        <div className="auth-title">Inscription</div>
+        <div className="auth-subtitle">Rejoins le peloton et défie tes amis.</div>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="auth-field">
+            <label className="auth-label">Pseudo</label>
             <input
+              className="auth-input"
               type="text"
               value={pseudo}
               onChange={(e) => setPseudo(e.target.value)}
+              placeholder="TonPseudo"
               required
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+          <div className="auth-field">
+            <label className="auth-label">Email</label>
             <input
+              className="auth-input"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="toi@exemple.fr"
               required
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Mot de passe</label>
+          <div className="auth-field">
+            <label className="auth-label">Mot de passe</label>
             <input
+              className="auth-input"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
               required
               minLength={8}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? 'Inscription…' : "S'inscrire"}
+          {error && <div className="auth-error">{error}</div>}
+          <button type="submit" className="auth-submit" disabled={loading}>
+            {loading ? 'Inscription…' : "Créer mon compte"}
           </button>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-4">
+
+        <div className="auth-divider" />
+        <div className="auth-footer">
           Déjà un compte ?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Se connecter
-          </Link>
-        </p>
+          <Link to="/login">Se connecter</Link>
+        </div>
       </div>
     </div>
   )
