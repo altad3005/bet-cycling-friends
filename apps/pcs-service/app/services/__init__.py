@@ -80,26 +80,36 @@ def get_stage_results(slug: str, year: int, stage_number: int) -> list[StageResu
         return []
 
 def get_race_results(slug: str, year: int) -> list[StageResultModel]:
-    # One-day races use /result, stage races (GC) use /gc
-    for path_suffix in ("result", "gc"):
-        path = f"race/{slug}/{year}/{path_suffix}"
-        try:
-            html = fetch_html(path)
-            stage = Stage(path, html=html, update_html=False)
+    try:
+        html = fetch_html(f"race/{slug}/{year}")
+        race = Race(f"race/{slug}/{year}", html=html, update_html=False)
+        stages = race.stages()
+
+        if stages:
+            # Stage race (grand tour): use .gc() on the last stage
+            last_stage_url = stages[-1]["stage_url"]
+            stage_html = fetch_html(last_stage_url)
+            stage = Stage(last_stage_url, html=stage_html, update_html=False)
+            results = stage.gc() or []
+        else:
+            # One-day race: use /result
+            path = f"race/{slug}/{year}/result"
+            stage_html = fetch_html(path)
+            stage = Stage(path, html=stage_html, update_html=False)
             results = stage.results()
-            return [
-                StageResultModel(
-                    rider_name=r.get("rider_name", ""),
-                    rider_url=r.get("rider_url", ""),
-                    rank=r.get("rank", 0),
-                    team_name=r.get("team_name"),
-                    nationality=r.get("nationality"),
-                    time=r.get("time"),
-                )
-                for r in results
-                if r.get("rank") and r.get("rank") <= 10
-            ]
-        except Exception as e:
-            logger.warning(f"Could not fetch {path}: {e}")
-    logger.error(f"Error fetching race results {slug}/{year}: all paths failed")
-    return []
+
+        return [
+            StageResultModel(
+                rider_name=r.get("rider_name", ""),
+                rider_url=r.get("rider_url", ""),
+                rank=r.get("rank", 0),
+                team_name=r.get("team_name"),
+                nationality=r.get("nationality"),
+                time=r.get("time"),
+            )
+            for r in results
+            if r.get("rank") and r.get("rank") <= 10
+        ]
+    except Exception as e:
+        logger.error(f"Error fetching race results {slug}/{year}: {e}")
+        return []
