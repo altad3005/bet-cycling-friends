@@ -1,5 +1,11 @@
 import { Worker } from 'bullmq'
 import { DateTime } from 'luxon'
+import { createBullBoard } from '@bull-board/api'
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter'
+import { HonoAdapter } from '@bull-board/hono'
+import { Hono } from 'hono'
+import { serve } from '@hono/node-server'
+import { serveStatic } from '@hono/node-server/serve-static'
 import type { ApplicationService } from '@adonisjs/core/types'
 import env from '#start/env'
 import { scoringQueue, type ScoringJobData } from '#start/queue'
@@ -97,6 +103,15 @@ export default class QueueProvider {
       { type: 'auto-sync' },
       { repeat: { pattern: '0 * * * *' }, jobId: 'auto-sync-cron' }
     )
+
+    // Bull Board UI on port 3335
+    const serverAdapter = new HonoAdapter(serveStatic)
+    serverAdapter.setBasePath('/queues')
+    createBullBoard({ queues: [new BullMQAdapter(scoringQueue)], serverAdapter })
+    const app = new Hono()
+    app.route('/queues', serverAdapter.registerPlugin())
+    serve({ fetch: app.fetch, port: 3335 })
+    console.log('Bull Board disponible sur http://localhost:3335/queues')
   }
 
   async shutdown() {
