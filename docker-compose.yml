@@ -27,8 +27,8 @@ services:
 
   pcs-service:
     build:
-      context: .
-      dockerfile: apps/pcs-service/DockerFile
+      context: apps/pcs-service
+      dockerfile: DockerFile
     environment:
       - DEBUG=false
     restart: unless-stopped
