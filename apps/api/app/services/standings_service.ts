@@ -2,7 +2,6 @@ import { SCORING_TABLE, MULTIPLIERS, MultiplierType } from '@bcf/shared'
 import db from '@adonisjs/lucid/services/db'
 import StageResult from '#models/stage_result'
 import BetGrandTour from '#models/bet_grand_tour'
-import BetGrandTourRider from '#models/bet_grand_tour_rider'
 import LeagueMember from '#models/league_member'
 import Rider from '#models/rider'
 

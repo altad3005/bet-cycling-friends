@@ -15,7 +15,7 @@ export default class ProfileController {
     return serialize(UserTransformer.transform(auth.getUserOrFail()))
   }
 
-  async update({ auth, request, response, serialize }: HttpContext) {
+  async update({ auth, request, serialize }: HttpContext) {
     const user = auth.getUserOrFail()
     const { pseudo } = await request.validateUsing(updateProfileValidator)
     user.pseudo = pseudo
