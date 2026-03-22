@@ -25,6 +25,13 @@ services:
       retries: 5
     restart: unless-stopped
 
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    networks:
+      - default
+      - dokploy-network
+
   pcs-service:
     build:
       context: apps/pcs-service
