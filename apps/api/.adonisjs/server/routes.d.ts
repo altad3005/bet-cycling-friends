@@ -12,6 +12,7 @@ export type ScannedRoutes = {
     'auth.password_reset.request': { paramsTuple?: []; params?: {} }
     'auth.password_reset.confirm': { paramsTuple?: []; params?: {} }
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'profile.profile.update': { paramsTuple?: []; params?: {} }
     'profile.profile.leagues': { paramsTuple?: []; params?: {} }
     'league.store': { paramsTuple?: []; params?: {} }
     'league.preview_join': { paramsTuple: [ParamValue]; params: {'code': ParamValue} }
@@ -84,6 +85,9 @@ export type ScannedRoutes = {
     'bet.store_classic': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.store_grand_tour': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'race_sync.sync': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+  }
+  PUT: {
+    'profile.profile.update': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
     'league.leave': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

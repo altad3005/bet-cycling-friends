@@ -33,6 +33,7 @@ router
     router
       .group(() => {
         router.get('/profile', [controllers.Profile, 'show'])
+        router.put('/profile', [controllers.Profile, 'update'])
         router.get('/leagues', [controllers.Profile, 'leagues'])
       })
       .prefix('account')

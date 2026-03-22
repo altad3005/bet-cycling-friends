@@ -22,6 +22,7 @@ export interface ApiDefinition {
   profile: {
     profile: {
       show: typeof routes['profile.profile.show']
+      update: typeof routes['profile.profile.update']
       leagues: typeof routes['profile.profile.leagues']
     }
   }

@@ -18,13 +18,14 @@ export default class GoogleAuthController {
 
     const googleUser = await google.user()
     const service = new GoogleAuthService()
-    const user = await service.findOrCreateUser({
+    const { user, isNew } = await service.findOrCreateUser({
       id: googleUser.id,
       email: googleUser.email,
       name: googleUser.name,
     })
 
     const token = await User.accessTokens.create(user)
-    return response.redirect(`${frontendUrl}/auth/callback?token=${token.value!.release()}`)
+    const setup = isNew ? '&setup=1' : ''
+    return response.redirect(`${frontendUrl}/auth/callback?token=${token.value!.release()}${setup}`)
   }
 }

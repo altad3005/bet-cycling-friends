@@ -54,6 +54,12 @@ const routes = {
     tokens: [{"old":"/api/account/profile","type":0,"val":"api","end":""},{"old":"/api/account/profile","type":0,"val":"account","end":""},{"old":"/api/account/profile","type":0,"val":"profile","end":""}],
     types: placeholder as Registry['profile.profile.show']['types'],
   },
+  'profile.profile.update': {
+    methods: ["PUT"],
+    pattern: '/api/account/profile',
+    tokens: [{"old":"/api/account/profile","type":0,"val":"api","end":""},{"old":"/api/account/profile","type":0,"val":"account","end":""},{"old":"/api/account/profile","type":0,"val":"profile","end":""}],
+    types: placeholder as Registry['profile.profile.update']['types'],
+  },
   'profile.profile.leagues': {
     methods: ["GET","HEAD"],
     pattern: '/api/account/leagues',

@@ -5,7 +5,7 @@ export default class GoogleAuthService {
     id: string
     email: string | null
     name: string | null
-  }): Promise<User> {
+  }): Promise<{ user: User; isNew: boolean }> {
     let user = await User.findBy('google_id', googleUser.id)
 
     if (!user && googleUser.email) {
@@ -13,7 +13,7 @@ export default class GoogleAuthService {
       if (user) {
         user.googleId = googleUser.id
         await user.save()
-        return user
+        return { user, isNew: false }
       }
     }
 
@@ -26,9 +26,10 @@ export default class GoogleAuthService {
         googleId: googleUser.id,
         pseudo,
       })
+      return { user, isNew: true }
     }
 
-    return user
+    return { user, isNew: false }
   }
 
   private async generateUniquePseudo(base: string): Promise<string> {

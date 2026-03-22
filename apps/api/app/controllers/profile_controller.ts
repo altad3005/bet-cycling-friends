@@ -2,10 +2,25 @@ import UserTransformer from '#transformers/user_transformer'
 import LeagueMember from '#models/league_member'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
+import vine from '@vinejs/vine'
+
+const updateProfileValidator = vine.compile(
+  vine.object({
+    pseudo: vine.string().trim().minLength(2).maxLength(50),
+  })
+)
 
 export default class ProfileController {
   async show({ auth, serialize }: HttpContext) {
     return serialize(UserTransformer.transform(auth.getUserOrFail()))
+  }
+
+  async update({ auth, request, response, serialize }: HttpContext) {
+    const user = auth.getUserOrFail()
+    const { pseudo } = await request.validateUsing(updateProfileValidator)
+    user.pseudo = pseudo
+    await user.save()
+    return serialize(UserTransformer.transform(user))
   }
 
   async leagues({ auth, serialize }: HttpContext) {

@@ -9,7 +9,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { initials, avatarColor } from '../utils/ui'
 import '../pages/HomePage.css'
 
-export type ActivePage = 'dashboard' | 'standings' | 'calendar' | 'bets' | 'members' | 'admin'
+export type ActivePage = 'dashboard' | 'standings' | 'calendar' | 'bets' | 'members' | 'admin' | 'profile'
 
 interface AppShellProps {
   activePage: ActivePage
@@ -174,8 +174,15 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
       </div>
 
       <div className="sidebar-footer">
-        <div className="me-avatar">{initials(user?.pseudo ?? '?')}</div>
-        <div className="me-info">
+        <div
+          className="me-avatar"
+          style={{ cursor: 'pointer' }}
+          onClick={() => handleNav('/profile')}
+          title="Mon profil"
+        >
+          {initials(user?.pseudo ?? '?')}
+        </div>
+        <div className="me-info" style={{ cursor: 'pointer' }} onClick={() => handleNav('/profile')}>
           <div className="me-name">{user?.pseudo}</div>
           {myStanding && (
             <div className="me-rank">

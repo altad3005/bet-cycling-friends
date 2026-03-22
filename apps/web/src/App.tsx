@@ -4,6 +4,7 @@ import LoginPage from './pages/auth/LoginPage'
 import SignupPage from './pages/auth/SignupPage'
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage'
 import ResetPasswordPage from './pages/auth/ResetPasswordPage'
+import AuthCallbackPage from './pages/auth/AuthCallbackPage'
 import HomePage from './pages/HomePage'
 import LandingPage from './pages/LandingPage'
 import StandingsPage from './pages/StandingsPage'
@@ -12,6 +13,8 @@ import BetsPage from './pages/BetsPage'
 import MembersPage from './pages/MembersPage'
 import AdminPage from './pages/AdminPage'
 import RacePage from './pages/RacePage'
+import ProfilePage from './pages/ProfilePage'
+import SetupProfilePage from './pages/auth/SetupProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useBootstrap } from './hooks/useBootstrap'
 
@@ -30,6 +33,15 @@ function AppRoutes() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
+      <Route
+        path="/setup-profile"
+        element={
+          <ProtectedRoute>
+            <SetupProfilePage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/dashboard"
         element={
@@ -83,6 +95,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <RacePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         }
       />
