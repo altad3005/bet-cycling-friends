@@ -6,8 +6,8 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY packages/shared/package.json packages/shared/
 COPY apps/web/package.json apps/web/
-RUN echo '{"name":"pcs-service","private":true,"version":"0.0.0"}' > apps/pcs-service/package.json
-RUN echo '{"name":"api","private":true,"version":"0.0.0"}' > apps/api/package.json
+RUN mkdir -p apps/pcs-service && echo '{"name":"pcs-service","private":true,"version":"0.0.0"}' > apps/pcs-service/package.json
+RUN mkdir -p apps/api && echo '{"name":"api","private":true,"version":"0.0.0"}' > apps/api/package.json
 
 RUN pnpm install --frozen-lockfile
 

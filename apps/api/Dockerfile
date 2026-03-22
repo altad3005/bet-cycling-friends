@@ -9,7 +9,7 @@ COPY packages/shared/package.json packages/shared/
 COPY apps/api/package.json apps/api/
 COPY apps/web/package.json apps/web/
 # Dummy pcs-service package.json to satisfy pnpm workspace
-RUN echo '{"name":"pcs-service","private":true,"version":"0.0.0"}' > apps/pcs-service/package.json
+RUN mkdir -p apps/pcs-service && echo '{"name":"pcs-service","private":true,"version":"0.0.0"}' > apps/pcs-service/package.json
 
 # Install all deps
 RUN pnpm install --frozen-lockfile
