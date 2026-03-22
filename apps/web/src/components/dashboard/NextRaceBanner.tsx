@@ -6,9 +6,10 @@ import { raceDot, raceMultDisplay, raceDateLabel } from './raceDisplay'
 interface Props {
   race: RaceResponse
   onNavigate: () => void
+  onBet?: () => void
 }
 
-export default function NextRaceBanner({ race, onNavigate }: Props) {
+export default function NextRaceBanner({ race, onNavigate, onBet }: Props) {
   const dot = raceDot(race.status)
   const { mult, multClass } = raceMultDisplay(race)
 
@@ -23,6 +24,12 @@ export default function NextRaceBanner({ race, onNavigate }: Props) {
     ? 'En cours →'
     : hasBet ? 'Modifier →' : 'Parier →'
 
+  const handleBtnClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (dot === 'upcoming' && onBet) onBet()
+    else onNavigate()
+  }
+
   return (
     <div className={`next-race-banner${dot === 'live' ? ' live' : ''}`} onClick={onNavigate}>
       <div className={`next-race-dot ${dot}`} />
@@ -34,7 +41,7 @@ export default function NextRaceBanner({ race, onNavigate }: Props) {
       <button
         className={dot === 'live' || hasBet ? 'btn-ghost-sm' : 'btn-primary'}
         style={{ fontSize: 12, padding: '6px 14px' }}
-        onClick={(e) => { e.stopPropagation(); onNavigate() }}
+        onClick={handleBtnClick}
       >
         {btnLabel}
       </button>

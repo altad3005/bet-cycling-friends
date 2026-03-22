@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { RaceStatus } from '@bcf/shared'
 import { standingsApi } from '../api/standings'
-import { racesApi } from '../api/races'
+import { racesApi, type RaceResponse } from '../api/races'
 import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
 import AppShell from '../components/AppShell'
@@ -13,6 +13,7 @@ import StatGrid from '../components/dashboard/StatGrid'
 import LeagueStandingsPanel from '../components/dashboard/LeagueStandingsPanel'
 import UpcomingRacesPanel from '../components/dashboard/UpcomingRacesPanel'
 import Top4Panel from '../components/dashboard/Top4Panel'
+import BetModal from '../components/betting/BetModal'
 import './HomePage.css'
 
 export default function HomePage() {
@@ -20,6 +21,7 @@ export default function HomePage() {
   const user = useAuthStore((s) => s.user)
   const { activeLeague, myLeagues, isLoading } = useLeague()
   const [codeCopied, setCodeCopied] = useState(false)
+  const [betRace, setBetRace] = useState<RaceResponse | null>(null)
 
   const { data: leagueStandings = [] } = useQuery({
     queryKey: ['standings', 'league', activeLeague?.id],
@@ -69,10 +71,15 @@ export default function HomePage() {
   )
 
   return (
+    <>
     <AppShell activePage="dashboard" pageTitle="Dashboard" topbarRight={leagueCodeBtn}>
 
       {nextRace && (
-        <NextRaceBanner race={nextRace} onNavigate={() => navigate('/bets')} />
+        <NextRaceBanner
+          race={nextRace}
+          onNavigate={() => navigate('/bets')}
+          onBet={() => setBetRace(nextRace)}
+        />
       )}
 
       <StatGrid
@@ -98,5 +105,10 @@ export default function HomePage() {
       </div>
 
     </AppShell>
+
+    {betRace && (
+      <BetModal race={betRace} onClose={() => setBetRace(null)} />
+    )}
+    </>
   )
 }
