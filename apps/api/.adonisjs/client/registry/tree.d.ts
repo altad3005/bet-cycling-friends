@@ -25,6 +25,13 @@ export interface ApiDefinition {
       update: typeof routes['profile.profile.update']
       leagues: typeof routes['profile.profile.leagues']
     }
+    pushSubscription: {
+      store: typeof routes['profile.push_subscription.store']
+      destroy: typeof routes['profile.push_subscription.destroy']
+    }
+  }
+  pushSubscription: {
+    vapidPublicKey: typeof routes['push_subscription.vapid_public_key']
   }
   league: {
     store: typeof routes['league.store']

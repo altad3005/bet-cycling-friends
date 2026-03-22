@@ -66,6 +66,24 @@ const routes = {
     tokens: [{"old":"/api/account/leagues","type":0,"val":"api","end":""},{"old":"/api/account/leagues","type":0,"val":"account","end":""},{"old":"/api/account/leagues","type":0,"val":"leagues","end":""}],
     types: placeholder as Registry['profile.profile.leagues']['types'],
   },
+  'profile.push_subscription.store': {
+    methods: ["POST"],
+    pattern: '/api/account/push-subscription',
+    tokens: [{"old":"/api/account/push-subscription","type":0,"val":"api","end":""},{"old":"/api/account/push-subscription","type":0,"val":"account","end":""},{"old":"/api/account/push-subscription","type":0,"val":"push-subscription","end":""}],
+    types: placeholder as Registry['profile.push_subscription.store']['types'],
+  },
+  'profile.push_subscription.destroy': {
+    methods: ["DELETE"],
+    pattern: '/api/account/push-subscription',
+    tokens: [{"old":"/api/account/push-subscription","type":0,"val":"api","end":""},{"old":"/api/account/push-subscription","type":0,"val":"account","end":""},{"old":"/api/account/push-subscription","type":0,"val":"push-subscription","end":""}],
+    types: placeholder as Registry['profile.push_subscription.destroy']['types'],
+  },
+  'push_subscription.vapid_public_key': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/push/vapid-public-key',
+    tokens: [{"old":"/api/push/vapid-public-key","type":0,"val":"api","end":""},{"old":"/api/push/vapid-public-key","type":0,"val":"push","end":""},{"old":"/api/push/vapid-public-key","type":0,"val":"vapid-public-key","end":""}],
+    types: placeholder as Registry['push_subscription.vapid_public_key']['types'],
+  },
   'league.store': {
     methods: ["POST"],
     pattern: '/api/leagues',

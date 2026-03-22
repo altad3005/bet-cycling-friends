@@ -6,6 +6,7 @@ export type ScoringJobData =
   | { type: 'sync-gt-stage'; raceId: string; stageNumber: number }
   | { type: 'sync-gt-gc'; raceId: string }
   | { type: 'auto-sync' }
+  | { type: 'auto-reminder' }
 
 const connection = {
   host: env.get('REDIS_HOST'),

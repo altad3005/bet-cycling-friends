@@ -127,6 +127,42 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['leagues']>>>
     }
   }
+  'profile.push_subscription.store': {
+    methods: ["POST"]
+    pattern: '/api/account/push-subscription'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/push_subscription_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/push_subscription_controller').default['store']>>>
+    }
+  }
+  'profile.push_subscription.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/account/push-subscription'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/push_subscription_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/push_subscription_controller').default['destroy']>>>
+    }
+  }
+  'push_subscription.vapid_public_key': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/push/vapid-public-key'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/push_subscription_controller').default['vapidPublicKey']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/push_subscription_controller').default['vapidPublicKey']>>>
+    }
+  }
   'league.store': {
     methods: ["POST"]
     pattern: '/api/leagues'

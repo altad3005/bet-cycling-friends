@@ -200,7 +200,7 @@ function SyncPanel({ race }: { race: RaceResponse }) {
               <div className="sync-gt-gc-row">
                 <button
                   className="amr-btn ghost"
-                  onClick={() => syncMutation.mutate()}
+                  onClick={() => syncMutation.mutate(undefined)}
                   disabled={syncMutation.isPending}
                 >
                   {syncMutation.isPending ? 'Envoi…' : 'Syncer GC final'}

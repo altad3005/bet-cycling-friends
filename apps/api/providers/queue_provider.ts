@@ -74,6 +74,13 @@ export default class QueueProvider {
           return
         }
 
+        // ── Reminder cron ───────────────────────────────────────────────────
+        if (job.data.type === 'auto-reminder') {
+          const { default: ReminderService } = await import('#services/reminder_service')
+          await new ReminderService().sendReminders()
+          return
+        }
+
         // ── Manual / enqueued syncs ─────────────────────────────────────────
         const race = await Race.findOrFail(job.data.raceId)
         const syncService = new ResultSyncService()
@@ -102,6 +109,13 @@ export default class QueueProvider {
       'auto-sync',
       { type: 'auto-sync' },
       { repeat: { pattern: '0 * * * *' }, jobId: 'auto-sync-cron' }
+    )
+
+    // Register the every-30-min reminder job (idempotent)
+    await scoringQueue.add(
+      'auto-reminder',
+      { type: 'auto-reminder' },
+      { repeat: { pattern: '*/30 * * * *' }, jobId: 'auto-reminder-cron' }
     )
 
     // Bull Board UI on port 3335

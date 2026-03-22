@@ -13,6 +13,7 @@ export const controllers = {
   NewAccount: () => import('#controllers/new_account_controller'),
   PasswordReset: () => import('#controllers/password_reset_controller'),
   Profile: () => import('#controllers/profile_controller'),
+  PushSubscription: () => import('#controllers/push_subscription_controller'),
   Race: () => import('#controllers/race_controller'),
   RaceSync: () => import('#controllers/race_sync_controller'),
   Standings: () => import('#controllers/standings_controller'),

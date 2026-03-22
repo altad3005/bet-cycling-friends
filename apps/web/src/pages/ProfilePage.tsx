@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { authApi } from '../api/auth'
 import { useAuthStore } from '../stores/auth'
+import { usePushNotifications } from '../hooks/usePushNotifications'
 import AppShell from '../components/AppShell'
 
 export default function ProfilePage() {
   const setUser = useAuthStore((s) => s.setUser)
   const user = useAuthStore((s) => s.user)
 
+  const push = usePushNotifications()
   const [pseudo, setPseudo] = useState(user?.pseudo ?? '')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -110,6 +112,51 @@ export default function ProfilePage() {
           </form>
         </div>
       </div>
+
+      {/* ── Notifications ── */}
+      {push.state !== 'unsupported' && (
+        <div style={{
+          background: '#131318',
+          border: '0.5px solid rgba(255,255,255,0.06)',
+          borderRadius: 12,
+          padding: '1.75rem',
+          marginTop: '1rem',
+        }}>
+          <div style={{ fontSize: 15, fontWeight: 600, color: '#f0ede8', marginBottom: 8 }}>
+            Notifications
+          </div>
+          <div style={{ fontSize: 13, color: 'rgba(240,237,232,0.45)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+            {push.state === 'subscribed'
+              ? 'Tu recevras un rappel 5h et 1h avant le départ d\'une course si tu n\'as pas encore pronostiqué.'
+              : push.state === 'denied'
+              ? 'Les notifications sont bloquées dans les paramètres de ton navigateur.'
+              : 'Active les notifications pour recevoir un rappel avant chaque course.'}
+          </div>
+          {push.state !== 'denied' && (
+            <button
+              onClick={push.state === 'subscribed' ? push.unsubscribe : push.subscribe}
+              disabled={push.loading}
+              style={{
+                background: push.state === 'subscribed' ? 'rgba(255,255,255,0.06)' : '#e8c96d',
+                color: push.state === 'subscribed' ? 'rgba(240,237,232,0.7)' : '#13110d',
+                border: 'none',
+                borderRadius: 8,
+                padding: '0.65rem 1.25rem',
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: push.loading ? 'not-allowed' : 'pointer',
+                opacity: push.loading ? 0.7 : 1,
+              }}
+            >
+              {push.loading
+                ? '…'
+                : push.state === 'subscribed'
+                ? 'Désactiver les notifications'
+                : 'Activer les notifications'}
+            </button>
+          )}
+        </div>
+      )}
     </AppShell>
   )
 }

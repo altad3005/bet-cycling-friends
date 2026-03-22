@@ -14,6 +14,9 @@ export type ScannedRoutes = {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
     'profile.profile.update': { paramsTuple?: []; params?: {} }
     'profile.profile.leagues': { paramsTuple?: []; params?: {} }
+    'profile.push_subscription.store': { paramsTuple?: []; params?: {} }
+    'profile.push_subscription.destroy': { paramsTuple?: []; params?: {} }
+    'push_subscription.vapid_public_key': { paramsTuple?: []; params?: {} }
     'league.store': { paramsTuple?: []; params?: {} }
     'league.preview_join': { paramsTuple: [ParamValue]; params: {'code': ParamValue} }
     'league.join': { paramsTuple: [ParamValue]; params: {'code': ParamValue} }
@@ -44,6 +47,7 @@ export type ScannedRoutes = {
     'auth.google_auth.callback': { paramsTuple?: []; params?: {} }
     'profile.profile.show': { paramsTuple?: []; params?: {} }
     'profile.profile.leagues': { paramsTuple?: []; params?: {} }
+    'push_subscription.vapid_public_key': { paramsTuple?: []; params?: {} }
     'league.preview_join': { paramsTuple: [ParamValue]; params: {'code': ParamValue} }
     'league.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league_member.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -64,6 +68,7 @@ export type ScannedRoutes = {
     'auth.google_auth.callback': { paramsTuple?: []; params?: {} }
     'profile.profile.show': { paramsTuple?: []; params?: {} }
     'profile.profile.leagues': { paramsTuple?: []; params?: {} }
+    'push_subscription.vapid_public_key': { paramsTuple?: []; params?: {} }
     'league.preview_join': { paramsTuple: [ParamValue]; params: {'code': ParamValue} }
     'league.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league_member.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -85,6 +90,7 @@ export type ScannedRoutes = {
     'auth.access_token.destroy': { paramsTuple?: []; params?: {} }
     'auth.password_reset.request': { paramsTuple?: []; params?: {} }
     'auth.password_reset.confirm': { paramsTuple?: []; params?: {} }
+    'profile.push_subscription.store': { paramsTuple?: []; params?: {} }
     'league.store': { paramsTuple?: []; params?: {} }
     'league.join': { paramsTuple: [ParamValue]; params: {'code': ParamValue} }
     'league_race.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -96,6 +102,7 @@ export type ScannedRoutes = {
     'profile.profile.update': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
+    'profile.push_subscription.destroy': { paramsTuple?: []; params?: {} }
     'league.leave': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league_member.destroy': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'league_race.destroy': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
