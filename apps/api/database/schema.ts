@@ -183,9 +183,9 @@ export class RaceSchema extends BaseModel {
   declare isGrandTour: boolean
   @column.dateTime()
   declare lastSyncedAt: DateTime | null
-  @column.dateTime()
+  @column.dateTime({ columnName: 'reminder5h_sent_at' })
   declare reminder5hSentAt: DateTime | null
-  @column.dateTime()
+  @column.dateTime({ columnName: 'reminder1h_sent_at' })
   declare reminder1hSentAt: DateTime | null
   @column()
   declare multiplierType: string
