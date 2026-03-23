@@ -95,24 +95,15 @@ router
       .post('/admin/races/:id/sync', [controllers.RaceSync, 'sync'])
       .use(middleware.auth())
 
-    // ── Dev only ──────────────────────────────────────────────────────────
-    if (process.env.NODE_ENV === 'development') {
-      router.get('/admin/test-push', async ({ auth, response }) => {
-        const user = await auth.authenticate()
-        const { default: PushNotificationService } = await import('#services/push_notification_service')
-        await new PushNotificationService().sendToUser(user.id, {
-          title: '🚴 Test notification',
-          body: 'Les notifications BCF fonctionnent correctement !',
-          url: '/dashboard',
-        })
-        return response.ok({ sent: true })
-      }).use(middleware.auth())
-
-      router.get('/admin/test-reminders', async ({ response }) => {
-        const { default: ReminderService } = await import('#services/reminder_service')
-        await new ReminderService().sendReminders()
-        return response.ok({ done: true })
+    router.get('/admin/test-push', async ({ auth, response }) => {
+      const user = await auth.authenticate()
+      const { default: PushNotificationService } = await import('#services/push_notification_service')
+      await new PushNotificationService().sendToUser(user.id, {
+        title: '🚴 Test notification',
+        body: 'Les notifications BCF fonctionnent correctement !',
+        url: '/dashboard',
       })
-    }
+      return response.ok({ sent: true })
+    }).use(middleware.auth())
   })
   .prefix('/api')
