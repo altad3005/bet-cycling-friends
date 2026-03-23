@@ -139,10 +139,115 @@
   margin-bottom: 0;
 }
 
+.admin-add-race-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bulk-mode-toggle {
+  display: flex;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bulk-toggle-btn {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  padding: 4px 12px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: rgba(240, 237, 232, 0.35);
+  transition: background 0.12s, color 0.12s;
+}
+.bulk-toggle-btn.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(240, 237, 232, 0.8);
+}
+
 .admin-add-race-form {
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.bulk-textarea {
+  width: 100%;
+  margin-top: 0.75rem;
+  min-height: 120px;
+  background: #0e0e13;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: monospace;
+  font-size: 12px;
+  color: rgba(240, 237, 232, 0.8);
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+.bulk-textarea:focus { border-color: rgba(255, 255, 255, 0.15); }
+.bulk-textarea::placeholder { color: rgba(240, 237, 232, 0.2); }
+.bulk-textarea:disabled { opacity: 0.5; }
+
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.bulk-count {
+  font-size: 11px;
+  color: rgba(240, 237, 232, 0.3);
+}
+
+.bulk-results {
+  margin-top: 10px;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.bulk-result-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 2px 0;
+}
+
+.bulk-result-icon {
+  font-size: 11px;
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.bulk-result-row.pending .bulk-result-icon { color: rgba(240, 237, 232, 0.25); }
+.bulk-result-row.ok .bulk-result-icon { color: #5cb85c; }
+.bulk-result-row.error .bulk-result-icon { color: #e86450; }
+
+.bulk-result-slug {
+  font-family: monospace;
+  color: rgba(240, 237, 232, 0.6);
+}
+.bulk-result-row.ok .bulk-result-slug { color: rgba(240, 237, 232, 0.9); }
+.bulk-result-row.error .bulk-result-slug { color: #e86450; }
+
+.bulk-result-msg {
+  font-size: 11px;
+  color: rgba(232, 100, 80, 0.6);
+  margin-left: auto;
 }
 
 .admin-preview-card {

@@ -214,13 +214,24 @@ function SyncPanel({ race }: { race: RaceResponse }) {
   )
 }
 
+type BulkResult = { slug: string; status: 'pending' | 'ok' | 'error'; message?: string }
+
 // ── Calendar tab ─────────────────────────────────────────────────────────
 
 function CalendarTab({ leagueId }: { leagueId: string }) {
   const queryClient = useQueryClient()
+  const [mode, setMode] = useState<'single' | 'bulk'>('single')
+
+  // single mode
   const [slug, setSlug] = useState('')
   const [preview, setPreview] = useState<RacePreview | null>(null)
   const [previewError, setPreviewError] = useState<string | null>(null)
+
+  // bulk mode
+  const [bulkText, setBulkText] = useState('')
+  const [bulkResults, setBulkResults] = useState<BulkResult[]>([])
+  const [bulkRunning, setBulkRunning] = useState(false)
+
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null)
 
   const { data: races, isLoading } = useQuery({
@@ -251,50 +262,127 @@ function CalendarTab({ leagueId }: { leagueId: string }) {
     },
   })
 
+  async function runBulk() {
+    const slugs = bulkText
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean)
+    if (!slugs.length) return
+
+    setBulkRunning(true)
+    setBulkResults(slugs.map((s) => ({ slug: s, status: 'pending' })))
+
+    for (let i = 0; i < slugs.length; i++) {
+      const s = slugs[i]
+      try {
+        await racesApi.addToLeague(leagueId, s)
+        setBulkResults((prev) => prev.map((r, idx) => idx === i ? { ...r, status: 'ok' } : r))
+      } catch (err: unknown) {
+        const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Erreur'
+        setBulkResults((prev) => prev.map((r, idx) => idx === i ? { ...r, status: 'error', message: msg } : r))
+      }
+    }
+
+    setBulkRunning(false)
+    queryClient.invalidateQueries({ queryKey: ['races', 'league', leagueId] })
+  }
+
   return (
     <div>
       {/* ── Add race form ── */}
       <div className="admin-add-race">
-        <div className="admin-section-title">Ajouter une course</div>
-        <div className="admin-add-race-form">
-          <input
-            className="empty-input"
-            placeholder="Slug PCS (ex: fleche-wallonne)"
-            value={slug}
-            onChange={(e) => { setSlug(e.target.value); setPreview(null); setPreviewError(null) }}
-            onKeyDown={(e) => e.key === 'Enter' && slug && previewMutation.mutate(slug)}
-            style={{ flex: 1, margin: 0, fontFamily: 'monospace', fontSize: 12 }}
-          />
-          <button
-            className="btn-ghost-sm"
-            onClick={() => previewMutation.mutate(slug)}
-            disabled={!slug || previewMutation.isPending}
-          >
-            {previewMutation.isPending ? 'Recherche…' : 'Prévisualiser'}
-          </button>
-        </div>
-        {previewError && <div className="empty-error" style={{ marginTop: 8 }}>{previewError}</div>}
-
-        {preview && (
-          <div className="admin-preview-card">
-            <div className="admin-preview-name">{preview.name}</div>
-            <div className="admin-preview-meta">
-              {preview.start_date && DATE_FMT.format(new Date(preview.start_date))}
-              {preview.start_date && preview.end_date && ' – '}
-              {preview.end_date && DATE_FMT.format(new Date(preview.end_date))}
-              <span className={`race-mult ${multClass(preview.multiplierType)}`} style={{ marginLeft: 8 }}>
-                {multLabel(preview.multiplierType)}
-              </span>
-            </div>
+        <div className="admin-add-race-header">
+          <div className="admin-section-title" style={{ margin: 0 }}>Ajouter une course</div>
+          <div className="bulk-mode-toggle">
             <button
-              className="btn-primary"
-              style={{ fontSize: 12, padding: '6px 16px' }}
-              onClick={() => addMutation.mutate(slug)}
-              disabled={addMutation.isPending}
-            >
-              {addMutation.isPending ? 'Ajout…' : '+ Ajouter au calendrier'}
-            </button>
+              className={`bulk-toggle-btn${mode === 'single' ? ' active' : ''}`}
+              onClick={() => setMode('single')}
+            >Unique</button>
+            <button
+              className={`bulk-toggle-btn${mode === 'bulk' ? ' active' : ''}`}
+              onClick={() => setMode('bulk')}
+            >Bulk</button>
           </div>
+        </div>
+
+        {mode === 'single' ? (
+          <>
+            <div className="admin-add-race-form" style={{ marginTop: '0.75rem' }}>
+              <input
+                className="empty-input"
+                placeholder="Slug PCS (ex: fleche-wallonne)"
+                value={slug}
+                onChange={(e) => { setSlug(e.target.value); setPreview(null); setPreviewError(null) }}
+                onKeyDown={(e) => e.key === 'Enter' && slug && previewMutation.mutate(slug)}
+                style={{ flex: 1, margin: 0, fontFamily: 'monospace', fontSize: 12 }}
+              />
+              <button
+                className="btn-ghost-sm"
+                onClick={() => previewMutation.mutate(slug)}
+                disabled={!slug || previewMutation.isPending}
+              >
+                {previewMutation.isPending ? 'Recherche…' : 'Prévisualiser'}
+              </button>
+            </div>
+            {previewError && <div className="empty-error" style={{ marginTop: 8 }}>{previewError}</div>}
+            {preview && (
+              <div className="admin-preview-card">
+                <div className="admin-preview-name">{preview.name}</div>
+                <div className="admin-preview-meta">
+                  {preview.start_date && DATE_FMT.format(new Date(preview.start_date))}
+                  {preview.start_date && preview.end_date && ' – '}
+                  {preview.end_date && DATE_FMT.format(new Date(preview.end_date))}
+                  <span className={`race-mult ${multClass(preview.multiplierType)}`} style={{ marginLeft: 8 }}>
+                    {multLabel(preview.multiplierType)}
+                  </span>
+                </div>
+                <button
+                  className="btn-primary"
+                  style={{ fontSize: 12, padding: '6px 16px' }}
+                  onClick={() => addMutation.mutate(slug)}
+                  disabled={addMutation.isPending}
+                >
+                  {addMutation.isPending ? 'Ajout…' : '+ Ajouter au calendrier'}
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <textarea
+              className="bulk-textarea"
+              placeholder={'Un slug par ligne :\nfleche-wallonne\nparis-roubaix\ngent-wevelgem'}
+              value={bulkText}
+              onChange={(e) => { setBulkText(e.target.value); setBulkResults([]) }}
+              disabled={bulkRunning}
+            />
+            <div className="bulk-actions">
+              <span className="bulk-count">
+                {bulkText.split('\n').filter((s) => s.trim()).length} slug(s)
+              </span>
+              <button
+                className="btn-primary"
+                style={{ fontSize: 12, padding: '6px 16px' }}
+                onClick={runBulk}
+                disabled={bulkRunning || !bulkText.trim()}
+              >
+                {bulkRunning ? 'Ajout en cours…' : '+ Tout ajouter'}
+              </button>
+            </div>
+            {bulkResults.length > 0 && (
+              <div className="bulk-results">
+                {bulkResults.map((r) => (
+                  <div key={r.slug} className={`bulk-result-row ${r.status}`}>
+                    <span className="bulk-result-icon">
+                      {r.status === 'pending' ? '⋯' : r.status === 'ok' ? '✓' : '✗'}
+                    </span>
+                    <span className="bulk-result-slug">{r.slug}</span>
+                    {r.message && <span className="bulk-result-msg">{r.message}</span>}
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 
