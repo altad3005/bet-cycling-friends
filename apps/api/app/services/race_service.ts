@@ -98,8 +98,8 @@ export default class RaceService {
     await Season.firstOrCreate({ year: info.year }, { year: info.year })
 
     const attrs = determineRaceAttrs(slug, info)
-    const startAt = info.start_date ? DateTime.fromISO(info.start_date) : null
-    const endAt = info.end_date ? DateTime.fromISO(info.end_date) : null
+    const startAt = info.start_date ? DateTime.fromISO(info.start_date, { zone: 'utc' }) : null
+    const endAt = info.end_date ? DateTime.fromISO(info.end_date, { zone: 'utc' }) : null
     const stagesInfo = attrs.isGrandTour ? await this.pcs.getStagesInfo(slug, info.year) : []
     const stageCount = stagesInfo.length || null
 
