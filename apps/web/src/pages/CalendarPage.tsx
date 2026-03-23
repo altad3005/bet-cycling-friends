@@ -72,6 +72,7 @@ export default function CalendarPage() {
   const navigate = useNavigate()
   const { activeLeague } = useLeague()
   const [filter, setFilter] = useState<Filter>('all')
+  const [search, setSearch] = useState('')
 
   const { data: races, isLoading } = useQuery({
     queryKey: ['races', 'league', activeLeague?.id],
@@ -81,9 +82,13 @@ export default function CalendarPage() {
 
   const filtered = useMemo(() => {
     if (!races) return []
-    if (filter === 'all') return races
-    return races.filter((r) => r.status === filter)
-  }, [races, filter])
+    let result = filter === 'all' ? races : races.filter((r) => r.status === filter)
+    if (search.trim()) {
+      const q = search.trim().toLowerCase()
+      result = result.filter((r) => r.name.toLowerCase().includes(q))
+    }
+    return result
+  }, [races, filter, search])
 
   // Group by month
   const grouped = useMemo(() => {
@@ -122,18 +127,34 @@ export default function CalendarPage() {
         )
       }
     >
-      {/* Filter tabs */}
-      <div className="cal-filters">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            className={`cal-tab${filter === t.key ? ' active' : ''}`}
-            onClick={() => setFilter(t.key)}
-          >
-            {t.label}
-            {t.count > 0 && <span className="cal-tab-count">{t.count}</span>}
-          </button>
-        ))}
+      {/* Toolbar */}
+      <div className="cal-toolbar">
+        <div className="cal-filters">
+          {TABS.map((t) => (
+            <button
+              key={t.key}
+              className={`cal-tab${filter === t.key ? ' active' : ''}`}
+              onClick={() => setFilter(t.key)}
+            >
+              {t.label}
+              {t.count > 0 && <span className="cal-tab-count">{t.count}</span>}
+            </button>
+          ))}
+        </div>
+        <div className="cal-search-wrap">
+          <svg className="cal-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            className="cal-search"
+            placeholder="Rechercher une course…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          {search && (
+            <button className="cal-search-clear" onClick={() => setSearch('')}>×</button>
+          )}
+        </div>
       </div>
 
       {/* Content */}
