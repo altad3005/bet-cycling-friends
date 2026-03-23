@@ -63,7 +63,7 @@
 /* ── Race row ─────────────────────────────────── */
 .cal-row {
   display: grid;
-  grid-template-columns: 20px 1fr auto auto auto;
+  grid-template-columns: 20px minmax(0, 1fr) auto auto auto;
   align-items: center;
   gap: 14px;
   padding: 13px 1.25rem;
@@ -177,7 +177,7 @@
 /* ── Responsive ───────────────────────────────── */
 @media (max-width: 768px) {
   .cal-row {
-    grid-template-columns: 16px 1fr auto auto;
+    grid-template-columns: 16px minmax(0, 1fr) auto auto;
     gap: 10px;
     padding: 11px 1rem;
   }
@@ -186,7 +186,7 @@
 
 @media (max-width: 480px) {
   .cal-row {
-    grid-template-columns: 16px 1fr auto;
+    grid-template-columns: 16px minmax(0, 1fr) auto;
     gap: 8px;
   }
   .cal-mult { display: none; }
