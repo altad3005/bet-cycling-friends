@@ -162,7 +162,7 @@ export class PushSubscriptionSchema extends BaseModel {
   declare endpoint: string
   @column({ isPrimary: true })
   declare id: string
-  @column()
+  @column({ columnName: 'p256dh' })
   declare p256Dh: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
