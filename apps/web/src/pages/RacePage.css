@@ -67,6 +67,13 @@
   color: rgba(240, 237, 232, 0.45);
 }
 
+.race-countdown {
+  margin-top: 0.75rem;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: rgba(232, 201, 109, 0.85);
+}
+
 .race-dot {
   width: 7px;
   height: 7px;

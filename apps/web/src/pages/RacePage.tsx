@@ -7,6 +7,7 @@ import { betsApi, type BetClassicResponse, type BetGrandTourResponse } from '../
 import { standingsApi, type StageStanding } from '../api/standings'
 import { useLeague } from '../hooks/useLeague'
 import { useAuthStore } from '../stores/auth'
+import { useCountdown } from '../hooks/useCountdown'
 import AppShell from '../components/AppShell'
 import BetModal from '../components/betting/BetModal'
 import { initials, avatarColor } from '../utils/ui'
@@ -112,6 +113,7 @@ export default function RacePage() {
   const status = statusInfo(race.status)
   const mult   = multLabel(race.multiplierType, race.isGrandTour)
   const canBet = race.status === RaceStatus.UPCOMING
+  const countdown = useCountdown(canBet ? race.startAt : null)
   const classicBet = myBet && 'favoriteRider' in myBet ? (myBet as BetClassicResponse) : null
   const gtBet      = myBet && 'riders' in myBet        ? (myBet as BetGrandTourResponse) : null
 
@@ -137,6 +139,10 @@ export default function RacePage() {
             <span className="race-sep">·</span>
             <span>{formatDate(race.startAt)}{race.endAt && race.startAt !== race.endAt ? ` – ${formatDate(race.endAt)}` : ''}</span>
           </div>
+
+          {canBet && countdown && (
+            <div className="race-countdown">⏱ Dans {countdown}</div>
+          )}
 
           {canBet && (
             <button className="btn-primary" style={{ marginTop: '1.25rem' }} onClick={() => setBetOpen(true)}>

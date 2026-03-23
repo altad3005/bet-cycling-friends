@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { betsApi } from '../../api/bets'
 import type { RaceResponse } from '../../api/races'
 import { raceDot, raceMultDisplay, raceDateLabel } from './raceDisplay'
+import { useCountdown } from '../../hooks/useCountdown'
 
 interface Props {
   race: RaceResponse
@@ -12,6 +13,7 @@ interface Props {
 export default function NextRaceBanner({ race, onNavigate, onBet }: Props) {
   const dot = raceDot(race.status)
   const { mult, multClass } = raceMultDisplay(race)
+  const countdown = useCountdown(dot === 'upcoming' ? race.startAt : null)
 
   const { data: existingBet } = useQuery({
     queryKey: ['bet', race.id],
@@ -36,6 +38,9 @@ export default function NextRaceBanner({ race, onNavigate, onBet }: Props) {
       <div className="next-race-info">
         <div className="next-race-name">{race.name}</div>
         <div className="next-race-date">{raceDateLabel(race)}</div>
+        {dot === 'upcoming' && countdown && (
+          <div className="next-race-countdown">Dans {countdown}</div>
+        )}
       </div>
       <div className={`race-mult ${multClass}`}>{mult}</div>
       <button
