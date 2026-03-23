@@ -12,4 +12,6 @@ export const notificationsApi = {
 
   unsubscribe: (endpoint: string) =>
     api.delete('/account/push-subscription', { data: { endpoint } }),
+
+  testPush: () => api.get('/admin/test-push'),
 }

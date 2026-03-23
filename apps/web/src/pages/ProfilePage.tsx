@@ -1,8 +1,45 @@
 import { useState } from 'react'
 import { authApi } from '../api/auth'
+import { notificationsApi } from '../api/notifications'
 import { useAuthStore } from '../stores/auth'
 import { usePushNotifications } from '../hooks/usePushNotifications'
 import AppShell from '../components/AppShell'
+
+function TestPushButton() {
+  const [state, setState] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle')
+
+  async function handleTest() {
+    setState('loading')
+    try {
+      await notificationsApi.testPush()
+      setState('ok')
+      setTimeout(() => setState('idle'), 3000)
+    } catch {
+      setState('error')
+      setTimeout(() => setState('idle'), 3000)
+    }
+  }
+
+  return (
+    <button
+      onClick={handleTest}
+      disabled={state === 'loading'}
+      style={{
+        background: state === 'ok' ? 'rgba(92,184,92,0.12)' : state === 'error' ? 'rgba(232,100,80,0.12)' : 'rgba(255,255,255,0.04)',
+        color: state === 'ok' ? '#5cb85c' : state === 'error' ? '#e86450' : 'rgba(240,237,232,0.5)',
+        border: '0.5px solid rgba(255,255,255,0.08)',
+        borderRadius: 8,
+        padding: '0.65rem 1.25rem',
+        fontSize: 14,
+        fontWeight: 600,
+        cursor: state === 'loading' ? 'not-allowed' : 'pointer',
+        marginBottom: '0.75rem',
+      }}
+    >
+      {state === 'loading' ? 'Envoi…' : state === 'ok' ? '✓ Notification envoyée !' : state === 'error' ? '✗ Erreur' : 'Tester les notifications'}
+    </button>
+  )
+}
 
 export default function ProfilePage() {
   const setUser = useAuthStore((s) => s.setUser)
@@ -130,6 +167,9 @@ export default function ProfilePage() {
                 ? 'Les notifications sont bloquées dans les paramètres de ton navigateur.'
                 : 'Active les notifications pour recevoir un rappel avant chaque course.'}
             </div>
+            {push.state === 'subscribed' && (
+              <TestPushButton />
+            )}
             {push.state !== 'denied' && (
               <button
                 onClick={push.state === 'subscribed' ? push.unsubscribe : push.subscribe}
