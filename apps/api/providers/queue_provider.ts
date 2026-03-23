@@ -81,6 +81,36 @@ export default class QueueProvider {
           return
         }
 
+        // ── Status update cron ──────────────────────────────────────────────
+        if (job.data.type === 'auto-status') {
+          const now = DateTime.now()
+          const races = await Race.query().whereNotNull('start_at')
+          for (const race of races) {
+            if (!race.startAt) continue
+            let status: string
+            if (race.endAt && race.endAt < now) {
+              status = 'finished'
+            } else if (race.startAt < now) {
+              status = 'live'
+            } else {
+              status = 'upcoming'
+            }
+            if (race.status !== status) {
+              // Passage live → finished : déclencher un sync immédiat
+              if (race.status === 'live' && status === 'finished') {
+                if (race.isGrandTour) {
+                  await scoringQueue.add('sync', { type: 'sync-gt-gc', raceId: race.id })
+                } else {
+                  await scoringQueue.add('sync', { type: 'sync-classic', raceId: race.id })
+                }
+              }
+              race.status = status as typeof race.status
+              await race.save()
+            }
+          }
+          return
+        }
+
         // ── Manual / enqueued syncs ─────────────────────────────────────────
         const race = await Race.find(job.data.raceId)
         if (!race) {
@@ -108,11 +138,11 @@ export default class QueueProvider {
       console.error(`Scoring job ${job?.id} failed:`, err)
     })
 
-    // Register the hourly auto-sync repeatable job (idempotent)
+    // Register the every-20-min auto-sync repeatable job (idempotent)
     await scoringQueue.add(
       'auto-sync',
       { type: 'auto-sync' },
-      { repeat: { pattern: '0 * * * *' }, jobId: 'auto-sync-cron' }
+      { repeat: { pattern: '*/20 * * * *' }, jobId: 'auto-sync-cron' }
     )
 
     // Register the every-30-min reminder job (idempotent)
@@ -120,6 +150,13 @@ export default class QueueProvider {
       'auto-reminder',
       { type: 'auto-reminder' },
       { repeat: { pattern: '*/30 * * * *' }, jobId: 'auto-reminder-cron' }
+    )
+
+    // Register the every-15-min status update job (idempotent)
+    await scoringQueue.add(
+      'auto-status',
+      { type: 'auto-status' },
+      { repeat: { pattern: '*/15 * * * *' }, jobId: 'auto-status-cron' }
     )
 
     // Bull Board UI on port 3335

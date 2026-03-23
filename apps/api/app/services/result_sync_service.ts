@@ -21,7 +21,7 @@ export default class ResultSyncService {
   async syncClassicRaceResults(race: Race): Promise<void> {
     const results = await this.pcs.getRaceResults(race.slug, race.seasonYear)
     await this.upsertResults(race.id, results, 0, 'result')
-    race.resultsFinal = true
+    race.resultsFinal = results.length >= 10
     race.lastSyncedAt = DateTime.now()
     await race.save()
   }
