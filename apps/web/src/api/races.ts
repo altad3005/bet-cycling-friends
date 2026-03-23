@@ -38,6 +38,8 @@ export interface RacePreview {
 export interface StartlistRider {
   id: string
   name: string
+  teamName: string | null
+  nationality: string | null
 }
 
 export const racesApi = {

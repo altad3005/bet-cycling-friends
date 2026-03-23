@@ -360,27 +360,50 @@ export default function RacePage() {
 
           {/* ── Startlist ── */}
           {startlist && startlist.length > 0 && (() => {
-            const filtered = startlistSearch.trim()
-              ? startlist.filter((r) => r.name.toLowerCase().includes(startlistSearch.toLowerCase()))
-              : startlist
+            const q = startlistSearch.trim().toLowerCase()
+            const filtered = q ? startlist.filter((r) => r.name.toLowerCase().includes(q) || (r.teamName ?? '').toLowerCase().includes(q)) : startlist
+
+            // Group by team
+            const byTeam = filtered.reduce<Record<string, typeof filtered>>((acc, rider) => {
+              const team = rider.teamName?.replace(/\s*\(.*?\)\s*$/, '') ?? 'Sans équipe'
+              if (!acc[team]) acc[team] = []
+              acc[team].push(rider)
+              return acc
+            }, {})
+            const teams = Object.entries(byTeam)
+
             return (
               <section className="race-section">
                 <div className="race-section-title">
-                  Startlist <span className="race-section-badge">{startlist.length} coureurs</span>
+                  Startlist <span className="race-section-badge">{startlist.length} coureurs · {Object.keys(byTeam).length > 1 ? `${Object.keys(byTeam).length} équipes` : ''}</span>
                 </div>
                 <input
                   className="startlist-search"
                   type="text"
-                  placeholder="Rechercher un coureur…"
+                  placeholder="Rechercher un coureur ou une équipe…"
                   value={startlistSearch}
                   onChange={(e) => setStartlistSearch(e.target.value)}
                 />
-                {filtered.length === 0 ? (
-                  <div className="race-empty">Aucun coureur ne correspond à "{startlistSearch}".</div>
+                {teams.length === 0 ? (
+                  <div className="race-empty">Aucun résultat pour "{startlistSearch}".</div>
                 ) : (
-                  <div className="startlist">
-                    {filtered.map((rider) => (
-                      <div key={rider.id} className="startlist-rider">{rider.name}</div>
+                  <div className="startlist-teams">
+                    {teams.map(([team, riders]) => (
+                      <div key={team} className="startlist-team">
+                        <div className="startlist-team-name">{team}</div>
+                        <div className="startlist-team-riders">
+                          {riders.map((rider) => (
+                            <div key={rider.id} className="startlist-rider">
+                              {rider.nationality && (
+                                <span className="startlist-flag">
+                                  {rider.nationality.toUpperCase().replace(/./g, (c) => String.fromCodePoint(c.charCodeAt(0) + 127397))}
+                                </span>
+                              )}
+                              <span className="startlist-rider-name">{rider.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     ))}
                   </div>
                 )}

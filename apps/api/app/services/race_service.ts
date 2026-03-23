@@ -152,7 +152,9 @@ export default class RaceService {
     return race
   }
 
-  async getStartlist(race: Race): Promise<{ id: string; name: string }[]> {
+  async getStartlist(
+    race: Race
+  ): Promise<{ id: string; name: string; teamName: string | null; nationality: string | null }[]> {
     const pcsRiders = await this.pcs.getStartlist(race.slug, race.seasonYear)
     const riders = await Promise.all(
       pcsRiders.map((r) =>
@@ -162,7 +164,12 @@ export default class RaceService {
         )
       )
     )
-    return riders.map((r) => ({ id: r.id, name: r.name }))
+    return riders.map((r, i) => ({
+      id: r.id,
+      name: r.name,
+      teamName: pcsRiders[i].team_name ?? null,
+      nationality: r.nationality,
+    }))
   }
 
   async removeFromLeague(user: User, leagueId: string, raceId: string): Promise<void> {
