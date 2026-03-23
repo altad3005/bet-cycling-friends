@@ -82,7 +82,11 @@ export default class QueueProvider {
         }
 
         // ── Manual / enqueued syncs ─────────────────────────────────────────
-        const race = await Race.findOrFail(job.data.raceId)
+        const race = await Race.find(job.data.raceId)
+        if (!race) {
+          console.warn(`Sync job skipped: race ${job.data.raceId} not found`)
+          return
+        }
         const syncService = new ResultSyncService()
         const scoringService = new ScoringService()
 
