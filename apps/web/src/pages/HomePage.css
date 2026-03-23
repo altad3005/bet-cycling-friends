@@ -36,7 +36,12 @@
   flex: 1;
   text-align: center;
   min-width: 0;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
 }
+.mobile-league:hover { background: rgba(255, 255, 255, 0.04); }
 
 .mobile-league-title {
   font-size: 13px;
@@ -100,24 +105,43 @@
 }
 
 .league-switcher {
-  margin-top: 6px;
-  background: none;
-  border: none;
-  padding: 0;
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 7px 10px;
   cursor: pointer;
   text-align: left;
   width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.league-switcher:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 .league-switcher-name {
-  font-size: 11px;
-  color: rgba(240, 237, 232, 0.35);
-  letter-spacing: 0.5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(240, 237, 232, 0.75);
   display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
+  flex: 1;
+  min-width: 0;
+}
+
+.league-switcher-chevron {
+  flex-shrink: 0;
+  color: rgba(240, 237, 232, 0.3);
+  transition: transform 0.18s;
+}
+.league-switcher-chevron.open {
+  transform: rotate(180deg);
 }
 
 .nav-section {
@@ -219,20 +243,30 @@
 }
 
 .league-dropdown-item {
-  padding: 10px 1.25rem;
+  padding: 9px 1rem;
   font-size: 13px;
   cursor: pointer;
   color: rgba(240, 237, 232, 0.6);
-  transition: background 0.1s;
+  transition: background 0.1s, color 0.1s;
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .league-dropdown-item:last-child { border-bottom: none; }
 .league-dropdown-item:hover { background: rgba(255, 255, 255, 0.04); color: #f0ede8; }
 .league-dropdown-item.selected { color: #e8c96d; }
 
+.league-dropdown-check {
+  width: 14px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: #e8c96d;
+}
+
 .league-dropdown-action {
-  padding: 10px 1.25rem;
+  padding: 9px 1rem;
   font-size: 12px;
   cursor: pointer;
   color: rgba(240, 237, 232, 0.35);
@@ -240,9 +274,73 @@
   align-items: center;
   gap: 6px;
   border-top: 0.5px solid rgba(255, 255, 255, 0.06);
-  transition: color 0.1s;
+  transition: color 0.1s, background 0.1s;
 }
-.league-dropdown-action:hover { color: rgba(240, 237, 232, 0.6); }
+.league-dropdown-action:hover { color: rgba(240, 237, 232, 0.7); background: rgba(255, 255, 255, 0.03); }
+
+/* ── Sidebar inline forms ─────────────────────── */
+.sidebar-inline-form {
+  margin-top: 8px;
+  background: #0e0e13;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-inline-form-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: rgba(240, 237, 232, 0.4);
+  text-transform: uppercase;
+}
+
+.sidebar-inline-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 7px 10px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: #f0ede8;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.sidebar-inline-input:focus { border-color: rgba(255, 255, 255, 0.2); }
+.sidebar-inline-input::placeholder { color: rgba(240, 237, 232, 0.25); }
+.sidebar-inline-input.mono { font-family: monospace; letter-spacing: 1px; }
+
+.sidebar-inline-error {
+  font-size: 11px;
+  color: #e86450;
+}
+
+.sidebar-inline-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.sidebar-inline-btn {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.sidebar-inline-btn:disabled { opacity: 0.35; cursor: default; }
+.sidebar-inline-btn.primary { background: #e8c96d; color: #0a0a0f; }
+.sidebar-inline-btn.primary:hover:not(:disabled) { opacity: 0.85; }
+.sidebar-inline-btn.ghost { background: rgba(255, 255, 255, 0.06); color: rgba(240, 237, 232, 0.5); }
+.sidebar-inline-btn.ghost:hover:not(:disabled) { opacity: 0.7; }
 
 /* ── Main ─────────────────────────────────────── */
 .main { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }

@@ -105,14 +105,13 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
         <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
       {activeLeague ? (
-        <div className="mobile-league">
+        <div className="mobile-league" onClick={() => setSidebarOpen(true)}>
           <div className="mobile-league-title">{activeLeague.name}</div>
-          <div className="mobile-league-sub">{activeLeague.code}</div>
         </div>
       ) : (
         <div className="mobile-logo">BCF</div>
       )}
-      <div className="mobile-avatar">{initials(user?.pseudo ?? '?')}</div>
+      <div className="mobile-avatar" onClick={() => handleNav('/profile')} style={{ cursor: 'pointer' }}>{initials(user?.pseudo ?? '?')}</div>
     </div>
   )
 
@@ -123,6 +122,17 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
         {activeLeague && (
           <button className="league-switcher" onClick={() => setShowDropdown((v) => !v)}>
             <span className="league-switcher-name">{activeLeague.name}</span>
+            <svg className={`league-switcher-chevron${showDropdown ? ' open' : ''}`} viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+        )}
+        {!activeLeague && myLeagues && myLeagues.length > 0 && (
+          <button className="league-switcher" onClick={() => setShowDropdown((v) => !v)}>
+            <span className="league-switcher-name" style={{ color: 'rgba(240,237,232,0.4)', fontStyle: 'italic' }}>Choisir une ligue</span>
+            <svg className={`league-switcher-chevron${showDropdown ? ' open' : ''}`} viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
           </button>
         )}
         {showDropdown && (
@@ -133,6 +143,7 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
                 className={`league-dropdown-item${l.id === activeLeague?.id ? ' selected' : ''}`}
                 onClick={() => { setActiveLeague(l); setShowDropdown(false) }}
               >
+                <span className="league-dropdown-check">{l.id === activeLeague?.id ? '✓' : ''}</span>
                 {l.name}
               </div>
             ))}
@@ -141,6 +152,57 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
             </div>
             <div className="league-dropdown-action" onClick={() => { setShowDropdown(false); setShowJoinForm(true); setShowCreateForm(false) }}>
               Rejoindre avec un code
+            </div>
+          </div>
+        )}
+        {showCreateForm && (
+          <div className="sidebar-inline-form">
+            <div className="sidebar-inline-form-title">Nouvelle ligue</div>
+            <input
+              className="sidebar-inline-input"
+              placeholder="Nom de la ligue"
+              value={leagueName}
+              onChange={(e) => setLeagueName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && leagueName && createMutation.mutate(leagueName, { onSuccess: () => { setShowCreateForm(false); setLeagueName('') } })}
+              autoFocus
+            />
+            <div className="sidebar-inline-actions">
+              <button
+                className="sidebar-inline-btn primary"
+                onClick={() => createMutation.mutate(leagueName, { onSuccess: () => { setShowCreateForm(false); setLeagueName('') } })}
+                disabled={!leagueName || createMutation.isPending}
+              >
+                {createMutation.isPending ? 'Création…' : 'Créer'}
+              </button>
+              <button className="sidebar-inline-btn ghost" onClick={() => { setShowCreateForm(false); setLeagueName('') }}>
+                Annuler
+              </button>
+            </div>
+          </div>
+        )}
+        {showJoinForm && (
+          <div className="sidebar-inline-form">
+            <div className="sidebar-inline-form-title">Rejoindre une ligue</div>
+            <input
+              className="sidebar-inline-input mono"
+              placeholder="Code d'invitation"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+              onKeyDown={(e) => e.key === 'Enter' && joinCode && joinMutation.mutate(joinCode, { onSuccess: () => { setShowJoinForm(false); setJoinCode('') } })}
+              autoFocus
+            />
+            {joinMutation.isError && <div className="sidebar-inline-error">Code invalide ou ligue introuvable.</div>}
+            <div className="sidebar-inline-actions">
+              <button
+                className="sidebar-inline-btn primary"
+                onClick={() => joinMutation.mutate(joinCode, { onSuccess: () => { setShowJoinForm(false); setJoinCode('') } })}
+                disabled={!joinCode || joinMutation.isPending}
+              >
+                {joinMutation.isPending ? 'Rejoindre…' : 'Rejoindre'}
+              </button>
+              <button className="sidebar-inline-btn ghost" onClick={() => { setShowJoinForm(false); setJoinCode('') }}>
+                Annuler
+              </button>
             </div>
           </div>
         )}
@@ -211,50 +273,7 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
           {topbarRight && <div className="topbar-right">{topbarRight}</div>}
         </div>
 
-        {/* Inline create/join forms (accessible via league dropdown) */}
-        {(showCreateForm || showJoinForm) && (
-          <div style={{ padding: '0 1.75rem', paddingTop: '1rem' }}>
-            {showCreateForm && (
-              <div style={{ background: '#131318', border: '0.5px solid rgba(255,255,255,0.06)', borderRadius: 8, padding: '1rem 1.25rem', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-                <input
-                  className="empty-input"
-                  placeholder="Nom de la nouvelle ligue"
-                  value={leagueName}
-                  onChange={(e) => setLeagueName(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && leagueName && createMutation.mutate(leagueName)}
-                  autoFocus
-                  style={{ flex: 1, margin: 0 }}
-                />
-                <button className="btn-primary" onClick={() => createMutation.mutate(leagueName)} disabled={!leagueName || createMutation.isPending}>
-                  {createMutation.isPending ? 'Création…' : 'Créer'}
-                </button>
-                <button className="btn-ghost-sm" onClick={() => { setShowCreateForm(false); setLeagueName('') }}>Annuler</button>
-              </div>
-            )}
-            {showJoinForm && (
-              <div style={{ background: '#131318', border: '0.5px solid rgba(255,255,255,0.06)', borderRadius: 8, padding: '1rem 1.25rem', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-                <input
-                  className="empty-input"
-                  placeholder="Code d'invitation"
-                  value={joinCode}
-                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                  onKeyDown={(e) => e.key === 'Enter' && joinCode && joinMutation.mutate(joinCode)}
-                  autoFocus
-                  style={{ flex: 1, margin: 0, fontFamily: 'monospace' }}
-                />
-                <button className="btn-primary" onClick={() => joinMutation.mutate(joinCode)} disabled={!joinCode || joinMutation.isPending}>
-                  {joinMutation.isPending ? 'Rejoindre…' : 'Rejoindre'}
-                </button>
-                <button className="btn-ghost-sm" onClick={() => { setShowJoinForm(false); setJoinCode('') }}>Annuler</button>
-                {joinMutation.isError && (
-                  <div className="empty-error" style={{ width: '100%' }}>Code invalide ou ligue introuvable.</div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        <div className="content" style={{ flex: 1, overflowY: 'auto' }}>
+<div className="content" style={{ flex: 1, overflowY: 'auto' }}>
           {children}
         </div>
       </div>
