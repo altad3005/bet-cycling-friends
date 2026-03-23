@@ -1,19 +1,42 @@
-import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { leaguesApi } from '../api/leagues'
 import { standingsApi } from '../api/standings'
 import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
+import { useLeagueStore } from '../stores/league'
 import AppShell from '../components/AppShell'
 import { initials, avatarColor } from '../utils/ui'
 import './HomePage.css'
 import './MembersPage.css'
+import './AdminPage.css'
 
 const DATE_FMT = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
 const RANK_CLASSES = ['g', 's', 'b']
 
 export default function MembersPage() {
+  const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const { activeLeague } = useLeague()
+  const queryClient = useQueryClient()
+  const resetLeague = useLeagueStore((s) => s.reset)
+  const [confirmLeave, setConfirmLeave] = useState(false)
+  const [leaveError, setLeaveError] = useState<string | null>(null)
+
+  const leaveMutation = useMutation({
+    mutationFn: () => leaguesApi.leave(activeLeague!.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-leagues'] })
+      resetLeague()
+      navigate('/dashboard')
+    },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Erreur'
+      setLeaveError(msg)
+      setConfirmLeave(false)
+    },
+  })
 
   const { data: members, isLoading: membersLoading } = useQuery({
     queryKey: ['members', activeLeague?.id],
@@ -104,6 +127,33 @@ export default function MembersPage() {
               </div>
             )
           })}
+        </div>
+      )}
+
+      {/* ── Quitter la ligue ── */}
+      {activeLeague && (
+        <div className="danger-zone" style={{ marginTop: '2rem' }}>
+          <div className="danger-zone-title">Zone dangereuse</div>
+          {leaveError && <div className="danger-zone-error">{leaveError}</div>}
+          <div className="danger-zone-row">
+            <div className="danger-zone-info">
+              <div className="danger-zone-label">Quitter la ligue</div>
+              <div className="danger-zone-desc">Vous perdrez l'accès à cette ligue et à vos pronostics.</div>
+            </div>
+            {confirmLeave ? (
+              <div className="danger-zone-confirm">
+                <span className="amr-confirm-txt">Confirmer ?</span>
+                <button className="amr-btn danger" onClick={() => leaveMutation.mutate()} disabled={leaveMutation.isPending}>
+                  {leaveMutation.isPending ? '…' : 'Quitter'}
+                </button>
+                <button className="amr-btn ghost" onClick={() => setConfirmLeave(false)}>Annuler</button>
+              </div>
+            ) : (
+              <button className="amr-btn danger-ghost" onClick={() => { setLeaveError(null); setConfirmLeave(true) }}>
+                Quitter
+              </button>
+            )}
+          </div>
         </div>
       )}
 

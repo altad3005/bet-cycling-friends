@@ -22,6 +22,7 @@ export type ScannedRoutes = {
     'league.join': { paramsTuple: [ParamValue]; params: {'code': ParamValue} }
     'league.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league.leave': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'league.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league_member.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league_member.update': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'league_member.destroy': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
@@ -104,6 +105,7 @@ export type ScannedRoutes = {
   DELETE: {
     'profile.push_subscription.destroy': { paramsTuple?: []; params?: {} }
     'league.leave': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'league.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'league_member.destroy': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'league_race.destroy': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
   }

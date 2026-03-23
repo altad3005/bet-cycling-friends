@@ -39,6 +39,7 @@ export interface ApiDefinition {
     join: typeof routes['league.join']
     show: typeof routes['league.show']
     leave: typeof routes['league.leave']
+    destroy: typeof routes['league.destroy']
   }
   leagueMember: {
     index: typeof routes['league_member.index']

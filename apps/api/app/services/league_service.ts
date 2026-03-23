@@ -74,6 +74,17 @@ export default class LeagueService {
       .where('user_id', user.id)
       .firstOrFail()
 
+    const memberCount = await LeagueMember.query()
+      .where('league_id', leagueId)
+      .count('* as total')
+
+    // Dernier membre → supprimer la ligue entière
+    if (Number(memberCount[0].$extras.total) <= 1) {
+      const league = await League.findOrFail(leagueId)
+      await league.delete()
+      return
+    }
+
     if (member.isAdmin) {
       const adminCount = await LeagueMember.query()
         .where('league_id', leagueId)
@@ -89,6 +100,12 @@ export default class LeagueService {
     }
 
     await member.delete()
+  }
+
+  async delete(user: User, leagueId: string): Promise<void> {
+    await this.requireAdmin(user.id, leagueId)
+    const league = await League.findOrFail(leagueId)
+    await league.delete()
   }
 
   async updateMember(

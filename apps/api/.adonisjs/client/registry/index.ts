@@ -114,6 +114,12 @@ const routes = {
     tokens: [{"old":"/api/leagues/:id/leave","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/leave","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/leave","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/leave","type":0,"val":"leave","end":""}],
     types: placeholder as Registry['league.leave']['types'],
   },
+  'league.destroy': {
+    methods: ["DELETE"],
+    pattern: '/api/leagues/:id',
+    tokens: [{"old":"/api/leagues/:id","type":0,"val":"api","end":""},{"old":"/api/leagues/:id","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['league.destroy']['types'],
+  },
   'league_member.index': {
     methods: ["GET","HEAD"],
     pattern: '/api/leagues/:id/members',

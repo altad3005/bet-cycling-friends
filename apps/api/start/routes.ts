@@ -51,6 +51,7 @@ router
         router.post('/join/:code', [controllers.League, 'join'])
         router.get('/:id', [controllers.League, 'show'])
         router.delete('/:id/leave', [controllers.League, 'leave'])
+        router.delete('/:id', [controllers.League, 'destroy'])
         router.get('/:id/members', [controllers.LeagueMember, 'index'])
         router.patch('/:id/members/:userId', [controllers.LeagueMember, 'update'])
         router.delete('/:id/members/:userId', [controllers.LeagueMember, 'destroy'])

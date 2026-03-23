@@ -40,4 +40,10 @@ export default class LeagueController {
     await new LeagueService().leave(user, params.id)
     return response.noContent()
   }
+
+  async destroy({ params, auth, response }: HttpContext) {
+    const user = auth.getUserOrFail()
+    await new LeagueService().delete(user, params.id)
+    return response.noContent()
+  }
 }

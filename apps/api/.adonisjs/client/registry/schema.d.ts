@@ -223,6 +223,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/league_controller').default['leave']>>>
     }
   }
+  'league.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/leagues/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/league_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/league_controller').default['destroy']>>>
+    }
+  }
   'league_member.index': {
     methods: ["GET","HEAD"]
     pattern: '/api/leagues/:id/members'

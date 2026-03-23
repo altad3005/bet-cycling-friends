@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { MultiplierType, RaceStatus } from '@bcf/shared'
 import { leaguesApi } from '../api/leagues'
 import { racesApi, type RacePreview, type RaceResponse } from '../api/races'
 import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
+import { useLeagueStore } from '../stores/league'
 import AppShell from '../components/AppShell'
 import { initials, avatarColor } from '../utils/ui'
 import './HomePage.css'
@@ -34,6 +36,7 @@ function MembersTab({ leagueId }: { leagueId: string }) {
   const user = useAuthStore((s) => s.user)
   const queryClient = useQueryClient()
   const [confirmKick, setConfirmKick] = useState<string | null>(null)
+  const [confirmPromote, setConfirmPromote] = useState<string | null>(null)
 
   const { data: members, isLoading } = useQuery({
     queryKey: ['members', leagueId],
@@ -108,14 +111,28 @@ function MembersTab({ leagueId }: { leagueId: string }) {
                   </>
                 ) : (
                   <>
-                    <button
-                      className="amr-btn ghost"
-                      onClick={() => promoteMutation.mutate({ userId: m.userId, isAdmin: !m.isAdmin })}
-                      disabled={promoteMutation.isPending || (!canDemote && m.isAdmin)}
-                      title={!canDemote && m.isAdmin ? 'Dernier admin — impossible de rétrograder' : ''}
-                    >
-                      {m.isAdmin ? 'Rétrograder' : 'Promouvoir admin'}
-                    </button>
+                    {confirmPromote === m.userId ? (
+                      <>
+                        <span className="amr-confirm-txt">{m.isAdmin ? 'Rétrograder ?' : 'Promouvoir admin ?'}</span>
+                        <button
+                          className="amr-btn ghost"
+                          onClick={() => { promoteMutation.mutate({ userId: m.userId, isAdmin: !m.isAdmin }); setConfirmPromote(null) }}
+                          disabled={promoteMutation.isPending}
+                        >
+                          Confirmer
+                        </button>
+                        <button className="amr-btn ghost" onClick={() => setConfirmPromote(null)}>Annuler</button>
+                      </>
+                    ) : (
+                      <button
+                        className="amr-btn ghost"
+                        onClick={() => setConfirmPromote(m.userId)}
+                        disabled={!canDemote && m.isAdmin}
+                        title={!canDemote && m.isAdmin ? 'Dernier admin — impossible de rétrograder' : ''}
+                      >
+                        {m.isAdmin ? 'Rétrograder' : 'Promouvoir admin'}
+                      </button>
+                    )}
                     {canKick && (
                       <button className="amr-btn danger-ghost" onClick={() => setConfirmKick(m.userId)}>
                         Exclure
@@ -441,6 +458,47 @@ function CalendarTab({ leagueId }: { leagueId: string }) {
 
 // ── Page ─────────────────────────────────────────────────────────────────
 
+function DangerZone({ league }: { league: { id: string; name: string; isAdmin: boolean } }) {
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const resetLeague = useLeagueStore((s) => s.reset)
+  const [confirm, setConfirm] = useState(false)
+
+  const deleteMutation = useMutation({
+    mutationFn: () => leaguesApi.delete(league.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-leagues'] })
+      resetLeague()
+      navigate('/dashboard')
+    },
+  })
+
+  return (
+    <div className="danger-zone">
+      <div className="danger-zone-title">Zone dangereuse</div>
+      <div className="danger-zone-row">
+        <div className="danger-zone-info">
+          <div className="danger-zone-label">Supprimer la ligue</div>
+          <div className="danger-zone-desc">Supprime définitivement la ligue, tous ses membres et son historique.</div>
+        </div>
+        {confirm ? (
+          <div className="danger-zone-confirm">
+            <span className="amr-confirm-txt">Confirmer ?</span>
+            <button className="amr-btn danger" onClick={() => deleteMutation.mutate()} disabled={deleteMutation.isPending}>
+              {deleteMutation.isPending ? '…' : 'Supprimer'}
+            </button>
+            <button className="amr-btn ghost" onClick={() => setConfirm(false)}>Annuler</button>
+          </div>
+        ) : (
+          <button className="amr-btn danger-ghost" onClick={() => setConfirm(true)}>
+            Supprimer
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function AdminPage() {
   const { activeLeague } = useLeague()
   const [tab, setTab] = useState<Tab>('members')
@@ -469,7 +527,10 @@ export default function AdminPage() {
       {!activeLeague ? (
         <div className="admin-empty">Aucune ligue sélectionnée.</div>
       ) : tab === 'members' ? (
-        <MembersTab leagueId={activeLeague.id} />
+        <>
+          <MembersTab leagueId={activeLeague.id} />
+          {activeLeague.isAdmin && <DangerZone league={activeLeague} />}
+        </>
       ) : (
         <CalendarTab leagueId={activeLeague.id} />
       )}

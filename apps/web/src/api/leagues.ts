@@ -38,6 +38,8 @@ export const leaguesApi = {
 
   leave: (id: string) => api.delete(`/leagues/${id}/leave`),
 
+  delete: (id: string) => api.delete(`/leagues/${id}`),
+
   members: (id: string) =>
     api.get<{ data: { members: LeagueMember[] } }>(`/leagues/${id}/members`),
 
