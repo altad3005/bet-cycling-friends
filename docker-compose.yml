@@ -44,6 +44,8 @@ services:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
+    ports:
+      - "127.0.0.1:3335:3335"
     environment:
       - NODE_ENV=production
       - LOG_LEVEL=${LOG_LEVEL:-info}
