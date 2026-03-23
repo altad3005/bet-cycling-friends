@@ -79,7 +79,7 @@
 /* ── Card header ──────────────────────────────── */
 .bet-card-head {
   display: grid;
-  grid-template-columns: 16px 1fr auto auto auto;
+  grid-template-columns: 16px minmax(0, 1fr) auto auto auto;
   align-items: center;
   gap: 12px;
   padding: 14px 1.25rem;
@@ -271,7 +271,7 @@
 @media (max-width: 640px) {
   .bets-stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .bet-card-head {
-    grid-template-columns: 12px 1fr auto auto;
+    grid-template-columns: 12px minmax(0, 1fr) auto auto;
     gap: 8px;
     padding: 12px 1rem;
   }
