@@ -103,26 +103,27 @@ export default function ActivityFeedPanel({ events, hasMore }: Props) {
 
   return (
     <div className="panel">
+      <div className="panel-head">
+        <div className="panel-title">Activité récente</div>
+        {hasMore && (
+          <button
+            onClick={() => navigate('/feed')}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, color: 'rgba(240,237,232,0.35)', padding: 0 }}
+          >
+            Voir tout →
+          </button>
+        )}
+      </div>
+
       {events.length === 0 ? (
         <div style={{ padding: '1.5rem 1.25rem', textAlign: 'center', fontSize: 13, color: 'rgba(240,237,232,0.25)' }}>
           Aucune activité pour l'instant.
         </div>
       ) : (
-        <div style={{ padding: '0 1.25rem 0' }}>
+        <div style={{ padding: '0 1.25rem 0.5rem' }}>
           {events.map((event, i) => (
             <EventRow key={`${event.type}-${event.at}-${i}`} event={event} />
           ))}
-        </div>
-      )}
-
-      {hasMore && (
-        <div style={{ padding: '0.6rem 1.25rem 0.85rem', borderTop: '0.5px solid rgba(255,255,255,0.05)' }}>
-          <button
-            onClick={() => navigate('/feed')}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: 'rgba(240,237,232,0.3)', padding: 0 }}
-          >
-            Voir toute l'activité →
-          </button>
         </div>
       )}
     </div>

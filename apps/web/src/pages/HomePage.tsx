@@ -106,13 +106,6 @@ export default function HomePage() {
         <UpcomingRacesPanel races={leagueRaces} />
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
-        <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(240,237,232,0.25)', textTransform: 'uppercase', letterSpacing: '0.6px', whiteSpace: 'nowrap' }}>
-          Activité récente
-        </div>
-        <div style={{ flex: 1, height: '0.5px', background: 'rgba(255,255,255,0.05)' }} />
-      </div>
-
       <ActivityFeedPanel events={feedEvents} hasMore={feedEvents.length >= 5} />
 
     </AppShell>

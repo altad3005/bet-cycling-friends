@@ -522,6 +522,7 @@
   display: grid;
   grid-template-columns: 1fr 340px;
   gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* ── Panel ────────────────────────────────────── */
