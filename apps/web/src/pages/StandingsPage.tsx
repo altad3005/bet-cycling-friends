@@ -118,7 +118,7 @@ export default function StandingsPage() {
           {top3.map((row, i) => {
             const col = avatarColor(i)
             return (
-              <div key={row.userId} className={`hero-card${row.userId === user?.id ? ' highlight' : ''}`}>
+              <div key={row.userId} className={`hero-card${row.userId === user?.id ? ' highlight' : ''}`} style={{ cursor: !isGlobal ? 'pointer' : 'default' }} onClick={() => !isGlobal && navigate(`/members/${row.userId}`)}>
                 <div className="hero-avatar" style={{ background: col.bg, color: col.color }}>
                   {initials(row.pseudo)}
                 </div>

@@ -191,28 +191,57 @@ export default function RacePage() {
             ) : null}
           </section>
 
-          {/* ── Classement de la course ── */}
+          {/* ── Résultats ligue (course terminée) ── */}
           {race.status === RaceStatus.FINISHED && (
             <section className="race-section">
-              <div className="race-section-title">Classement de la course</div>
+              <div className="race-section-title">
+                Résultats · Ligue
+                {raceResults && raceResults.length > 0 && (
+                  <span className="race-section-badge">
+                    🏆 {raceResults[0].name}
+                  </span>
+                )}
+              </div>
               {!raceStandings || raceStandings.length === 0 ? (
                 <div className="race-empty">Aucun résultat disponible.</div>
               ) : (
-                <div className="race-standings">
+                <div className="results-list">
                   {raceStandings.map((row) => {
                     const isMe = row.userId === user?.id
                     const col  = avatarColor(row.rank - 1)
+                    const bet  = leagueBetsData?.raceStarted
+                      ? leagueBetsData.bets.find((b) => b.userId === row.userId)
+                      : undefined
+                    const cb = bet && 'favoriteRider' in bet ? (bet as BetClassicResponse) : null
+                    const gb = bet && 'riders' in bet        ? (bet as BetGrandTourResponse) : null
                     return (
-                      <div key={row.userId} className={`race-standing-row${isMe ? ' me' : ''}`}>
-                        <div className="rs-rank">{row.rank}</div>
-                        <div className="rs-avatar" style={{ background: col.bg, color: col.color }}>
+                      <div key={row.userId} className={`result-row${isMe ? ' me' : ''}${row.rank === 1 ? ' first' : ''}`}>
+                        <div className="result-rank-col">
+                          <span className={`result-rank${row.rank <= 3 ? ` r${row.rank}` : ''}`}>{row.rank}</span>
+                        </div>
+                        <div className="result-avatar" style={{ background: col.bg, color: col.color }}>
                           {initials(row.pseudo)}
                         </div>
-                        <div className="rs-pseudo">
-                          {row.pseudo}
-                          {isMe && <span className="me-badge">Moi</span>}
+                        <div className="result-main">
+                          <div className="result-name">
+                            {row.pseudo}
+                            {isMe && <span className="me-badge">Moi</span>}
+                          </div>
+                          {cb && (
+                            <div className="result-picks">
+                              {cb.favoriteRider && <span className="result-pick favori">{cb.favoriteRider.name}</span>}
+                              {cb.bonusRider   && <span className="result-pick bonus">{cb.bonusRider.name}</span>}
+                            </div>
+                          )}
+                          {gb && gb.riders && gb.riders.length > 0 && (
+                            <div className="result-gt-riders">
+                              {gb.riders.map((r) => (
+                                <span key={r.id} className="result-gt-chip">{r.name}</span>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        <div className="rs-points">{row.points.toLocaleString('fr-FR')} pts</div>
+                        <div className="result-pts">{row.points.toLocaleString('fr-FR')}</div>
                       </div>
                     )
                   })}
@@ -221,11 +250,11 @@ export default function RacePage() {
             </section>
           )}
 
-          {/* ── Résultats de la course ── */}
+          {/* ── Résultats officiels (course terminée) ── */}
           {race.status === RaceStatus.FINISHED && raceResults && raceResults.length > 0 && (
             <section className="race-section">
               <div className="race-section-title">
-                {race.isGrandTour ? 'Classement général final' : 'Top 10'}
+                {race.isGrandTour ? 'Classement général final' : 'Top 10 officiel'}
               </div>
               <div className="race-results">
                 {raceResults.map((r) => (
@@ -238,47 +267,49 @@ export default function RacePage() {
             </section>
           )}
 
-          {/* ── Paris des membres ── */}
-          <section className="race-section">
-            <div className="race-section-title">
-              Paris des membres
-              {leagueBetsData && !leagueBetsData.raceStarted && (
-                <span className="race-section-badge masked">Masqués</span>
-              )}
-            </div>
-            {!leagueBetsData || leagueBetsData.bets.length === 0 ? (
-              <div className="race-empty">Aucun pari placé dans cette ligue.</div>
-            ) : !leagueBetsData.raceStarted ? (
-              <div className="race-empty">Les paris seront révélés au départ de la course.</div>
-            ) : (
-              <div className="member-bets">
-                {leagueBetsData.bets.map((bet) => {
-                  const cb = 'favoriteRider' in bet ? (bet as BetClassicResponse) : null
-                  const gb = 'riders' in bet        ? (bet as BetGrandTourResponse) : null
-                  const isMe = bet.userId === user?.id
-                  return (
-                    <div key={bet.userId} className={`member-bet-card${isMe ? ' me' : ''}`}>
-                      <div className="member-bet-pseudo">
-                        {bet.user?.pseudo ?? (isMe ? 'Moi' : '—')}
-                        {isMe && <span className="me-badge">Moi</span>}
-                      </div>
-                      {cb && (
-                        <>
-                          <div className="bet-rider-row"><span className="bet-rider-label">Favori</span> {cb.favoriteRider?.name ?? '—'}</div>
-                          <div className="bet-rider-row"><span className="bet-rider-label">Bonus</span> {cb.bonusRider?.name ?? '—'}</div>
-                        </>
-                      )}
-                      {gb && (
-                        <div className="bet-gt-riders">
-                          {gb.riders?.map((r) => <div key={r.id} className="bet-gt-rider">{r.name}</div>)}
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
+          {/* ── Paris des membres (live / à venir) ── */}
+          {race.status !== RaceStatus.FINISHED && (
+            <section className="race-section">
+              <div className="race-section-title">
+                Paris des membres
+                {leagueBetsData && !leagueBetsData.raceStarted && (
+                  <span className="race-section-badge masked">Masqués</span>
+                )}
               </div>
-            )}
-          </section>
+              {!leagueBetsData || leagueBetsData.bets.length === 0 ? (
+                <div className="race-empty">Aucun pari placé dans cette ligue.</div>
+              ) : !leagueBetsData.raceStarted ? (
+                <div className="race-empty">Les paris seront révélés au départ de la course.</div>
+              ) : (
+                <div className="member-bets">
+                  {leagueBetsData.bets.map((bet) => {
+                    const cb = 'favoriteRider' in bet ? (bet as BetClassicResponse) : null
+                    const gb = 'riders' in bet        ? (bet as BetGrandTourResponse) : null
+                    const isMe = bet.userId === user?.id
+                    return (
+                      <div key={bet.userId} className={`member-bet-card${isMe ? ' me' : ''}`}>
+                        <div className="member-bet-pseudo">
+                          {bet.user?.pseudo ?? (isMe ? 'Moi' : '—')}
+                          {isMe && <span className="me-badge">Moi</span>}
+                        </div>
+                        {cb && (
+                          <>
+                            <div className="bet-rider-row"><span className="bet-rider-label">Favori</span> {cb.favoriteRider?.name ?? '—'}</div>
+                            <div className="bet-rider-row"><span className="bet-rider-label">Bonus</span> {cb.bonusRider?.name ?? '—'}</div>
+                          </>
+                        )}
+                        {gb && (
+                          <div className="bet-gt-riders">
+                            {gb.riders?.map((r) => <div key={r.id} className="bet-gt-rider">{r.name}</div>)}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </section>
+          )}
 
           {/* ── Étapes (Grand Tour) ── */}
           {race.isGrandTour && stagesData && stagesData.stages.length > 0 && (

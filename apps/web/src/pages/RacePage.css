@@ -519,6 +519,124 @@
   font-weight: 400;
 }
 
+/* ── Unified Results ── */
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.result-row.me {
+  background: rgba(232, 201, 109, 0.04);
+  border-color: rgba(232, 201, 109, 0.18);
+}
+
+.result-row.first {
+  border-color: rgba(232, 201, 109, 0.12);
+}
+
+.result-rank-col {
+  min-width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.result-rank {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  color: rgba(240, 237, 232, 0.22);
+}
+.result-rank.r1 { color: #e8c96d; font-size: 18px; }
+.result-rank.r2 { color: #b0b8c8; }
+.result-rank.r3 { color: #cd7f32; }
+
+.result-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.result-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.result-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f0ede8;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.result-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.result-pick {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+.result-pick.favori {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(240, 237, 232, 0.65);
+}
+.result-pick.bonus {
+  background: rgba(91, 156, 246, 0.08);
+  color: rgba(91, 156, 246, 0.7);
+}
+
+.result-gt-riders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.result-gt-chip {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(240, 237, 232, 0.5);
+  white-space: nowrap;
+}
+
+.result-pts {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  color: #e8c96d;
+  flex-shrink: 0;
+  text-align: right;
+  min-width: 60px;
+}
+
 /* ── Race results ── */
 .race-results {
   display: flex;
