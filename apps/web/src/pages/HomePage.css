@@ -627,6 +627,19 @@
   vertical-align: middle;
 }
 
+/* ── Race group header ────────────────────────── */
+.race-group-header {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(240, 237, 232, 0.2);
+  padding: 8px 1.25rem 4px;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.04);
+}
+.race-group-header:first-child { border-top: none; }
+.race-group-header.live { color: rgba(74, 222, 128, 0.5); }
+
 /* ── Race list ────────────────────────────────── */
 .race-item {
   display: flex;

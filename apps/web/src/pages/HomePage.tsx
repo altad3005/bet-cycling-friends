@@ -57,8 +57,9 @@ export default function HomePage() {
 
   const myStanding     = leagueStandings.find((s) => s.userId === user?.id)
   const leaderStanding = leagueStandings[0]
-  const nextRace       = leagueRaces.find((r) => r.status === RaceStatus.LIVE)
-                      ?? leagueRaces.find((r) => r.status === RaceStatus.UPCOMING)
+  const liveRaces      = leagueRaces.filter((r) => r.status === RaceStatus.LIVE)
+  const nextUpcoming   = leagueRaces.find((r) => r.status === RaceStatus.UPCOMING)
+  const bannerRaces    = nextUpcoming ? [...liveRaces, nextUpcoming] : liveRaces
 
   function copyCode() {
     navigator.clipboard.writeText(activeLeague!.code).then(() => {
@@ -81,13 +82,14 @@ export default function HomePage() {
     <>
     <AppShell activePage="dashboard" pageTitle="Dashboard" topbarRight={leagueCodeBtn}>
 
-      {nextRace && (
+      {bannerRaces.map((race) => (
         <NextRaceBanner
-          race={nextRace}
-          onNavigate={() => navigate('/bets')}
-          onBet={() => setBetRace(nextRace)}
+          key={race.id}
+          race={race}
+          onNavigate={() => navigate(`/races/${race.id}`)}
+          onBet={() => setBetRace(race)}
         />
-      )}
+      ))}
 
       <StatGrid
         myStanding={myStanding}
