@@ -14,6 +14,7 @@ import MembersPage from './pages/MembersPage'
 import AdminPage from './pages/AdminPage'
 import RacePage from './pages/RacePage'
 import ProfilePage from './pages/ProfilePage'
+import StatsPage from './pages/StatsPage'
 import SetupProfilePage from './pages/auth/SetupProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useBootstrap } from './hooks/useBootstrap'
@@ -103,6 +104,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/stats"
+        element={
+          <ProtectedRoute>
+            <StatsPage />
           </ProtectedRoute>
         }
       />

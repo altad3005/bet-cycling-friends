@@ -9,7 +9,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { initials, avatarColor } from '../utils/ui'
 import '../pages/HomePage.css'
 
-export type ActivePage = 'dashboard' | 'standings' | 'calendar' | 'bets' | 'members' | 'admin' | 'profile'
+export type ActivePage = 'dashboard' | 'standings' | 'calendar' | 'bets' | 'stats' | 'members' | 'admin' | 'profile'
 
 interface AppShellProps {
   activePage: ActivePage
@@ -85,6 +85,10 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
     {
       key: 'bets', label: 'Mes pronostics', path: '/bets',
       icon: <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>,
+    },
+    {
+      key: 'stats', label: 'Statistiques', path: '/stats',
+      icon: <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
     },
   ]
 

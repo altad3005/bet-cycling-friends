@@ -17,4 +17,5 @@ export const controllers = {
   Race: () => import('#controllers/race_controller'),
   RaceSync: () => import('#controllers/race_sync_controller'),
   Standings: () => import('#controllers/standings_controller'),
+  Stats: () => import('#controllers/stats_controller'),
 }

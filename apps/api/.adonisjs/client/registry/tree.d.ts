@@ -63,6 +63,9 @@ export interface ApiDefinition {
     storeGrandTour: typeof routes['bet.store_grand_tour']
     leagueBets: typeof routes['bet.league_bets']
   }
+  stats: {
+    leagueStats: typeof routes['stats.league_stats']
+  }
   standings: {
     leagueStandings: typeof routes['standings.league_standings']
     raceStandings: typeof routes['standings.race_standings']

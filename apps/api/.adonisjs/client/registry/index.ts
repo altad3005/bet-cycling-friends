@@ -204,6 +204,12 @@ const routes = {
     tokens: [{"old":"/api/leagues/:id/races/:raceId/bets","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/races/:raceId/bets","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/races/:raceId/bets","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/races/:raceId/bets","type":0,"val":"races","end":""},{"old":"/api/leagues/:id/races/:raceId/bets","type":1,"val":"raceId","end":""},{"old":"/api/leagues/:id/races/:raceId/bets","type":0,"val":"bets","end":""}],
     types: placeholder as Registry['bet.league_bets']['types'],
   },
+  'stats.league_stats': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/stats',
+    tokens: [{"old":"/api/leagues/:id/stats","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/stats","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/stats","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/stats","type":0,"val":"stats","end":""}],
+    types: placeholder as Registry['stats.league_stats']['types'],
+  },
   'standings.league_standings': {
     methods: ["GET","HEAD"],
     pattern: '/api/leagues/:id/standings',

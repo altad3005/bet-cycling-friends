@@ -81,6 +81,10 @@ router
       .use(middleware.auth())
 
     router
+      .get('/leagues/:id/stats', [controllers.Stats, 'leagueStats'])
+      .use(middleware.auth())
+
+    router
       .group(() => {
         router.get('/:id/standings', [controllers.Standings, 'leagueStandings'])
         router.get('/:id/races/:raceId/standings', [controllers.Standings, 'raceStandings'])

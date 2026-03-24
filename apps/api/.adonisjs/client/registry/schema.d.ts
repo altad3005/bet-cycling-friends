@@ -403,6 +403,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/bet_controller').default['leagueBets']>>>
     }
   }
+  'stats.league_stats': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/stats'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/stats_controller').default['leagueStats']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/stats_controller').default['leagueStats']>>>
+    }
+  }
   'standings.league_standings': {
     methods: ["GET","HEAD"]
     pattern: '/api/leagues/:id/standings'

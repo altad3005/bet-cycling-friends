@@ -37,6 +37,7 @@ export type ScannedRoutes = {
     'bet.store_classic': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.store_grand_tour': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.league_bets': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
+    'stats.league_stats': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
@@ -59,6 +60,7 @@ export type ScannedRoutes = {
     'race.results': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.league_bets': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
+    'stats.league_stats': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
@@ -80,6 +82,7 @@ export type ScannedRoutes = {
     'race.results': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.league_bets': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
+    'stats.league_stats': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
