@@ -15,6 +15,8 @@ import AdminPage from './pages/AdminPage'
 import RacePage from './pages/RacePage'
 import ProfilePage from './pages/ProfilePage'
 import StatsPage from './pages/StatsPage'
+import FeedPage from './pages/FeedPage'
+import MemberProfilePage from './pages/MemberProfilePage'
 import SetupProfilePage from './pages/auth/SetupProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useBootstrap } from './hooks/useBootstrap'
@@ -112,6 +114,22 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <StatsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/feed"
+        element={
+          <ProtectedRoute>
+            <FeedPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/members/:userId"
+        element={
+          <ProtectedRoute>
+            <MemberProfilePage />
           </ProtectedRoute>
         }
       />

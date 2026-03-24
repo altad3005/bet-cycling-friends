@@ -18,4 +18,6 @@ export const controllers = {
   RaceSync: () => import('#controllers/race_sync_controller'),
   Standings: () => import('#controllers/standings_controller'),
   Stats: () => import('#controllers/stats_controller'),
+  Feed: () => import('#controllers/feed_controller'),
+  MemberProfile: () => import('#controllers/member_profile_controller'),
 }

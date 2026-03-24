@@ -210,6 +210,18 @@ const routes = {
     tokens: [{"old":"/api/leagues/:id/stats","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/stats","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/stats","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/stats","type":0,"val":"stats","end":""}],
     types: placeholder as Registry['stats.league_stats']['types'],
   },
+  'feed.league_feed': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/feed',
+    tokens: [{"old":"/api/leagues/:id/feed","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/feed","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/feed","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/feed","type":0,"val":"feed","end":""}],
+    types: placeholder as Registry['feed.league_feed']['types'],
+  },
+  'member_profile.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/members/:userId/profile',
+    tokens: [{"old":"/api/leagues/:id/members/:userId/profile","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/members/:userId/profile","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/members/:userId/profile","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/members/:userId/profile","type":0,"val":"members","end":""},{"old":"/api/leagues/:id/members/:userId/profile","type":1,"val":"userId","end":""},{"old":"/api/leagues/:id/members/:userId/profile","type":0,"val":"profile","end":""}],
+    types: placeholder as Registry['member_profile.show']['types'],
+  },
   'standings.league_standings': {
     methods: ["GET","HEAD"],
     pattern: '/api/leagues/:id/standings',

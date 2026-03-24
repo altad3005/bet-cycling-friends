@@ -100,7 +100,7 @@ export default function MembersPage() {
             const rankIdx = (m.rank ?? 999) - 1
             const col = avatarColor(m.colorIndex)
             return (
-              <div key={m.userId} className={`members-row${isMe ? ' me' : ''}`}>
+              <div key={m.userId} className={`members-row${isMe ? ' me' : ''}`} style={{ cursor: 'pointer' }} onClick={() => navigate(`/members/${m.userId}`)}>
                 <div className={`mcol-rank rank-num ${RANK_CLASSES[rankIdx] ?? ''}`}>
                   {m.rank ?? '—'}
                 </div>

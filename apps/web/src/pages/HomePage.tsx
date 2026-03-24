@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { RaceStatus } from '@bcf/shared'
 import { standingsApi } from '../api/standings'
 import { racesApi, type RaceResponse } from '../api/races'
+import { feedApi } from '../api/feed'
 import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
 import AppShell from '../components/AppShell'
@@ -12,6 +13,7 @@ import NextRaceBanner from '../components/dashboard/NextRaceBanner'
 import StatGrid from '../components/dashboard/StatGrid'
 import LeagueStandingsPanel from '../components/dashboard/LeagueStandingsPanel'
 import UpcomingRacesPanel from '../components/dashboard/UpcomingRacesPanel'
+import ActivityFeedPanel from '../components/dashboard/ActivityFeedPanel'
 import BetModal from '../components/betting/BetModal'
 import './HomePage.css'
 
@@ -31,6 +33,12 @@ export default function HomePage() {
   const { data: leagueRaces = [] } = useQuery({
     queryKey: ['races', 'league', activeLeague?.id],
     queryFn: () => racesApi.leagueRaces(activeLeague!.id).then((r) => r.data.data.races),
+    enabled: !!activeLeague,
+  })
+
+  const { data: feedEvents = [] } = useQuery({
+    queryKey: ['feed', 'league', activeLeague?.id, 5],
+    queryFn: () => feedApi.league(activeLeague!.id, 5).then((r) => r.data.data.events),
     enabled: !!activeLeague,
   })
 
@@ -97,6 +105,15 @@ export default function HomePage() {
 
         <UpcomingRacesPanel races={leagueRaces} />
       </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
+        <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(240,237,232,0.25)', textTransform: 'uppercase', letterSpacing: '0.6px', whiteSpace: 'nowrap' }}>
+          Activité récente
+        </div>
+        <div style={{ flex: 1, height: '0.5px', background: 'rgba(255,255,255,0.05)' }} />
+      </div>
+
+      <ActivityFeedPanel events={feedEvents} hasMore={feedEvents.length >= 5} />
 
     </AppShell>
 

@@ -66,6 +66,12 @@ export interface ApiDefinition {
   stats: {
     leagueStats: typeof routes['stats.league_stats']
   }
+  feed: {
+    leagueFeed: typeof routes['feed.league_feed']
+  }
+  memberProfile: {
+    show: typeof routes['member_profile.show']
+  }
   standings: {
     leagueStandings: typeof routes['standings.league_standings']
     raceStandings: typeof routes['standings.race_standings']

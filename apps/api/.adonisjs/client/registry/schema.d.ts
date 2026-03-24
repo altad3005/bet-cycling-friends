@@ -415,6 +415,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/stats_controller').default['leagueStats']>>>
     }
   }
+  'feed.league_feed': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/feed'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/feed_controller').default['leagueFeed']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/feed_controller').default['leagueFeed']>>>
+    }
+  }
+  'member_profile.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/members/:userId/profile'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; userId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/member_profile_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/member_profile_controller').default['show']>>>
+    }
+  }
   'standings.league_standings': {
     methods: ["GET","HEAD"]
     pattern: '/api/leagues/:id/standings'

@@ -15,10 +15,11 @@ interface AppShellProps {
   activePage: ActivePage
   pageTitle: string
   topbarRight?: ReactNode
+  backPath?: string
   children: ReactNode
 }
 
-export default function AppShell({ activePage, pageTitle, topbarRight, children }: AppShellProps) {
+export default function AppShell({ activePage, pageTitle, topbarRight, backPath, children }: AppShellProps) {
   const navigate = useNavigate()
   const clearAuth = useAuthStore((s) => s.clearAuth)
   const user = useAuthStore((s) => s.user)
@@ -105,9 +106,15 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
 
   const mobileHeader = (
     <div className="mobile-header">
-      <button className="hamburger" onClick={() => setSidebarOpen((v) => !v)}>
-        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
+      {backPath ? (
+        <button className="hamburger" onClick={() => navigate(backPath)}>
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+      ) : (
+        <button className="hamburger" onClick={() => setSidebarOpen((v) => !v)}>
+          <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      )}
       {activeLeague ? (
         <div className="mobile-league" onClick={() => setSidebarOpen(true)}>
           <div className="mobile-league-title">{activeLeague.name}</div>
@@ -273,6 +280,15 @@ export default function AppShell({ activePage, pageTitle, topbarRight, children 
         {mobileHeader}
 
         <div className="topbar">
+          {backPath && (
+            <button
+              onClick={() => navigate(backPath)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(240,237,232,0.4)', display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, padding: '0 0.75rem 0 0', marginRight: 4 }}
+            >
+              <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Retour
+            </button>
+          )}
           <div className="page-title">{pageTitle}</div>
           {topbarRight && <div className="topbar-right">{topbarRight}</div>}
         </div>
