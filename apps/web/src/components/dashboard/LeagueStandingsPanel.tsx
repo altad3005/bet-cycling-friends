@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import type { LeagueStanding } from '../../api/standings'
 import { initials, avatarColor } from '../../utils/ui'
 
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function LeagueStandingsPanel({ standings, userId, season }: Props) {
+  const navigate   = useNavigate()
   const maxPts     = standings[0]?.totalPoints ?? 1
   const hidden     = standings.length > 8 ? standings.length - 8 : 0
   const visible    = standings.slice(0, 8)
@@ -38,7 +40,7 @@ export default function LeagueStandingsPanel({ standings, userId, season }: Prop
             const barPct   = maxPts > 0 ? Math.round((row.totalPoints / maxPts) * 100) : 0
             const barColor = i === 0 ? '#e8c96d' : i === 1 ? '#b0b8c8' : i === 2 ? '#cd7f32' : '#e8c96d'
             return (
-              <div key={row.userId} className={`standings-row${isMe ? ' me' : ''}`}>
+              <div key={row.userId} className={`standings-row${isMe ? ' me' : ''}`} style={{ cursor: 'pointer' }} onClick={() => navigate(`/members/${row.userId}`)}>
                 <div className={`s-rank ${RANK_CLASSES[i] ?? ''}`}>{row.rank}</div>
                 <div className="s-avatar" style={{ background: col.bg, color: col.color }}>
                   {initials(row.pseudo ?? '?')}

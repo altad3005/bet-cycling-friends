@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { standingsApi, type LeagueStanding, type GlobalStanding } from '../api/standings'
 import { useAuthStore } from '../stores/auth'
@@ -23,6 +24,7 @@ function barColor(rank: number) {
 }
 
 export default function StandingsPage() {
+  const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const { activeLeague } = useLeague()
 
@@ -154,7 +156,7 @@ export default function StandingsPage() {
             const bColor = barColor(row.rank)
 
             return (
-              <div key={row.userId} className={`standings-full-row${isMe ? ' me' : ''}`}>
+              <div key={row.userId} className={`standings-full-row${isMe ? ' me' : ''}`} style={{ cursor: !isGlobal ? 'pointer' : 'default' }} onClick={() => !isGlobal && navigate(`/members/${row.userId}`)}>
                 <div className={`full-rank ${rankClass(row.rank)}`}>{row.rank}</div>
 
                 <div className="full-player">
@@ -194,7 +196,7 @@ export default function StandingsPage() {
               const val = rowVal(myRow)
               const pct = maxVal > 0 ? (val / maxVal) * 100 : 0
               return (
-                <div className="standings-full-row me">
+                <div className="standings-full-row me" style={{ cursor: !isGlobal ? 'pointer' : 'default' }} onClick={() => !isGlobal && navigate(`/members/${myRow.userId}`)}>
                   <div className={`full-rank ${rankClass(myRow.rank)}`}>{myRow.rank}</div>
                   <div className="full-player">
                     <div className="full-avatar" style={{ background: col.bg, color: col.color }}>

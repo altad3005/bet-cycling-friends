@@ -65,7 +65,7 @@ export default function MemberProfilePage() {
   const col = avatarColor(0)
 
   return (
-    <AppShell activePage="members" pageTitle={data?.user.pseudo ?? 'Profil'} backPath="/members">
+    <AppShell activePage="members" pageTitle={data?.user.pseudo ?? 'Profil'} backPath="-1">
       {isLoading || !data ? (
         <div style={{ textAlign: 'center', padding: '3rem', fontSize: 13, color: 'rgba(240,237,232,0.3)' }}>
           Chargement…

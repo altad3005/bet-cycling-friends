@@ -107,7 +107,7 @@ export default function FeedPage() {
   })
 
   return (
-    <AppShell activePage="dashboard" pageTitle="Activité" backPath="/dashboard">
+    <AppShell activePage="dashboard" pageTitle="Activité" backPath="-1">
       <div style={{ maxWidth: 600, margin: '0 auto', padding: '0 1rem 2rem' }}>
         <div style={{ background: '#131318', border: '0.5px solid rgba(255,255,255,0.06)', borderRadius: 12, overflow: 'hidden' }}>
           {isLoading ? (

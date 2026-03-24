@@ -107,7 +107,7 @@ export default function AppShell({ activePage, pageTitle, topbarRight, backPath,
   const mobileHeader = (
     <div className="mobile-header">
       {backPath ? (
-        <button className="hamburger" onClick={() => navigate(backPath)}>
+        <button className="hamburger" onClick={() => backPath === '-1' ? navigate(-1) : navigate(backPath)}>
           <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
       ) : (
@@ -282,7 +282,7 @@ export default function AppShell({ activePage, pageTitle, topbarRight, backPath,
         <div className="topbar">
           {backPath && (
             <button
-              onClick={() => navigate(backPath)}
+              onClick={() => backPath === '-1' ? navigate(-1) : navigate(backPath)}
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(240,237,232,0.4)', display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, padding: '0 0.75rem 0 0', marginRight: 4 }}
             >
               <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
