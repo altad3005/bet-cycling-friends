@@ -107,13 +107,14 @@ export default function RacePage() {
     enabled: !!raceId && race?.status === RaceStatus.FINISHED,
   })
 
+  const canBet = race?.status === RaceStatus.UPCOMING
+  const countdown = useCountdown(canBet ? race?.startAt ?? null : null)
+
   if (!race) return null
 
   const type   = typeLabel(race)
   const status = statusInfo(race.status)
   const mult   = multLabel(race.multiplierType, race.isGrandTour)
-  const canBet = race.status === RaceStatus.UPCOMING
-  const countdown = useCountdown(canBet ? race.startAt : null)
   const classicBet = myBet && 'favoriteRider' in myBet ? (myBet as BetClassicResponse) : null
   const gtBet      = myBet && 'riders' in myBet        ? (myBet as BetGrandTourResponse) : null
 
