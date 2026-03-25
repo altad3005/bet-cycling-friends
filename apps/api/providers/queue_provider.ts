@@ -87,6 +87,7 @@ export default class QueueProvider {
           const races = await Race.query().whereNotNull('start_at')
           for (const race of races) {
             if (!race.startAt) continue
+            if (race.resultsFinal) continue
             let status: string
             if (race.endAt && race.endAt < now) {
               status = 'finished'
