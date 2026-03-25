@@ -3,7 +3,7 @@ import env from '#start/env'
 import PushSubscription from '#models/push_subscription'
 
 webpush.setVapidDetails(
-  env.get('VAPID_SUBJECT', 'mailto:contact@betcyclingfriends.com'),
+  env.get('VAPID_SUBJECT', ''),
   env.get('VAPID_PUBLIC_KEY', ''),
   env.get('VAPID_PRIVATE_KEY', '')
 )
