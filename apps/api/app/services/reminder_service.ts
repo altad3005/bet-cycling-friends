@@ -18,6 +18,12 @@ export default class ReminderService {
       if (!race.startAt) continue
       const hoursUntilStart = race.startAt.diff(now, 'hours').hours
 
+      if (hoursUntilStart >= 23.5 && hoursUntilStart < 24.5 && !race.reminder24hSentAt) {
+        await this.notifyAllUsers(race)
+        race.reminder24hSentAt = DateTime.now()
+        await race.save()
+      }
+
       if (hoursUntilStart >= 4.5 && hoursUntilStart < 5.5 && !race.reminder5hSentAt) {
         await this.notifyUnbetUsers(race, '5h')
         race.reminder5hSentAt = DateTime.now()
@@ -29,6 +35,45 @@ export default class ReminderService {
         race.reminder1hSentAt = DateTime.now()
         await race.save()
       }
+    }
+  }
+
+  private async notifyAllUsers(race: Race): Promise<void> {
+    const leagueRaces = await LeagueRace.query().where('race_id', race.id)
+    const leagueIds = leagueRaces.map((lr) => lr.leagueId)
+    if (leagueIds.length === 0) return
+
+    const members = await LeagueMember.query().whereIn('league_id', leagueIds)
+    const userIds = [...new Set(members.map((m) => m.userId))]
+    if (userIds.length === 0) return
+
+    const [classicBets, gtBets] = await Promise.all([
+      BetClassic.query().where('race_id', race.id).whereIn('user_id', userIds).select('user_id'),
+      BetGrandTour.query().where('race_id', race.id).whereIn('user_id', userIds).select('user_id'),
+    ])
+
+    const bettedUserIds = new Set([
+      ...classicBets.map((b) => b.userId),
+      ...gtBets.map((b) => b.userId),
+    ])
+
+    const unbetUserIds = userIds.filter((id) => !bettedUserIds.has(id))
+    const alreadyBetUserIds = userIds.filter((id) => bettedUserIds.has(id))
+
+    if (unbetUserIds.length > 0) {
+      await this.push.sendToUsers(unbetUserIds, {
+        title: '🚴 Tu n\'as pas encore parié !',
+        body: `${race.name} commence dans 24h — place ton pronostic avant le départ !`,
+        url: `/races/${race.id}`,
+      })
+    }
+
+    if (alreadyBetUserIds.length > 0) {
+      await this.push.sendToUsers(alreadyBetUserIds, {
+        title: '⏳ La course approche !',
+        body: `${race.name} commence dans 24h — bonne chance pour ton pronostic !`,
+        url: `/races/${race.id}`,
+      })
     }
   }
 

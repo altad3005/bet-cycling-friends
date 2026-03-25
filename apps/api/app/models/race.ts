@@ -15,6 +15,9 @@ export default class Race extends RaceSchema {
   @column.dateTime({ columnName: 'reminder1h_sent_at' })
   declare reminder1hSentAt: DateTime | null
 
+  @column.dateTime({ columnName: 'reminder24h_sent_at' })
+  declare reminder24hSentAt: DateTime | null
+
   @hasMany(() => LeagueRace)
   declare leagueRaces: HasMany<typeof LeagueRace>
 
