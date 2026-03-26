@@ -25,3 +25,14 @@ export const BONUS_COEFFICIENT = 0.5
 export const FAVORITE_COEFFICIENT = 1.0
 export const MAX_LEAGUE_MEMBERS = 20
 export const GRAND_TOUR_TEAM_SIZE = 8
+
+export const GT_RIDER_BUDGET = 100
+
+export const GT_RIDER_COST_TIERS: { maxRank: number; cost: number }[] = [
+  { maxRank: 10,  cost: 30 },
+  { maxRank: 30,  cost: 20 },
+  { maxRank: 100, cost: 12 },
+  { maxRank: 200, cost: 6  },
+]
+
+export const GT_RIDER_COST_DEFAULT = 2

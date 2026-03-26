@@ -1,9 +1,10 @@
-import { RaceType, MultiplierType, RaceStatus } from '@bcf/shared'
+import { RaceType, MultiplierType, RaceStatus, type RiderWithCostResponse } from '@bcf/shared'
 import { Exception } from '@adonisjs/core/exceptions'
 import { DateTime } from 'luxon'
 import Race from '#models/race'
 import Stage from '#models/stage'
 import Rider from '#models/rider'
+import RaceRiderCost from '#models/race_rider_cost'
 import LeagueRace from '#models/league_race'
 import LeagueMember from '#models/league_member'
 import Season from '#models/season'
@@ -152,10 +153,8 @@ export default class RaceService {
     return race
   }
 
-  async getStartlist(
-    race: Race
-  ): Promise<{ id: string; name: string; teamName: string | null; nationality: string | null }[]> {
-    const pcsRiders = await this.pcs.getStartlist(race.slug, race.seasonYear)
+  async getStartlist(race: Race): Promise<RiderWithCostResponse[]> {
+    const pcsRiders = await this.pcs.getStartlistWithCosts(race.slug, race.seasonYear)
     const riders = await Promise.all(
       pcsRiders.map((r) =>
         Rider.firstOrCreate(
@@ -164,12 +163,48 @@ export default class RaceService {
         )
       )
     )
-    return riders.map((r, i) => ({
-      id: r.id,
-      name: r.name,
-      teamName: pcsRiders[i].team_name ?? null,
-      nationality: r.nationality,
-    }))
+
+    const costs = await RaceRiderCost.query()
+      .where('race_id', race.id)
+      .whereIn('rider_id', riders.map((r) => r.id))
+
+    const costMap = new Map(costs.map((c) => [c.riderId, c]))
+
+    return riders.map((r, i) => {
+      const snapshot = costMap.get(r.id)
+      return {
+        id: r.id,
+        name: r.name,
+        teamName: pcsRiders[i].team_name ?? null,
+        nationality: r.nationality,
+        pcsRank: snapshot?.pcsRank ?? pcsRiders[i].pcs_rank ?? null,
+        cost: snapshot?.cost ?? pcsRiders[i].cost,
+      }
+    })
+  }
+
+  async snapshotRiderCosts(race: Race): Promise<void> {
+    const pcsRiders = await this.pcs.getStartlistWithCosts(race.slug, race.seasonYear)
+    if (pcsRiders.length === 0) return
+
+    const riders = await Promise.all(
+      pcsRiders.map((r) =>
+        Rider.firstOrCreate(
+          { pcsUrl: r.pcs_url },
+          { name: r.name, nationality: r.nationality ?? null, pcsUrl: r.pcs_url }
+        )
+      )
+    )
+
+    const now = DateTime.now()
+    await Promise.all(
+      riders.map((rider, i) =>
+        RaceRiderCost.updateOrCreate(
+          { raceId: race.id, riderId: rider.id },
+          { pcsRank: pcsRiders[i].pcs_rank ?? null, cost: pcsRiders[i].cost, snapshottedAt: now }
+        )
+      )
+    )
   }
 
   async removeFromLeague(user: User, leagueId: string, raceId: string): Promise<void> {

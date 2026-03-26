@@ -45,6 +45,7 @@ export type ScannedRoutes = {
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
     'standings.global_standings': { paramsTuple?: []; params?: {} }
     'race_sync.sync': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'race_snapshot.snapshot_costs': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'auth.google_auth.redirect': { paramsTuple?: []; params?: {} }
@@ -107,6 +108,7 @@ export type ScannedRoutes = {
     'bet.store_classic': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bet.store_grand_tour': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'race_sync.sync': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'race_snapshot.snapshot_costs': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   PUT: {
     'profile.profile.update': { paramsTuple?: []; params?: {} }

@@ -1,8 +1,9 @@
-import { BetStatus } from '@bcf/shared'
+import { BetStatus, GT_RIDER_BUDGET } from '@bcf/shared'
 import { Exception } from '@adonisjs/core/exceptions'
 import { DateTime } from 'luxon'
 import Race from '#models/race'
 import Rider from '#models/rider'
+import RaceRiderCost from '#models/race_rider_cost'
 import BetClassic from '#models/bet_classic'
 import BetGrandTour from '#models/bet_grand_tour'
 import BetGrandTourRider from '#models/bet_grand_tour_rider'
@@ -48,6 +49,8 @@ export default class BetService {
     const race = await Race.findOrFail(raceId)
     this.checkRaceNotStarted(race)
 
+    await this.checkGrandTourBudget(raceId, riderIds)
+
     const existing = await BetGrandTour.query()
       .where('user_id', user.id)
       .where('race_id', raceId)
@@ -74,6 +77,28 @@ export default class BetService {
 
   private async createGrandTourRiders(betId: string, riderIds: string[]): Promise<void> {
     await Promise.all(riderIds.map((riderId) => BetGrandTourRider.create({ betId, riderId })))
+  }
+
+  private async checkGrandTourBudget(raceId: string, riderIds: string[]): Promise<void> {
+    const snapshotExists = await RaceRiderCost.query().where('race_id', raceId).first()
+    if (!snapshotExists) {
+      throw new Exception(
+        'Les coûts des coureurs ne sont pas encore définis pour cette course.',
+        { status: 422 }
+      )
+    }
+
+    const costs = await RaceRiderCost.query()
+      .where('race_id', raceId)
+      .whereIn('rider_id', riderIds)
+
+    const total = costs.reduce((sum, c) => sum + c.cost, 0)
+    if (total > GT_RIDER_BUDGET) {
+      throw new Exception(
+        `Budget dépassé : ${total} crédits pour ${GT_RIDER_BUDGET} autorisés.`,
+        { status: 422 }
+      )
+    }
   }
 
   private checkRaceNotStarted(race: Race): void {

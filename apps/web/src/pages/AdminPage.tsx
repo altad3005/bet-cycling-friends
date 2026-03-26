@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { MultiplierType, RaceStatus } from '@bcf/shared'
+import { MultiplierType, RaceStatus, RaceType } from '@bcf/shared'
 import { leaguesApi } from '../api/leagues'
 import { racesApi, type RacePreview, type RaceResponse } from '../api/races'
 import { useAuthStore } from '../stores/auth'
@@ -169,9 +169,15 @@ function SyncPanel({ race }: { race: RaceResponse }) {
     },
   })
 
+  const snapshotMutation = useMutation({
+    mutationFn: () => racesApi.snapshotCosts(race.id),
+  })
+
+  const isGrandTour = race.raceType === RaceType.GRAND_TOUR
+  const canSnapshot = isGrandTour && race.status === RaceStatus.UPCOMING
   const canSync = race.status === RaceStatus.LIVE || race.status === RaceStatus.FINISHED
 
-  if (!canSync) return null
+  if (!canSnapshot && !canSync) return null
 
   if (!race.isGrandTour) {
     return (
@@ -188,9 +194,21 @@ function SyncPanel({ race }: { race: RaceResponse }) {
 
   return (
     <div className="sync-gt-wrap">
+      {canSnapshot && (
+        <button
+          className="amr-btn ghost"
+          onClick={() => snapshotMutation.mutate()}
+          disabled={snapshotMutation.isPending}
+          title="Figer le classement PCS pour les coûts des pronostics"
+        >
+          {snapshotMutation.isPending ? 'Snapshot…' : snapshotMutation.isSuccess ? '✓ Coûts figés' : 'Snapshot coûts'}
+        </button>
+      )}
+      {canSync && (
       <button className="amr-btn ghost" onClick={() => setOpen((v) => !v)}>
         {open ? 'Fermer' : 'Syncer étapes'}
       </button>
+      )}
       {open && (
         <div className="sync-gt-panel">
           {!stagesData ? (

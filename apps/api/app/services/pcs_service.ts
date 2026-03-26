@@ -19,6 +19,11 @@ export interface PcsRider {
   team_name?: string | null
 }
 
+export interface PcsRiderWithCost extends PcsRider {
+  pcs_rank: number | null
+  cost: number
+}
+
 export interface PcsStageResult {
   rider_name: string
   rider_url: string
@@ -47,6 +52,18 @@ export default class PcsService {
       const response = await fetch(`${this.baseUrl}/internal/races/${slug}/startlist?year=${year}`)
       if (!response.ok) return []
       return response.json() as Promise<PcsRider[]>
+    } catch {
+      return []
+    }
+  }
+
+  async getStartlistWithCosts(slug: string, year = DateTime.now().year): Promise<PcsRiderWithCost[]> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/internal/races/${slug}/startlist-with-costs?year=${year}`
+      )
+      if (!response.ok) return []
+      return response.json() as Promise<PcsRiderWithCost[]>
     } catch {
       return []
     }

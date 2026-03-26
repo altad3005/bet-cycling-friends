@@ -20,6 +20,15 @@ export interface RiderResponse {
   nationality: string
 }
 
+export interface RiderWithCostResponse {
+  id: string
+  name: string
+  teamName: string | null
+  nationality: string | null
+  pcsRank: number | null
+  cost: number
+}
+
 export interface StageResultResponse {
   riderId: string
   riderName: string

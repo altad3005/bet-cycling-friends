@@ -2,11 +2,12 @@ from fastapi import APIRouter, HTTPException
 from app.services import (
     get_race_info,
     get_startlist,
+    get_startlist_with_costs,
     get_stage_results,
     get_race_results,
     get_stages_info,
 )
-from app.models import RaceInfoModel, RiderModel, StageResultModel, StageInfoModel
+from app.models import RaceInfoModel, RiderModel, RiderWithCostModel, StageResultModel, StageInfoModel
 import datetime
 
 router = APIRouter()
@@ -25,6 +26,12 @@ async def race_startlist(slug: str, year: int = None) -> list[RiderModel]:
     if not year:
         year = datetime.datetime.now().year
     return get_startlist(slug, year)
+
+@router.get("/{slug}/startlist-with-costs")
+async def race_startlist_with_costs(slug: str, year: int = None) -> list[RiderWithCostModel]:
+    if not year:
+        year = datetime.datetime.now().year
+    return get_startlist_with_costs(slug, year)
 
 @router.get("/{slug}/results")
 async def race_results(slug: str, year: int = None) -> list[StageResultModel]:

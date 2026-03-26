@@ -81,4 +81,7 @@ export interface ApiDefinition {
   raceSync: {
     sync: typeof routes['race_sync.sync']
   }
+  raceSnapshot: {
+    snapshotCosts: typeof routes['race_snapshot.snapshot_costs']
+  }
 }

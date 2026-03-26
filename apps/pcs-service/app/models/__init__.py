@@ -38,3 +38,7 @@ class StageInfoModel(BaseModel):
     name: str
     date: Optional[str] = None
     profile_icon: Optional[str] = None
+
+class RiderWithCostModel(RiderModel):
+    pcs_rank: Optional[int] = None
+    cost: int

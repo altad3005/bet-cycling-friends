@@ -499,4 +499,16 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/race_sync_controller').default['sync']>>>
     }
   }
+  'race_snapshot.snapshot_costs': {
+    methods: ["POST"]
+    pattern: '/api/admin/races/:id/snapshot-costs'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/race_snapshot_controller').default['snapshotCosts']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/race_snapshot_controller').default['snapshotCosts']>>>
+    }
+  }
 }

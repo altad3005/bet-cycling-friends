@@ -107,5 +107,9 @@ router
       .post('/admin/races/:id/sync', [controllers.RaceSync, 'sync'])
       .use(middleware.auth())
 
+    router
+      .post('/admin/races/:id/snapshot-costs', [controllers.RaceSnapshot, 'snapshotCosts'])
+      .use(middleware.auth())
+
   })
   .prefix('/api')

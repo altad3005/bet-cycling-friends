@@ -40,6 +40,8 @@ export interface StartlistRider {
   name: string
   teamName: string | null
   nationality: string | null
+  pcsRank: number | null
+  cost: number
 }
 
 export const racesApi = {
@@ -63,6 +65,9 @@ export const racesApi = {
 
   sync: (raceId: string, stageNumber?: number) =>
     api.post(`/admin/races/${raceId}/sync`, stageNumber !== undefined ? { stageNumber } : {}),
+
+  snapshotCosts: (raceId: string) =>
+    api.post(`/admin/races/${raceId}/snapshot-costs`),
 
   results: (raceId: string) =>
     api.get<{ data: { results: { rank: number; riderId: string; name: string }[] } }>(`/races/${raceId}/results`),

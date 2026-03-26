@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { GRAND_TOUR_TEAM_SIZE } from '@bcf/shared'
+import { GRAND_TOUR_TEAM_SIZE, GT_RIDER_BUDGET } from '@bcf/shared'
 import { betsApi, type BetGrandTourResponse } from '../../api/bets'
 import { type StartlistRider } from '../../api/races'
 import type { RaceResponse } from '../../api/races'
@@ -10,6 +10,14 @@ interface Props {
   startlist:   StartlistRider[]
   existingBet: BetGrandTourResponse | null
   onSuccess:   () => void
+}
+
+function costClass(cost: number): string {
+  if (cost >= 30) return 'cost-tier-1'
+  if (cost >= 20) return 'cost-tier-2'
+  if (cost >= 12) return 'cost-tier-3'
+  if (cost >= 6)  return 'cost-tier-4'
+  return 'cost-tier-5'
 }
 
 export default function GrandTourBetForm({ race, startlist, existingBet, onSuccess }: Props) {
@@ -23,10 +31,14 @@ export default function GrandTourBetForm({ race, startlist, existingBet, onSucce
   })
   const [search, setSearch] = useState('')
 
+  const spent = useMemo(() => team.reduce((s, r) => s + (r.cost ?? 0), 0), [team])
+  const budgetPct = Math.min((spent / GT_RIDER_BUDGET) * 100, 100)
+
   const filtered = useMemo(() => {
-    if (!search.trim()) return startlist
-    const q = search.toLowerCase()
-    return startlist.filter((r) => r.name.toLowerCase().includes(q))
+    const base = search.trim()
+      ? startlist.filter((r) => r.name.toLowerCase().includes(search.toLowerCase()))
+      : [...startlist]
+    return base.sort((a, b) => (a.cost !== b.cost ? b.cost - a.cost : a.name.localeCompare(b.name)))
   }, [startlist, search])
 
   const mutation = useMutation({
@@ -41,7 +53,7 @@ export default function GrandTourBetForm({ race, startlist, existingBet, onSucce
     const inTeam = team.some((r) => r.id === rider.id)
     if (inTeam) {
       setTeam(team.filter((r) => r.id !== rider.id))
-    } else if (team.length < GRAND_TOUR_TEAM_SIZE) {
+    } else if (team.length < GRAND_TOUR_TEAM_SIZE && spent + rider.cost <= GT_RIDER_BUDGET) {
       setTeam([...team, rider])
     }
   }
@@ -49,8 +61,28 @@ export default function GrandTourBetForm({ race, startlist, existingBet, onSucce
   const slots = Array.from({ length: GRAND_TOUR_TEAM_SIZE })
   const canSubmit = team.length === GRAND_TOUR_TEAM_SIZE
 
+  const errorMsg = mutation.isError
+    ? ((mutation.error as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Erreur lors de l\'enregistrement.')
+    : null
+
   return (
     <div className="bet-form">
+      {/* ── Budget bar ── */}
+      <div className="gt-budget-wrap">
+        <div className="gt-budget-header">
+          <span className="gt-budget-label">Budget</span>
+          <span className={`gt-budget-value${spent > GT_RIDER_BUDGET ? ' over' : ''}`}>
+            {spent} <span className="gt-budget-sep">/</span> {GT_RIDER_BUDGET} cr
+          </span>
+        </div>
+        <div className="gt-budget-bar-track">
+          <div
+            className={`gt-budget-bar-fill${spent >= GT_RIDER_BUDGET * 0.9 ? ' warn' : ''}`}
+            style={{ width: `${budgetPct}%` }}
+          />
+        </div>
+      </div>
+
       {/* ── Team slots ── */}
       <div className="bet-team-header">
         <div className="bet-team-label">Équipe de {GRAND_TOUR_TEAM_SIZE}</div>
@@ -67,6 +99,7 @@ export default function GrandTourBetForm({ race, startlist, existingBet, onSucce
               {rider ? (
                 <>
                   <div className="bet-team-slot-name">{rider.name}</div>
+                  <span className={`gt-cost-badge sm ${costClass(rider.cost)}`}>{rider.cost}</span>
                   <button
                     className="bet-team-remove"
                     onClick={() => setTeam(team.filter((r) => r.id !== rider.id))}
@@ -99,17 +132,30 @@ export default function GrandTourBetForm({ race, startlist, existingBet, onSucce
         {filtered.length === 0 ? (
           <div className="bet-list-empty">Aucun coureur trouvé.</div>
         ) : filtered.map((rider) => {
-          const inTeam = team.some((r) => r.id === rider.id)
-          const full   = !inTeam && team.length >= GRAND_TOUR_TEAM_SIZE
+          const inTeam   = team.some((r) => r.id === rider.id)
+          const teamFull = !inTeam && team.length >= GRAND_TOUR_TEAM_SIZE
+          const overBudget = !inTeam && spent + rider.cost > GT_RIDER_BUDGET
+          const disabled = teamFull || overBudget
+
           return (
             <div
               key={rider.id}
-              className={`bet-rider-row${inTeam ? ' selected' : ''}${full ? ' disabled' : ''}`}
-              onClick={() => !full && toggleRider(rider)}
-              style={full ? { opacity: 0.35, cursor: 'default' } : undefined}
+              className={`bet-rider-row${inTeam ? ' selected' : ''}${disabled ? ' disabled' : ''}`}
+              onClick={() => !disabled && toggleRider(rider)}
+              style={disabled ? { opacity: 0.35, cursor: 'default' } : undefined}
             >
-              <div className="bet-rider-name">{rider.name}</div>
-              <div className="bet-rider-hint">{inTeam ? '✓ Dans l\'équipe' : full ? '' : '+ Ajouter'}</div>
+              <div className="bet-rider-row-left">
+                <div className="bet-rider-name">{rider.name}</div>
+                {rider.pcsRank && (
+                  <div className="bet-rider-rank">#{rider.pcsRank}</div>
+                )}
+              </div>
+              <div className="bet-rider-row-right">
+                <span className={`gt-cost-badge ${costClass(rider.cost)}`}>{rider.cost} cr</span>
+                <div className="bet-rider-hint">
+                  {inTeam ? '✓' : disabled ? '' : '+'}
+                </div>
+              </div>
             </div>
           )
         })}
@@ -117,9 +163,7 @@ export default function GrandTourBetForm({ race, startlist, existingBet, onSucce
 
       {/* ── Footer ── */}
       <div className="bet-modal-footer">
-        {mutation.isError && (
-          <div className="bet-modal-error">Erreur lors de l'enregistrement.</div>
-        )}
+        {errorMsg && <div className="bet-modal-error">{errorMsg}</div>}
         <button
           className="btn-primary"
           onClick={() => mutation.mutate()}
@@ -127,7 +171,9 @@ export default function GrandTourBetForm({ race, startlist, existingBet, onSucce
         >
           {mutation.isPending
             ? 'Enregistrement…'
-            : existingBet ? 'Modifier l\'équipe' : `Confirmer l'équipe (${team.length}/${GRAND_TOUR_TEAM_SIZE})`}
+            : existingBet
+              ? 'Modifier l\'équipe'
+              : `Confirmer l'équipe (${spent} / ${GT_RIDER_BUDGET} cr)`}
         </button>
       </div>
     </div>

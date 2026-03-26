@@ -1,6 +1,6 @@
-from procyclingstats import Race, RaceStartlist, Stage
+from procyclingstats import Race, RaceStartlist, Stage, Ranking
 from procyclingstats.errors import ExpectedParsingError
-from app.models import RaceInfoModel, RiderModel, StageResultModel, StageInfoModel
+from app.models import RaceInfoModel, RiderModel, StageResultModel, StageInfoModel, RiderWithCostModel
 from typing import Optional
 import requests
 import logging
@@ -102,6 +102,51 @@ def get_stage_results(slug: str, year: int, stage_number: int) -> list[StageResu
     except Exception as e:
         logger.error(f"Error fetching stage results {slug}/{year}/stage-{stage_number}: {e}")
         return []
+
+COST_TIERS = [
+    (10,  30),
+    (30,  20),
+    (100, 12),
+    (200, 6),
+]
+COST_DEFAULT = 2
+
+def _compute_cost(rank: Optional[int]) -> int:
+    if rank is None:
+        return COST_DEFAULT
+    for max_rank, cost in COST_TIERS:
+        if rank <= max_rank:
+            return cost
+    return COST_DEFAULT
+
+def get_pcs_ranking(limit: int = 500) -> dict[str, int]:
+    """Returns a dict mapping rider_url → PCS rank for the individual ranking."""
+    try:
+        html = fetch_html("rankings/me/individual")
+        ranking = Ranking("rankings/me/individual", html=html, update_html=False)
+        riders = ranking.individual_ranking()
+        return {r["rider_url"]: r["rank"] for r in riders if r.get("rider_url") and r.get("rank")}
+    except Exception as e:
+        logger.error(f"Error fetching PCS ranking: {e}")
+        return {}
+
+def get_startlist_with_costs(slug: str, year: int) -> list[RiderWithCostModel]:
+    startlist = get_startlist(slug, year)
+    if not startlist:
+        return []
+    ranking = get_pcs_ranking()
+    result = []
+    for rider in startlist:
+        rank = ranking.get(rider.pcs_url)
+        result.append(RiderWithCostModel(
+            name=rider.name,
+            pcs_url=rider.pcs_url,
+            nationality=rider.nationality,
+            team_name=rider.team_name,
+            pcs_rank=rank,
+            cost=_compute_cost(rank),
+        ))
+    return result
 
 def get_race_results(slug: str, year: int) -> list[StageResultModel]:
     try:

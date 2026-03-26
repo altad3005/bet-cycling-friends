@@ -252,6 +252,12 @@ const routes = {
     tokens: [{"old":"/api/admin/races/:id/sync","type":0,"val":"api","end":""},{"old":"/api/admin/races/:id/sync","type":0,"val":"admin","end":""},{"old":"/api/admin/races/:id/sync","type":0,"val":"races","end":""},{"old":"/api/admin/races/:id/sync","type":1,"val":"id","end":""},{"old":"/api/admin/races/:id/sync","type":0,"val":"sync","end":""}],
     types: placeholder as Registry['race_sync.sync']['types'],
   },
+  'race_snapshot.snapshot_costs': {
+    methods: ["POST"],
+    pattern: '/api/admin/races/:id/snapshot-costs',
+    tokens: [{"old":"/api/admin/races/:id/snapshot-costs","type":0,"val":"api","end":""},{"old":"/api/admin/races/:id/snapshot-costs","type":0,"val":"admin","end":""},{"old":"/api/admin/races/:id/snapshot-costs","type":0,"val":"races","end":""},{"old":"/api/admin/races/:id/snapshot-costs","type":1,"val":"id","end":""},{"old":"/api/admin/races/:id/snapshot-costs","type":0,"val":"snapshot-costs","end":""}],
+    types: placeholder as Registry['race_snapshot.snapshot_costs']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

@@ -162,7 +162,7 @@ export class PushSubscriptionSchema extends BaseModel {
   declare endpoint: string
   @column({ isPrimary: true })
   declare id: string
-  @column({ columnName: 'p256dh' })
+  @column()
   declare p256Dh: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
@@ -170,8 +170,25 @@ export class PushSubscriptionSchema extends BaseModel {
   declare userId: string
 }
 
+export class RaceRiderCostSchema extends BaseModel {
+  static $columns = ['cost', 'id', 'pcsRank', 'raceId', 'riderId', 'snapshottedAt'] as const
+  $columns = RaceRiderCostSchema.$columns
+  @column()
+  declare cost: number
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare pcsRank: number | null
+  @column()
+  declare raceId: string
+  @column()
+  declare riderId: string
+  @column.dateTime()
+  declare snapshottedAt: DateTime
+}
+
 export class RaceSchema extends BaseModel {
-  static $columns = ['createdAt', 'endAt', 'id', 'isGrandTour', 'lastSyncedAt', 'multiplierType', 'name', 'raceType', 'reminder1hSentAt', 'reminder5hSentAt', 'resultsFinal', 'seasonYear', 'slug', 'stageCount', 'startAt', 'status', 'updatedAt'] as const
+  static $columns = ['createdAt', 'endAt', 'id', 'isGrandTour', 'lastSyncedAt', 'multiplierType', 'name', 'raceType', 'reminder1HSentAt', 'reminder24HSentAt', 'reminder5HSentAt', 'resultsFinal', 'seasonYear', 'slug', 'stageCount', 'startAt', 'status', 'updatedAt'] as const
   $columns = RaceSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -183,16 +200,18 @@ export class RaceSchema extends BaseModel {
   declare isGrandTour: boolean
   @column.dateTime()
   declare lastSyncedAt: DateTime | null
-  @column.dateTime({ columnName: 'reminder5h_sent_at' })
-  declare reminder5hSentAt: DateTime | null
-  @column.dateTime({ columnName: 'reminder1h_sent_at' })
-  declare reminder1hSentAt: DateTime | null
   @column()
   declare multiplierType: string
   @column()
   declare name: string
   @column()
   declare raceType: string
+  @column.dateTime()
+  declare reminder1HSentAt: DateTime | null
+  @column.dateTime()
+  declare reminder24HSentAt: DateTime | null
+  @column.dateTime()
+  declare reminder5HSentAt: DateTime | null
   @column()
   declare resultsFinal: boolean
   @column()
@@ -275,6 +294,27 @@ export class StageResultSchema extends BaseModel {
   declare riderId: string
   @column()
   declare stageNumber: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
+export class StageSchema extends BaseModel {
+  static $columns = ['createdAt', 'date', 'id', 'name', 'number', 'profileIcon', 'raceId', 'updatedAt'] as const
+  $columns = StageSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare date: string | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare name: string
+  @column()
+  declare number: number
+  @column()
+  declare profileIcon: string | null
+  @column()
+  declare raceId: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
