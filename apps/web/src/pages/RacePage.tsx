@@ -150,6 +150,14 @@ export default function RacePage() {
               {myBet ? 'Modifier mon pari' : 'Parier sur cette course'}
             </button>
           )}
+
+          {leagueBetsData && leagueBetsData.bets.length > 0 && (
+            <div className="race-participation">
+              {leagueBetsData.bets.length === 1
+                ? '1 membre a déjà parié'
+                : `${leagueBetsData.bets.length} membres ont déjà parié`}
+            </div>
+          )}
         </div>
 
         <div className="race-body">
@@ -273,8 +281,11 @@ export default function RacePage() {
             <section className="race-section">
               <div className="race-section-title">
                 Paris des membres
-                {leagueBetsData && !leagueBetsData.raceStarted && (
-                  <span className="race-section-badge masked">Masqués</span>
+                {leagueBetsData && (
+                  <span className="race-section-badge masked">
+                    {leagueBetsData.bets.length} pari{leagueBetsData.bets.length !== 1 ? 's' : ''}
+                    {!leagueBetsData.raceStarted && ' · masqués'}
+                  </span>
                 )}
               </div>
               {!leagueBetsData || leagueBetsData.bets.length === 0 ? (
