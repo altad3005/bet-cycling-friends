@@ -151,13 +151,6 @@ export default function RacePage() {
             </button>
           )}
 
-          {leagueBetsData && leagueBetsData.bets.length > 0 && (
-            <div className="race-participation">
-              {leagueBetsData.bets.length === 1
-                ? '1 membre a déjà parié'
-                : `${leagueBetsData.bets.length} membres ont déjà parié`}
-            </div>
-          )}
         </div>
 
         <div className="race-body">
