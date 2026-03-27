@@ -451,6 +451,54 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['leagueStandings']>>>
     }
   }
+  'standings.monument_standings': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/standings/monuments'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['monumentStandings']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['monumentStandings']>>>
+    }
+  }
+  'standings.grand_tour_standings': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/standings/grand-tours'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['grandTourStandings']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['grandTourStandings']>>>
+    }
+  }
+  'standings.classic_standings': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/standings/classics'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['classicStandings']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['classicStandings']>>>
+    }
+  }
+  'standings.championnat_standings': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/standings/championnats'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['championnatStandings']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['championnatStandings']>>>
+    }
+  }
   'standings.race_standings': {
     methods: ["GET","HEAD"]
     pattern: '/api/leagues/:id/races/:raceId/standings'

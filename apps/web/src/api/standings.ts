@@ -47,6 +47,18 @@ export const standingsApi = {
   league: (leagueId: string) =>
     api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings`),
 
+  monuments: (leagueId: string) =>
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/monuments`),
+
+  grandTours: (leagueId: string) =>
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/grand-tours`),
+
+  classics: (leagueId: string) =>
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/classics`),
+
+  championnats: (leagueId: string) =>
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/championnats`),
+
   race: (leagueId: string, raceId: string) =>
     api.get<{ data: { standings: RaceStanding[] } }>(`/leagues/${leagueId}/races/${raceId}/standings`),
 

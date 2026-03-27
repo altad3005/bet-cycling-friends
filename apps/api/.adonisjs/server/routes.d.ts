@@ -41,6 +41,10 @@ export type ScannedRoutes = {
     'feed.league_feed': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'member_profile.show': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.monument_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.grand_tour_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.classic_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.championnat_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
     'standings.global_standings': { paramsTuple?: []; params?: {} }
@@ -67,6 +71,10 @@ export type ScannedRoutes = {
     'feed.league_feed': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'member_profile.show': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.monument_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.grand_tour_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.classic_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.championnat_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
     'standings.global_standings': { paramsTuple?: []; params?: {} }
@@ -91,6 +99,10 @@ export type ScannedRoutes = {
     'feed.league_feed': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'member_profile.show': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.monument_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.grand_tour_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.classic_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.championnat_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
     'standings.global_standings': { paramsTuple?: []; params?: {} }

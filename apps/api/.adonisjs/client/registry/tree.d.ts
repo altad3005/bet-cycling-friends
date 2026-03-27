@@ -74,6 +74,10 @@ export interface ApiDefinition {
   }
   standings: {
     leagueStandings: typeof routes['standings.league_standings']
+    monumentStandings: typeof routes['standings.monument_standings']
+    grandTourStandings: typeof routes['standings.grand_tour_standings']
+    classicStandings: typeof routes['standings.classic_standings']
+    championnatStandings: typeof routes['standings.championnat_standings']
     raceStandings: typeof routes['standings.race_standings']
     stageStandings: typeof routes['standings.stage_standings']
     globalStandings: typeof routes['standings.global_standings']

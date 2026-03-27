@@ -21,6 +21,26 @@ export default class StandingsController {
     return serialize({ standings })
   }
 
+  async monumentStandings({ params, serialize }: HttpContext) {
+    const standings = await new StandingsService().getLeagueMonumentStandings(params.id)
+    return serialize({ standings })
+  }
+
+  async grandTourStandings({ params, serialize }: HttpContext) {
+    const standings = await new StandingsService().getLeagueGrandTourStandings(params.id)
+    return serialize({ standings })
+  }
+
+  async classicStandings({ params, serialize }: HttpContext) {
+    const standings = await new StandingsService().getLeagueClassicStandings(params.id)
+    return serialize({ standings })
+  }
+
+  async championnatStandings({ params, serialize }: HttpContext) {
+    const standings = await new StandingsService().getLeagueChampionnatStandings(params.id)
+    return serialize({ standings })
+  }
+
   async globalStandings({ serialize }: HttpContext) {
     const standings = await new StandingsService().getGlobalStandings()
     return serialize({ standings })

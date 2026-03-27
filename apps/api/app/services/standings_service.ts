@@ -138,6 +138,59 @@ export default class StandingsService {
     return standings.map((row, index) => ({ rank: index + 1, ...row }))
   }
 
+  async getLeagueMonumentStandings(leagueId: string) {
+    return this.getLeagueFilteredStandings(leagueId, `r.multiplier_type = 'monument'`)
+  }
+
+  async getLeagueGrandTourStandings(leagueId: string) {
+    return this.getLeagueFilteredStandings(leagueId, `r.is_grand_tour = true`)
+  }
+
+  async getLeagueClassicStandings(leagueId: string) {
+    return this.getLeagueFilteredStandings(leagueId, `r.multiplier_type = 'wt_classic'`)
+  }
+
+  async getLeagueChampionnatStandings(leagueId: string) {
+    return this.getLeagueFilteredStandings(leagueId, `r.race_type IN ('national', 'worlds')`)
+  }
+
+  private async getLeagueFilteredStandings(leagueId: string, filter: string) {
+    const result = await db.rawQuery<{
+      rows: { user_id: string; pseudo: string; icon: string; total_points: number; races_played: number }[]
+    }>(
+      `SELECT
+        lm.user_id,
+        u.pseudo,
+        u.icon,
+        COALESCE(SUM(s.points), 0) AS total_points,
+        COUNT(DISTINCT s.race_id)  AS races_played
+      FROM league_members lm
+      JOIN users u ON u.id = lm.user_id
+      LEFT JOIN (
+        SELECT sc.*
+        FROM scores sc
+        JOIN races r ON r.id = sc.race_id
+        WHERE ${filter}
+          AND sc.league_id = ?
+      ) s ON s.user_id = lm.user_id
+      WHERE lm.league_id = ?
+      GROUP BY lm.user_id, u.pseudo, u.icon
+      ORDER BY total_points DESC`,
+      [leagueId, leagueId]
+    )
+
+    return this.withSharedRanks(
+      result.rows.map((row) => ({
+        userId: row.user_id,
+        pseudo: row.pseudo,
+        icon: row.icon,
+        totalPoints: Number(row.total_points),
+        racesPlayed: Number(row.races_played),
+      })),
+      (a, b) => a.totalPoints === b.totalPoints && a.racesPlayed === b.racesPlayed
+    )
+  }
+
   async getGlobalStandings() {
     const result = await db.rawQuery<{
       rows: { user_id: string; pseudo: string; icon: string; total_points: number; total_max: number; races_played: number }[]

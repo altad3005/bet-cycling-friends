@@ -9,6 +9,7 @@ import AppShell from '../components/AppShell'
 import './StandingsPage.css'
 
 type Tab = 'global' | 'league'
+type LeagueFilter = 'all' | 'monuments' | 'grand-tours' | 'classics' | 'championnats'
 
 const RANK_CLASSES = ['g', 's', 'b']
 
@@ -29,6 +30,7 @@ export default function StandingsPage() {
   const { activeLeague } = useLeague()
 
   const [tab, setTab] = useState<Tab>('league')
+  const [leagueFilter, setLeagueFilter] = useState<LeagueFilter>('all')
   const [search, setSearch] = useState('')
 
   const { data: globalStandings } = useQuery({
@@ -42,8 +44,37 @@ export default function StandingsPage() {
     enabled: !!activeLeague,
   })
 
-  const isGlobal = tab === 'global'
-  const rawRows = isGlobal ? globalStandings : leagueStandings
+  const { data: monumentStandings } = useQuery({
+    queryKey: ['standings', 'monuments', activeLeague?.id],
+    queryFn: () => standingsApi.monuments(activeLeague!.id).then((r) => r.data.data.standings),
+    enabled: !!activeLeague,
+  })
+
+  const { data: grandTourStandings } = useQuery({
+    queryKey: ['standings', 'grand-tours', activeLeague?.id],
+    queryFn: () => standingsApi.grandTours(activeLeague!.id).then((r) => r.data.data.standings),
+    enabled: !!activeLeague,
+  })
+
+  const { data: classicStandings } = useQuery({
+    queryKey: ['standings', 'classics', activeLeague?.id],
+    queryFn: () => standingsApi.classics(activeLeague!.id).then((r) => r.data.data.standings),
+    enabled: !!activeLeague,
+  })
+
+  const { data: championnatStandings } = useQuery({
+    queryKey: ['standings', 'championnats', activeLeague?.id],
+    queryFn: () => standingsApi.championnats(activeLeague!.id).then((r) => r.data.data.standings),
+    enabled: !!activeLeague,
+  })
+
+  const rawRows =
+    tab === 'global'                    ? globalStandings :
+    leagueFilter === 'monuments'        ? monumentStandings :
+    leagueFilter === 'grand-tours'      ? grandTourStandings :
+    leagueFilter === 'classics'         ? classicStandings :
+    leagueFilter === 'championnats'     ? championnatStandings :
+    leagueStandings
 
   const filtered = useMemo(() => {
     if (!rawRows) return []
@@ -54,22 +85,22 @@ export default function StandingsPage() {
 
   const maxVal = useMemo(() => {
     if (!rawRows || rawRows.length === 0) return 1
-    if (isGlobal) return Math.max(...(rawRows as GlobalStanding[]).map((r) => r.percentage), 1)
+    if (tab === 'global') return Math.max(...(rawRows as GlobalStanding[]).map((r) => r.percentage), 1)
     return Math.max(...(rawRows as LeagueStanding[]).map((r) => r.totalPoints), 1)
-  }, [rawRows, isGlobal])
+  }, [rawRows, tab])
 
   // Top 3 + ma position pour le hero (uniquement joueurs ayant au moins 1 course scorée)
   const top3 = (rawRows ?? []).slice(0, 3)
   const myRow = rawRows?.find((r) => r.userId === user?.id)
-  const myVal = myRow && (isGlobal ? (myRow as GlobalStanding).percentage : (myRow as LeagueStanding).totalPoints)
+  const myVal = myRow && (tab === 'global' ? (myRow as GlobalStanding).percentage : (myRow as LeagueStanding).totalPoints)
 
   function displayVal(row: LeagueStanding | GlobalStanding) {
-    if (isGlobal) return `${(row as GlobalStanding).percentage.toFixed(1)}%`
+    if (tab === 'global') return `${(row as GlobalStanding).percentage.toFixed(1)}%`
     return (row as LeagueStanding).totalPoints.toLocaleString('fr-FR')
   }
 
   function rowVal(row: LeagueStanding | GlobalStanding): number {
-    return isGlobal ? (row as GlobalStanding).percentage : (row as LeagueStanding).totalPoints
+    return tab === 'global' ? (row as GlobalStanding).percentage : (row as LeagueStanding).totalPoints
   }
 
   const totalPlayers = rawRows?.length ?? 0
@@ -86,19 +117,46 @@ export default function StandingsPage() {
     >
       {/* ── Controls ── */}
       <div className="standings-controls">
-        <div className="tab-bar">
-          <button
-            className={`tab${tab === 'league' ? ' active' : ''}`}
-            onClick={() => setTab('league')}
-          >
-            {activeLeague ? activeLeague.name : 'Ma ligue'}
-          </button>
-          <button
-            className={`tab${tab === 'global' ? ' active' : ''}`}
-            onClick={() => setTab('global')}
-          >
-            Global
-          </button>
+        <div className="standings-controls-top">
+          <div className="tab-bar">
+            <button
+              className={`tab${tab === 'league' ? ' active' : ''}`}
+              onClick={() => setTab('league')}
+            >
+              {activeLeague ? activeLeague.name : 'Ma ligue'}
+            </button>
+            <button
+              className={`tab${tab === 'global' ? ' active' : ''}`}
+              onClick={() => setTab('global')}
+            >
+              Global
+            </button>
+          </div>
+
+          {tab === 'league' && (
+            <div className="league-filter-bar">
+              <button
+                className={`league-filter-btn${leagueFilter === 'all' ? ' active' : ''}`}
+                onClick={() => setLeagueFilter('all')}
+              >Tout</button>
+              <button
+                className={`league-filter-btn${leagueFilter === 'monuments' ? ' active' : ''}`}
+                onClick={() => setLeagueFilter('monuments')}
+              >Monuments</button>
+              <button
+                className={`league-filter-btn${leagueFilter === 'grand-tours' ? ' active' : ''}`}
+                onClick={() => setLeagueFilter('grand-tours')}
+              >Grands Tours</button>
+              <button
+                className={`league-filter-btn${leagueFilter === 'classics' ? ' active' : ''}`}
+                onClick={() => setLeagueFilter('classics')}
+              >Classiques</button>
+              <button
+                className={`league-filter-btn${leagueFilter === 'championnats' ? ' active' : ''}`}
+                onClick={() => setLeagueFilter('championnats')}
+              >Championnats</button>
+            </div>
+          )}
         </div>
 
         <div className="search-wrap">
@@ -118,7 +176,7 @@ export default function StandingsPage() {
           {top3.map((row, i) => {
             const col = avatarColor(i)
             return (
-              <div key={row.userId} className={`hero-card${row.userId === user?.id ? ' highlight' : ''}`} style={{ cursor: !isGlobal ? 'pointer' : 'default' }} onClick={() => !isGlobal && navigate(`/members/${row.userId}`)}>
+              <div key={row.userId} className={`hero-card${row.userId === user?.id ? ' highlight' : ''}`} style={{ cursor: tab !== 'global' ? 'pointer' : 'default' }} onClick={() => tab !== 'global' && navigate(`/members/${row.userId}`)}>
                 <div className="hero-avatar" style={{ background: col.bg, color: col.color }}>
                   {initials(row.pseudo)}
                 </div>
@@ -140,7 +198,7 @@ export default function StandingsPage() {
           <div className="standings-head-cell">Joueur</div>
           <div className="standings-head-cell right">Courses</div>
           <div className="standings-head-cell">Score</div>
-          <div className="standings-head-cell right">{isGlobal ? '%' : 'Pts'}</div>
+          <div className="standings-head-cell right">{tab === 'global' ? '%' : 'Pts'}</div>
         </div>
 
         {filtered.length === 0 ? (
@@ -156,7 +214,7 @@ export default function StandingsPage() {
             const bColor = barColor(row.rank)
 
             return (
-              <div key={row.userId} className={`standings-full-row${isMe ? ' me' : ''}`} style={{ cursor: !isGlobal ? 'pointer' : 'default' }} onClick={() => !isGlobal && navigate(`/members/${row.userId}`)}>
+              <div key={row.userId} className={`standings-full-row${isMe ? ' me' : ''}`} style={{ cursor: tab !== 'global' ? 'pointer' : 'default' }} onClick={() => tab !== 'global' && navigate(`/members/${row.userId}`)}>
                 <div className={`full-rank ${rankClass(row.rank)}`}>{row.rank}</div>
 
                 <div className="full-player">
@@ -196,7 +254,7 @@ export default function StandingsPage() {
               const val = rowVal(myRow)
               const pct = maxVal > 0 ? (val / maxVal) * 100 : 0
               return (
-                <div className="standings-full-row me" style={{ cursor: !isGlobal ? 'pointer' : 'default' }} onClick={() => !isGlobal && navigate(`/members/${myRow.userId}`)}>
+                <div className="standings-full-row me" style={{ cursor: tab !== 'global' ? 'pointer' : 'default' }} onClick={() => tab !== 'global' && navigate(`/members/${myRow.userId}`)}>
                   <div className={`full-rank ${rankClass(myRow.rank)}`}>{myRow.rank}</div>
                   <div className="full-player">
                     <div className="full-avatar" style={{ background: col.bg, color: col.color }}>

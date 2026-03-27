@@ -95,6 +95,10 @@ router
     router
       .group(() => {
         router.get('/:id/standings', [controllers.Standings, 'leagueStandings'])
+        router.get('/:id/standings/monuments', [controllers.Standings, 'monumentStandings'])
+        router.get('/:id/standings/grand-tours', [controllers.Standings, 'grandTourStandings'])
+        router.get('/:id/standings/classics', [controllers.Standings, 'classicStandings'])
+        router.get('/:id/standings/championnats', [controllers.Standings, 'championnatStandings'])
         router.get('/:id/races/:raceId/standings', [controllers.Standings, 'raceStandings'])
         router.get('/:id/races/:raceId/stage/:n/standings', [controllers.Standings, 'stageStandings'])
       })

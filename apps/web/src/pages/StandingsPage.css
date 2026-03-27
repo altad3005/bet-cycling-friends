@@ -40,6 +40,42 @@
   flex-wrap: wrap;
 }
 
+.standings-controls-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── League filter ────────────────────────────── */
+.league-filter-bar {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.league-filter-bar::-webkit-scrollbar { display: none; }
+
+.league-filter-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  color: rgba(240, 237, 232, 0.4);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.league-filter-btn:hover { color: rgba(240, 237, 232, 0.7); border-color: rgba(255, 255, 255, 0.18); }
+.league-filter-btn.active {
+  color: #e8c96d;
+  border-color: rgba(232, 201, 109, 0.5);
+  background: rgba(232, 201, 109, 0.08);
+}
+
 .search-wrap {
   position: relative;
   flex: 1;
@@ -262,5 +298,5 @@
   .search-wrap { max-width: 100%; }
 
   .standings-controls { flex-direction: column; align-items: stretch; }
-  .tab-bar { align-self: flex-start; }
+  .standings-controls-top { align-items: flex-start; }
 }

@@ -228,6 +228,30 @@ const routes = {
     tokens: [{"old":"/api/leagues/:id/standings","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/standings","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/standings","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/standings","type":0,"val":"standings","end":""}],
     types: placeholder as Registry['standings.league_standings']['types'],
   },
+  'standings.monument_standings': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/standings/monuments',
+    tokens: [{"old":"/api/leagues/:id/standings/monuments","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/standings/monuments","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/standings/monuments","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/standings/monuments","type":0,"val":"standings","end":""},{"old":"/api/leagues/:id/standings/monuments","type":0,"val":"monuments","end":""}],
+    types: placeholder as Registry['standings.monument_standings']['types'],
+  },
+  'standings.grand_tour_standings': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/standings/grand-tours',
+    tokens: [{"old":"/api/leagues/:id/standings/grand-tours","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/standings/grand-tours","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/standings/grand-tours","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/standings/grand-tours","type":0,"val":"standings","end":""},{"old":"/api/leagues/:id/standings/grand-tours","type":0,"val":"grand-tours","end":""}],
+    types: placeholder as Registry['standings.grand_tour_standings']['types'],
+  },
+  'standings.classic_standings': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/standings/classics',
+    tokens: [{"old":"/api/leagues/:id/standings/classics","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/standings/classics","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/standings/classics","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/standings/classics","type":0,"val":"standings","end":""},{"old":"/api/leagues/:id/standings/classics","type":0,"val":"classics","end":""}],
+    types: placeholder as Registry['standings.classic_standings']['types'],
+  },
+  'standings.championnat_standings': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/standings/championnats',
+    tokens: [{"old":"/api/leagues/:id/standings/championnats","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/standings/championnats","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/standings/championnats","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/standings/championnats","type":0,"val":"standings","end":""},{"old":"/api/leagues/:id/standings/championnats","type":0,"val":"championnats","end":""}],
+    types: placeholder as Registry['standings.championnat_standings']['types'],
+  },
   'standings.race_standings': {
     methods: ["GET","HEAD"],
     pattern: '/api/leagues/:id/races/:raceId/standings',
