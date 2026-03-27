@@ -359,6 +359,12 @@ function CalendarTab({ leagueId }: { leagueId: string }) {
                 {previewMutation.isPending ? 'Recherche…' : 'Prévisualiser'}
               </button>
             </div>
+            <div className="admin-slug-hint">
+              Le slug se trouve dans l'URL PCS de la course :<br />
+              <span className="admin-slug-hint-url">
+                procyclingstats.com/race/<mark>tour-down-under</mark>/2026/gc
+              </span>
+            </div>
             {previewError && <div className="empty-error" style={{ marginTop: 8 }}>{previewError}</div>}
             {preview && (
               <div className="admin-preview-card">

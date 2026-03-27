@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { SCORING_TABLE, MULTIPLIERS, FAVORITE_COEFFICIENT, BONUS_COEFFICIENT } from '@bcf/shared'
 import { betsApi, type BetClassicResponse } from '../../api/bets'
 import { type StartlistRider } from '../../api/races'
 import type { RaceResponse } from '../../api/races'
@@ -56,6 +57,16 @@ export default function ClassicBetForm({ race, startlist, existingBet, onSuccess
   const bonusIsSelected = (r: StartlistRider) => bonusRider?.id === r.id
   const canSubmit = !!favoriteRider && !!bonusRider && favoriteRider.id !== bonusRider.id
 
+  const multiplier = MULTIPLIERS[race.multiplierType]
+  const maxFavPts   = Math.round(SCORING_TABLE[1] * multiplier * FAVORITE_COEFFICIENT)
+  const maxBonusPts = Math.round(SCORING_TABLE[1] * multiplier * BONUS_COEFFICIENT)
+  const maxTotalPts = useMemo(() => {
+    let total = 0
+    if (favoriteRider) total += maxFavPts
+    if (bonusRider)    total += maxBonusPts
+    return total
+  }, [favoriteRider, bonusRider, maxFavPts, maxBonusPts])
+
   return (
     <div className="bet-form">
       {/* ── Slots ── */}
@@ -70,6 +81,7 @@ export default function ClassicBetForm({ race, startlist, existingBet, onSuccess
             : <div className="bet-slot-empty">Sélectionner…</div>
           }
           <div className="bet-slot-coeff fav">×1,0</div>
+          <div className="bet-slot-max-pts">{favoriteRider ? `+${maxFavPts} pts` : `max ${maxFavPts} pts`}</div>
         </div>
         <div
           className={`bet-slot${activeSlot === 'bonus' ? ' active' : ''}`}
@@ -81,7 +93,14 @@ export default function ClassicBetForm({ race, startlist, existingBet, onSuccess
             : <div className="bet-slot-empty">Sélectionner…</div>
           }
           <div className="bet-slot-coeff bonus">×0,5</div>
+          <div className="bet-slot-max-pts">{bonusRider ? `+${maxBonusPts} pts` : `max ${maxBonusPts} pts`}</div>
         </div>
+      </div>
+
+      {/* ── Points preview ── */}
+      <div className="classic-points-preview">
+        <span className="classic-points-preview-label">Points max potentiels</span>
+        <span className="classic-points-preview-value">{maxTotalPts} pts</span>
       </div>
 
       {/* ── Search ── */}

@@ -143,6 +143,38 @@
 .bet-slot-coeff.fav   { background: rgba(232, 201, 109, 0.12); color: #e8c96d; }
 .bet-slot-coeff.bonus { background: rgba(94, 160, 220, 0.12);  color: #5ea0dc; }
 
+.bet-slot-max-pts {
+  font-size: 10px;
+  color: rgba(240, 237, 232, 0.35);
+  margin-top: 2px;
+}
+
+/* ── Classic: points preview ────────────────────── */
+.classic-points-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(232, 201, 109, 0.07);
+  border: 1px solid rgba(232, 201, 109, 0.18);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.classic-points-preview-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(240, 237, 232, 0.45);
+}
+
+.classic-points-preview-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e8c96d;
+}
+
 /* ── GT: budget bar ────────────────────────────── */
 .gt-budget-wrap {
   flex-shrink: 0;
@@ -191,6 +223,39 @@
   transition: width 0.2s ease, background 0.2s;
 }
 .gt-budget-bar-fill.warn { background: #f87171; }
+
+/* ── GT: points preview ─────────────────────────── */
+.gt-points-preview {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  background: rgba(232, 201, 109, 0.07);
+  border: 1px solid rgba(232, 201, 109, 0.18);
+  border-radius: 8px;
+}
+
+.gt-points-preview-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(240, 237, 232, 0.45);
+}
+
+.gt-points-preview-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #e8c96d;
+  line-height: 1.1;
+}
+
+.gt-points-preview-detail {
+  font-size: 11px;
+  color: rgba(240, 237, 232, 0.4);
+  margin-top: 1px;
+}
 
 /* ── GT: cost badges ────────────────────────────── */
 .gt-cost-badge {
@@ -369,8 +434,8 @@
   font-size: 11px;
   color: rgba(240, 237, 232, 0.25);
   white-space: nowrap;
-  width: 10px;
-  text-align: center;
+  flex-shrink: 0;
+  text-align: right;
 }
 .bet-rider-row.selected .bet-rider-hint { color: rgba(232, 201, 109, 0.6); }
 

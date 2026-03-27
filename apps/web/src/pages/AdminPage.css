@@ -176,6 +176,29 @@
   align-items: center;
 }
 
+.admin-slug-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(240, 237, 232, 0.35);
+  line-height: 1.6;
+}
+
+.admin-slug-hint-url {
+  display: inline-block;
+  margin-top: 3px;
+  font-family: monospace;
+  font-size: 11px;
+  color: rgba(240, 237, 232, 0.45);
+  word-break: break-all;
+}
+
+.admin-slug-hint-url mark {
+  background: rgba(232, 201, 109, 0.18);
+  color: #e8c96d;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
 .bulk-textarea {
   width: 100%;
   margin-top: 0.75rem;

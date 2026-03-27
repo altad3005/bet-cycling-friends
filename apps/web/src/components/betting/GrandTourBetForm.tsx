@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { GRAND_TOUR_TEAM_SIZE, GT_RIDER_BUDGET } from '@bcf/shared'
+import { GRAND_TOUR_TEAM_SIZE, GT_RIDER_BUDGET, SCORING_TABLE, MULTIPLIERS, MultiplierType } from '@bcf/shared'
 import { betsApi, type BetGrandTourResponse } from '../../api/bets'
 import { type StartlistRider } from '../../api/races'
 import type { RaceResponse } from '../../api/races'
@@ -33,6 +33,14 @@ export default function GrandTourBetForm({ race, startlist, existingBet, onSucce
 
   const spent = useMemo(() => team.reduce((s, r) => s + (r.cost ?? 0), 0), [team])
   const budgetPct = Math.min((spent / GT_RIDER_BUDGET) * 100, 100)
+
+  const maxPtsPerStage = SCORING_TABLE[1] * MULTIPLIERS[MultiplierType.GT_STAGE]
+  const maxPtsGC      = SCORING_TABLE[1] * MULTIPLIERS[MultiplierType.GT_GC]
+  const stageCount    = race.stageCount ?? 0
+  const maxPts = useMemo(
+    () => team.length * (stageCount * maxPtsPerStage + maxPtsGC),
+    [team.length, stageCount, maxPtsPerStage, maxPtsGC],
+  )
 
   const filtered = useMemo(() => {
     const base = search.trim()
@@ -81,6 +89,17 @@ export default function GrandTourBetForm({ race, startlist, existingBet, onSucce
             style={{ width: `${budgetPct}%` }}
           />
         </div>
+      </div>
+
+      {/* ── Points preview ── */}
+      <div className="gt-points-preview">
+        <div className="gt-points-preview-label">Points max potentiels</div>
+        <div className="gt-points-preview-value">{maxPts.toLocaleString('fr-FR')}</div>
+        {stageCount > 0 && (
+          <div className="gt-points-preview-detail">
+            {team.length} coureur{team.length > 1 ? 's' : ''} × ({stageCount} étapes × {maxPtsPerStage} pts&nbsp;+&nbsp;GC × {maxPtsGC} pts)
+          </div>
+        )}
       </div>
 
       {/* ── Team slots ── */}
