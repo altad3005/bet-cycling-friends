@@ -80,7 +80,7 @@ export default function RacePage() {
   const { data: raceStandings } = useQuery({
     queryKey: ['standings', 'race', activeLeague?.id, raceId],
     queryFn: () => standingsApi.race(activeLeague!.id, raceId!).then((r) => r.data.data.standings),
-    enabled: !!activeLeague && !!raceId && race?.status === RaceStatus.FINISHED,
+    enabled: !!activeLeague && !!raceId && race?.status !== RaceStatus.UPCOMING,
   })
 
   const { data: leagueBetsData } = useQuery({
@@ -104,7 +104,7 @@ export default function RacePage() {
   const { data: raceResults } = useQuery({
     queryKey: ['results', raceId],
     queryFn: () => racesApi.results(raceId!).then((r) => r.data.data.results),
-    enabled: !!raceId && race?.status === RaceStatus.FINISHED,
+    enabled: !!raceId && race?.resultsFinal === true,
   })
 
   const canBet = race?.status === RaceStatus.UPCOMING
@@ -193,14 +193,17 @@ export default function RacePage() {
             ) : null}
           </section>
 
-          {/* ── Résultats ligue (course terminée) ── */}
-          {race.status === RaceStatus.FINISHED && (
+          {/* ── Résultats ligue (course en cours ou terminée) ── */}
+          {race.status !== RaceStatus.UPCOMING && raceStandings && raceStandings.length > 0 && (
             <section className="race-section">
               <div className="race-section-title">
                 Résultats · Ligue
+                {!race.resultsFinal && (
+                  <span className="race-section-badge">provisoire</span>
+                )}
                 {raceResults && raceResults.length > 0 && (
                   <span className="race-section-badge">
-                    🏆 {raceResults[0].name}
+                    {raceResults[0].name}
                   </span>
                 )}
               </div>
@@ -252,8 +255,8 @@ export default function RacePage() {
             </section>
           )}
 
-          {/* ── Résultats officiels (course terminée) ── */}
-          {race.status === RaceStatus.FINISHED && raceResults && raceResults.length > 0 && (
+          {/* ── Résultats officiels (résultats finaux disponibles) ── */}
+          {race.resultsFinal && raceResults && raceResults.length > 0 && (
             <section className="race-section">
               <div className="race-section-title">
                 {race.isGrandTour ? 'Classement général final' : 'Top 10 officiel'}
