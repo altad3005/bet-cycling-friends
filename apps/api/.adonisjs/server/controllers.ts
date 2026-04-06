@@ -18,6 +18,7 @@ export const controllers = {
   PushSubscription: () => import('#controllers/push_subscription_controller'),
   Race: () => import('#controllers/race_controller'),
   RaceSnapshot: () => import('#controllers/race_snapshot_controller'),
+  RaceStartTime: () => import('#controllers/race_start_time_controller'),
   RaceSync: () => import('#controllers/race_sync_controller'),
   Standings: () => import('#controllers/standings_controller'),
   Stats: () => import('#controllers/stats_controller'),

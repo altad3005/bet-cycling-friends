@@ -115,5 +115,9 @@ router
       .post('/admin/races/:id/snapshot-costs', [controllers.RaceSnapshot, 'snapshotCosts'])
       .use(middleware.auth())
 
+    router
+      .patch('/admin/races/:id/start-time', [controllers.RaceStartTime, 'update'])
+      .use(middleware.auth())
+
   })
   .prefix('/api')

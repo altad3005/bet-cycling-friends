@@ -71,4 +71,7 @@ export const racesApi = {
 
   results: (raceId: string) =>
     api.get<{ data: { results: { rank: number; riderId: string; name: string }[] } }>(`/races/${raceId}/results`),
+
+  updateStartTime: (raceId: string, startAt: string) =>
+    api.patch<{ data: { startAt: string } }>(`/admin/races/${raceId}/start-time`, { startAt }),
 }

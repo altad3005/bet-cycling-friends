@@ -6,6 +6,7 @@ export interface User {
   email: string
   icon: string
   initials: string
+  isSuperAdmin: boolean
   notificationsEnabled: boolean
   createdAt: string
   updatedAt: string

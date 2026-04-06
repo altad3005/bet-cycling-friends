@@ -320,7 +320,7 @@ export class StageSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'googleId', 'icon', 'id', 'notificationsEnabled', 'passwordHash', 'pseudo', 'updatedAt'] as const
+  static $columns = ['createdAt', 'email', 'googleId', 'icon', 'id', 'isSuperAdmin', 'notificationsEnabled', 'passwordHash', 'pseudo', 'updatedAt'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -332,6 +332,8 @@ export class UserSchema extends BaseModel {
   declare icon: string
   @column({ isPrimary: true })
   declare id: string
+  @column()
+  declare isSuperAdmin: boolean
   @column()
   declare notificationsEnabled: boolean
   @column()

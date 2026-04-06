@@ -253,8 +253,15 @@ type BulkResult = { slug: string; status: 'pending' | 'ok' | 'error'; message?: 
 
 // ── Calendar tab ─────────────────────────────────────────────────────────
 
+function toDatetimeLocal(iso: string | null): string {
+  if (!iso) return ''
+  const d = new Date(iso)
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+}
+
 function CalendarTab({ leagueId }: { leagueId: string }) {
   const queryClient = useQueryClient()
+  const user = useAuthStore((s) => s.user)
   const [mode, setMode] = useState<'single' | 'bulk'>('single')
 
   // single mode
@@ -268,6 +275,8 @@ function CalendarTab({ leagueId }: { leagueId: string }) {
   const [bulkRunning, setBulkRunning] = useState(false)
 
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null)
+  const [editingStartTime, setEditingStartTime] = useState<string | null>(null)
+  const [startTimeValue, setStartTimeValue] = useState('')
 
   const { data: races, isLoading } = useQuery({
     queryKey: ['races', 'league', leagueId],
@@ -294,6 +303,15 @@ function CalendarTab({ leagueId }: { leagueId: string }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['races', 'league', leagueId] })
       setConfirmRemove(null)
+    },
+  })
+
+  const startTimeMutation = useMutation({
+    mutationFn: ({ raceId, startAt }: { raceId: string; startAt: string }) =>
+      racesApi.updateStartTime(raceId, startAt),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['races', 'league', leagueId] })
+      setEditingStartTime(null)
     },
   })
 
@@ -437,6 +455,7 @@ function CalendarTab({ leagueId }: { leagueId: string }) {
         <div className="admin-race-list">
           {races.map((race) => {
             const isRemoving = confirmRemove === race.id
+            const isEditingTime = editingStartTime === race.id
             return (
               <div key={race.id} className="admin-race-row">
                 <div className="arr-info">
@@ -445,6 +464,41 @@ function CalendarTab({ leagueId }: { leagueId: string }) {
                     {race.startAt ? DATE_FMT.format(new Date(race.startAt)) : '—'}
                     {race.endAt ? ` – ${DATE_FMT.format(new Date(race.endAt))}` : ''}
                   </div>
+                  {user?.isSuperAdmin && (
+                    isEditingTime ? (
+                      <div className="arr-start-time-edit">
+                        <input
+                          type="datetime-local"
+                          value={startTimeValue}
+                          onChange={(e) => setStartTimeValue(e.target.value)}
+                        />
+                        <button
+                          className="amr-btn primary"
+                          disabled={startTimeMutation.isPending}
+                          onClick={() => {
+                            const utcIso = new Date(startTimeValue).toISOString()
+                            startTimeMutation.mutate({ raceId: race.id, startAt: utcIso })
+                          }}
+                        >
+                          {startTimeMutation.isPending ? '…' : 'OK'}
+                        </button>
+                        <button className="amr-btn ghost" onClick={() => setEditingStartTime(null)}>
+                          Annuler
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        className="amr-btn ghost"
+                        style={{ fontSize: 11, marginTop: 2 }}
+                        onClick={() => {
+                          setEditingStartTime(race.id)
+                          setStartTimeValue(toDatetimeLocal(race.startAt))
+                        }}
+                      >
+                        Modifier heure départ
+                      </button>
+                    )
+                  )}
                 </div>
                 <div className={`race-mult ${multClass(race.multiplierType)}`}>
                   {multLabel(race.multiplierType)}
