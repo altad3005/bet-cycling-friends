@@ -13,6 +13,7 @@ import BetsPage from './pages/BetsPage'
 import MembersPage from './pages/MembersPage'
 import AdminPage from './pages/AdminPage'
 import RacePage from './pages/RacePage'
+import StageResultPage from './pages/StageResultPage'
 import ProfilePage from './pages/ProfilePage'
 import StatsPage from './pages/StatsPage'
 import FeedPage from './pages/FeedPage'
@@ -98,6 +99,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <RacePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/races/:raceId/stages/:stageNumber"
+        element={
+          <ProtectedRoute>
+            <StageResultPage />
           </ProtectedRoute>
         }
       />

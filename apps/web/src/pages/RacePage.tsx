@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { RaceStatus, MultiplierType } from '@bcf/shared'
 import { racesApi } from '../api/races'
 import { betsApi, type BetClassicResponse, type BetGrandTourResponse } from '../api/bets'
-import { standingsApi, type StageStanding } from '../api/standings'
+import { standingsApi } from '../api/standings'
 import { useLeague } from '../hooks/useLeague'
 import { useAuthStore } from '../stores/auth'
 import { useCountdown } from '../hooks/useCountdown'
@@ -56,7 +56,6 @@ export default function RacePage() {
   const { activeLeague } = useLeague()
   const [betOpen, setBetOpen] = useState(false)
   const [startlistSearch, setStartlistSearch] = useState('')
-  const [selectedStage, setSelectedStage] = useState<number | null>(null)
 
   const { data: races } = useQuery({
     queryKey: ['races', 'league', activeLeague?.id],
@@ -93,12 +92,6 @@ export default function RacePage() {
     queryKey: ['stages', raceId],
     queryFn: () => racesApi.stages(raceId!).then((r) => r.data.data),
     enabled: !!raceId && !!race?.isGrandTour,
-  })
-
-  const { data: stageStandings } = useQuery({
-    queryKey: ['standings', 'stage', activeLeague?.id, raceId, selectedStage],
-    queryFn: () => standingsApi.stage(activeLeague!.id, raceId!, selectedStage!).then((r) => r.data.data.standings),
-    enabled: !!activeLeague && !!raceId && selectedStage !== null,
   })
 
   const { data: raceResults } = useQuery({
@@ -325,13 +318,12 @@ export default function RacePage() {
               <div className="race-section-title">Étapes</div>
               <div className="gt-stage-list">
                 {stagesData.stages.map((stage) => {
-                  const isSelected = selectedStage === stage.number
                   const profileLevel = stage.profileIcon ? parseInt(stage.profileIcon.replace('p', '')) : 0
                   return (
                     <button
                       key={stage.number}
-                      className={`gt-stage-row-btn${stage.synced ? ' synced' : ''}${isSelected ? ' active' : ''}`}
-                      onClick={() => stage.synced && setSelectedStage(isSelected ? null : stage.number)}
+                      className={`gt-stage-row-btn${stage.synced ? ' synced' : ''}`}
+                      onClick={() => stage.synced && navigate(`/races/${raceId}/stages/${stage.number}`)}
                     >
                       <span className="gt-stage-num">{stage.number}</span>
                       <span className="gt-stage-name">{stage.name}</span>
@@ -345,55 +337,11 @@ export default function RacePage() {
                         ? <span className="gt-stage-status synced">Résultats</span>
                         : <span className="gt-stage-status pending">À venir</span>
                       }
+                      {stage.synced && <span className="gt-stage-chevron">›</span>}
                     </button>
                   )
                 })}
               </div>
-
-              {selectedStage !== null && (
-                <div className="gt-stage-panel">
-                  <div className="gt-stage-panel-title">
-                    {stagesData.stages.find((s) => s.number === selectedStage)?.name ?? `Étape ${selectedStage}`}
-                  </div>
-                  {!stageStandings || stageStandings.length === 0 ? (
-                    <div className="race-empty">Aucun résultat pour cette étape.</div>
-                  ) : (
-                    <div className="gt-stage-standings">
-                      {stageStandings.map((row: StageStanding) => {
-                        const isMe = row.userId === user?.id
-                        const col = avatarColor(row.rank - 1)
-                        return (
-                          <div key={row.userId} className={`gt-stage-row${isMe ? ' me' : ''}`}>
-                            <div className="gt-stage-header">
-                              <div className="rs-rank">{row.rank}</div>
-                              <div className="rs-avatar" style={{ background: col.bg, color: col.color }}>
-                                {initials(row.pseudo)}
-                              </div>
-                              <div className="rs-pseudo">
-                                {row.pseudo}
-                                {isMe && <span className="me-badge">Moi</span>}
-                              </div>
-                              <div className="rs-points">{row.points.toLocaleString('fr-FR')} pts</div>
-                            </div>
-                            <div className="gt-rider-breakdown">
-                              {row.riders.map((r) => (
-                                <div key={r.riderId} className={`gt-rider-line${r.points > 0 ? ' scored' : ''}`}>
-                                  <span className="gt-rider-name">{r.name}</span>
-                                  {r.stageRank !== null
-                                    ? <span className="gt-rider-rank">{r.stageRank}e</span>
-                                    : <span className="gt-rider-rank muted">—</span>
-                                  }
-                                  <span className="gt-rider-pts">{r.points > 0 ? `+${r.points.toLocaleString('fr-FR')}` : '0'}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
             </section>
           )}
 

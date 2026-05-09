@@ -380,8 +380,17 @@
 .gt-stage-row-btn:last-child { border-bottom: none; }
 
 .gt-stage-row-btn.synced { cursor: pointer; }
-.gt-stage-row-btn.synced:hover { background: rgba(255, 255, 255, 0.04); }
-.gt-stage-row-btn.active { background: rgba(232, 201, 109, 0.06); }
+.gt-stage-row-btn.synced:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+.gt-stage-row-btn.synced:hover .gt-stage-name {
+  color: rgba(240, 237, 232, 0.9);
+}
+.gt-stage-row-btn.synced:hover .gt-stage-chevron {
+  opacity: 1;
+  transform: translateX(2px);
+}
 
 .gt-stage-num {
   font-size: 11px;
@@ -434,8 +443,17 @@
   letter-spacing: 0.3px;
   white-space: nowrap;
 }
-.gt-stage-status.synced { background: rgba(92, 184, 92, 0.12); color: #5cb85c; }
+.gt-stage-status.synced { background: rgba(92, 184, 92, 0.15); color: #5cb85c; }
 .gt-stage-status.pending { background: rgba(255, 255, 255, 0.04); color: rgba(240, 237, 232, 0.2); }
+
+.gt-stage-chevron {
+  font-size: 16px;
+  color: rgba(240, 237, 232, 0.25);
+  opacity: 0.6;
+  transition: opacity 0.12s, transform 0.12s;
+  flex-shrink: 0;
+  line-height: 1;
+}
 
 .gt-stage-panel {
   background: rgba(255, 255, 255, 0.02);
