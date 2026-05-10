@@ -155,32 +155,49 @@ export default class RaceService {
 
   async getStartlist(race: Race): Promise<RiderWithCostResponse[]> {
     const pcsRiders = await this.pcs.getStartlistWithCosts(race.slug, race.seasonYear)
-    const riders = await Promise.all(
-      pcsRiders.map((r) =>
-        Rider.firstOrCreate(
-          { pcsUrl: r.pcs_url },
-          { name: r.name, nationality: r.nationality ?? null, pcsUrl: r.pcs_url }
+
+    if (pcsRiders.length > 0) {
+      const riders = await Promise.all(
+        pcsRiders.map((r) =>
+          Rider.firstOrCreate(
+            { pcsUrl: r.pcs_url },
+            { name: r.name, nationality: r.nationality ?? null, pcsUrl: r.pcs_url }
+          )
         )
       )
-    )
 
-    const costs = await RaceRiderCost.query()
+      const costs = await RaceRiderCost.query()
+        .where('race_id', race.id)
+        .whereIn('rider_id', riders.map((r) => r.id))
+
+      const costMap = new Map(costs.map((c) => [c.riderId, c]))
+
+      return riders.map((r, i) => {
+        const snapshot = costMap.get(r.id)
+        return {
+          id: r.id,
+          name: r.name,
+          teamName: pcsRiders[i].team_name ?? null,
+          nationality: r.nationality,
+          pcsRank: snapshot?.pcsRank ?? pcsRiders[i].pcs_rank ?? null,
+          cost: snapshot?.cost ?? pcsRiders[i].cost,
+        }
+      })
+    }
+
+    // PCS indisponible : fallback sur le snapshot stocké en base
+    const snapshots = await RaceRiderCost.query()
       .where('race_id', race.id)
-      .whereIn('rider_id', riders.map((r) => r.id))
+      .preload('rider')
 
-    const costMap = new Map(costs.map((c) => [c.riderId, c]))
-
-    return riders.map((r, i) => {
-      const snapshot = costMap.get(r.id)
-      return {
-        id: r.id,
-        name: r.name,
-        teamName: pcsRiders[i].team_name ?? null,
-        nationality: r.nationality,
-        pcsRank: snapshot?.pcsRank ?? pcsRiders[i].pcs_rank ?? null,
-        cost: snapshot?.cost ?? pcsRiders[i].cost,
-      }
-    })
+    return snapshots.map((snap) => ({
+      id: snap.rider.id,
+      name: snap.rider.name,
+      teamName: null,
+      nationality: snap.rider.nationality,
+      pcsRank: snap.pcsRank,
+      cost: snap.cost,
+    }))
   }
 
   async snapshotRiderCosts(race: Race): Promise<void> {
