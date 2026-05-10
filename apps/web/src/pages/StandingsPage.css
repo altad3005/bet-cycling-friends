@@ -76,6 +76,18 @@
   background: rgba(232, 201, 109, 0.08);
 }
 
+@media (max-width: 480px) {
+  .league-filter-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow-x: unset;
+  }
+  .league-filter-btn {
+    text-align: center;
+    padding: 5px 4px;
+  }
+}
+
 .search-wrap {
   position: relative;
   flex: 1;
