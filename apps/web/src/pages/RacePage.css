@@ -661,6 +661,54 @@
   min-width: 60px;
 }
 
+/* ── GT Accordion ── */
+.gt-accordion-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.result-row.gt-clickable {
+  cursor: pointer;
+  user-select: none;
+}
+.result-row.gt-clickable:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.gt-chevron {
+  font-size: 16px;
+  color: rgba(240, 237, 232, 0.25);
+  flex-shrink: 0;
+  transition: transform 0.15s;
+  line-height: 1;
+}
+.gt-chevron.open {
+  transform: rotate(90deg);
+  color: rgba(240, 237, 232, 0.5);
+}
+
+.gt-accordion-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  padding: 0.625rem 1rem 0.75rem 4rem;
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(255, 255, 255, 0.05);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  margin-top: -2px;
+}
+
+.gt-accordion-rider {
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  padding: 3px 9px;
+  color: rgba(240, 237, 232, 0.65);
+}
+
 /* ── Race results ── */
 .race-results {
   display: flex;
