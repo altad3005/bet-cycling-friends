@@ -7,10 +7,9 @@ const RANK_CLASSES = ['g', 's', 'b']
 interface Props {
   standings: LeagueStanding[]
   userId:    string
-  season:    number
 }
 
-export default function LeagueStandingsPanel({ standings, userId, season }: Props) {
+export default function LeagueStandingsPanel({ standings, userId }: Props) {
   const navigate   = useNavigate()
   const maxPts     = standings[0]?.totalPoints ?? 1
   const hidden     = standings.length > 8 ? standings.length - 8 : 0
@@ -20,7 +19,12 @@ export default function LeagueStandingsPanel({ standings, userId, season }: Prop
     <div className="panel">
       <div className="panel-head">
         <div className="panel-title">Classement de la ligue</div>
-        <div className="panel-meta">Saison {season}</div>
+        <button
+          onClick={() => navigate('/standings')}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, color: 'rgba(240,237,232,0.35)', padding: 0 }}
+        >
+          Voir tout →
+        </button>
       </div>
 
       {standings.length > 0 ? (

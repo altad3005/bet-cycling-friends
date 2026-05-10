@@ -41,7 +41,12 @@ export default function UpcomingRacesPanel({ races }: Props) {
     <div className="panel">
       <div className="panel-head">
         <div className="panel-title">Prochaines courses</div>
-        <div className="panel-meta">Calendrier ligue</div>
+        <button
+          onClick={() => navigate('/calendar')}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, color: 'rgba(240,237,232,0.35)', padding: 0 }}
+        >
+          Voir tout →
+        </button>
       </div>
 
       {isEmpty ? (

@@ -102,7 +102,6 @@ export default function HomePage() {
         <LeagueStandingsPanel
           standings={leagueStandings}
           userId={user?.id ?? ''}
-          season={activeLeague.season}
         />
 
         <UpcomingRacesPanel races={leagueRaces} />
