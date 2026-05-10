@@ -36,6 +36,11 @@ export default class StandingsController {
     return serialize({ standings })
   }
 
+  async stageRaceStandings({ params, serialize }: HttpContext) {
+    const standings = await new StandingsService().getLeagueStageRaceStandings(params.id)
+    return serialize({ standings })
+  }
+
   async championnatStandings({ params, serialize }: HttpContext) {
     const standings = await new StandingsService().getLeagueChampionnatStandings(params.id)
     return serialize({ standings })

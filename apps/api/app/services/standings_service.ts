@@ -150,6 +150,10 @@ export default class StandingsService {
     return this.getLeagueFilteredStandings(leagueId, `r.multiplier_type = 'wt_classic'`)
   }
 
+  async getLeagueStageRaceStandings(leagueId: string) {
+    return this.getLeagueFilteredStandings(leagueId, `r.race_type = 'stage_race' AND r.is_grand_tour = false`)
+  }
+
   async getLeagueChampionnatStandings(leagueId: string) {
     return this.getLeagueFilteredStandings(leagueId, `r.race_type IN ('national', 'worlds')`)
   }

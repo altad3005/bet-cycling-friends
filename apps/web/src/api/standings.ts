@@ -56,6 +56,9 @@ export const standingsApi = {
   classics: (leagueId: string) =>
     api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/classics`),
 
+  stageRaces: (leagueId: string) =>
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/stage-races`),
+
   championnats: (leagueId: string) =>
     api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/championnats`),
 

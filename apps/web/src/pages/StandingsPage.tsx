@@ -9,7 +9,7 @@ import AppShell from '../components/AppShell'
 import './StandingsPage.css'
 
 type Tab = 'global' | 'league'
-type LeagueFilter = 'all' | 'monuments' | 'grand-tours' | 'classics' | 'championnats'
+type LeagueFilter = 'all' | 'monuments' | 'grand-tours' | 'stage-races' | 'classics' | 'championnats'
 
 const RANK_CLASSES = ['g', 's', 'b']
 
@@ -62,6 +62,12 @@ export default function StandingsPage() {
     enabled: !!activeLeague,
   })
 
+  const { data: stageRaceStandings } = useQuery({
+    queryKey: ['standings', 'stage-races', activeLeague?.id],
+    queryFn: () => standingsApi.stageRaces(activeLeague!.id).then((r) => r.data.data.standings),
+    enabled: !!activeLeague,
+  })
+
   const { data: championnatStandings } = useQuery({
     queryKey: ['standings', 'championnats', activeLeague?.id],
     queryFn: () => standingsApi.championnats(activeLeague!.id).then((r) => r.data.data.standings),
@@ -72,6 +78,7 @@ export default function StandingsPage() {
     tab === 'global'                    ? globalStandings :
     leagueFilter === 'monuments'        ? monumentStandings :
     leagueFilter === 'grand-tours'      ? grandTourStandings :
+    leagueFilter === 'stage-races'      ? stageRaceStandings :
     leagueFilter === 'classics'         ? classicStandings :
     leagueFilter === 'championnats'     ? championnatStandings :
     leagueStandings
@@ -147,6 +154,10 @@ export default function StandingsPage() {
                 className={`league-filter-btn${leagueFilter === 'grand-tours' ? ' active' : ''}`}
                 onClick={() => setLeagueFilter('grand-tours')}
               >Grands Tours</button>
+              <button
+                className={`league-filter-btn${leagueFilter === 'stage-races' ? ' active' : ''}`}
+                onClick={() => setLeagueFilter('stage-races')}
+              >Tours</button>
               <button
                 className={`league-filter-btn${leagueFilter === 'classics' ? ' active' : ''}`}
                 onClick={() => setLeagueFilter('classics')}
