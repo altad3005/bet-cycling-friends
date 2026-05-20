@@ -139,26 +139,43 @@ export default class StandingsService {
   }
 
   async getLeagueMonumentStandings(leagueId: string) {
-    return this.getLeagueFilteredStandings(leagueId, `r.multiplier_type = 'monument'`)
+    return this.getLeagueFilteredStandings(leagueId, 'monument')
   }
 
   async getLeagueGrandTourStandings(leagueId: string) {
-    return this.getLeagueFilteredStandings(leagueId, `r.is_grand_tour = true`)
+    return this.getLeagueFilteredStandings(leagueId, 'grand-tour')
   }
 
   async getLeagueClassicStandings(leagueId: string) {
-    return this.getLeagueFilteredStandings(leagueId, `r.multiplier_type = 'wt_classic'`)
+    return this.getLeagueFilteredStandings(leagueId, 'classic')
   }
 
   async getLeagueStageRaceStandings(leagueId: string) {
-    return this.getLeagueFilteredStandings(leagueId, `r.race_type = 'stage_race' AND r.is_grand_tour = false`)
+    return this.getLeagueFilteredStandings(leagueId, 'stage-race')
   }
 
   async getLeagueChampionnatStandings(leagueId: string) {
-    return this.getLeagueFilteredStandings(leagueId, `r.race_type IN ('national', 'worlds')`)
+    return this.getLeagueFilteredStandings(leagueId, 'championnat')
   }
 
-  private async getLeagueFilteredStandings(leagueId: string, filter: string) {
+  private buildRaceFilter(
+    key: 'monument' | 'grand-tour' | 'classic' | 'stage-race' | 'championnat'
+  ): { sql: string; bindings: unknown[] } {
+    switch (key) {
+      case 'monument':   return { sql: 'r.multiplier_type = ?',                      bindings: ['monument'] }
+      case 'grand-tour': return { sql: 'r.is_grand_tour = ?',                         bindings: [true] }
+      case 'classic':    return { sql: 'r.multiplier_type = ?',                      bindings: ['wt_classic'] }
+      case 'stage-race': return { sql: 'r.race_type = ? AND r.is_grand_tour = ?',    bindings: ['stage_race', false] }
+      case 'championnat':return { sql: 'r.race_type IN (?, ?)',                       bindings: ['national', 'worlds'] }
+    }
+  }
+
+  private async getLeagueFilteredStandings(
+    leagueId: string,
+    filterKey: 'monument' | 'grand-tour' | 'classic' | 'stage-race' | 'championnat'
+  ) {
+    const { sql: filterSql, bindings: filterBindings } = this.buildRaceFilter(filterKey)
+
     const result = await db.rawQuery<{
       rows: { user_id: string; pseudo: string; icon: string; total_points: number; races_played: number }[]
     }>(
@@ -174,13 +191,13 @@ export default class StandingsService {
         SELECT sc.*
         FROM scores sc
         JOIN races r ON r.id = sc.race_id
-        WHERE ${filter}
+        WHERE ${filterSql}
           AND sc.league_id = ?
       ) s ON s.user_id = lm.user_id
       WHERE lm.league_id = ?
       GROUP BY lm.user_id, u.pseudo, u.icon
       ORDER BY total_points DESC`,
-      [leagueId, leagueId]
+      [...filterBindings, leagueId, leagueId]
     )
 
     return this.withSharedRanks(

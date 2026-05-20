@@ -109,16 +109,13 @@ router
     router.get('/standings/global', [controllers.Standings, 'globalStandings'])
 
     router
-      .post('/admin/races/:id/sync', [controllers.RaceSync, 'sync'])
-      .use(middleware.auth())
-
-    router
-      .post('/admin/races/:id/snapshot-costs', [controllers.RaceSnapshot, 'snapshotCosts'])
-      .use(middleware.auth())
-
-    router
-      .patch('/admin/races/:id/start-time', [controllers.RaceStartTime, 'update'])
-      .use(middleware.auth())
+      .group(() => {
+        router.post('/races/:id/sync', [controllers.RaceSync, 'sync'])
+        router.post('/races/:id/snapshot-costs', [controllers.RaceSnapshot, 'snapshotCosts'])
+        router.patch('/races/:id/start-time', [controllers.RaceStartTime, 'update'])
+      })
+      .prefix('admin')
+      .use(middleware.admin())
 
   })
   .prefix('/api')
