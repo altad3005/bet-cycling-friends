@@ -1,3 +1,11 @@
+export const DATE_FMT = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+export const TIME_FMT = new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit' })
+
+export function formatDate(iso: string | null) {
+  if (!iso) return '—'
+  return DATE_FMT.format(new Date(iso))
+}
+
 export const AVATAR_COLORS = [
   { bg: 'rgba(232,201,109,0.15)', color: '#e8c96d' },
   { bg: 'rgba(176,184,200,0.12)', color: '#b0b8c8' },
