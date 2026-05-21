@@ -11,6 +11,7 @@ export interface RaceResponse {
   startAt: string
   endAt: string
   isGrandTour: boolean
+  costsSnapshotted: boolean
 }
 
 export interface RiderResponse {

@@ -171,6 +171,7 @@ function SyncPanel({ race }: { race: RaceResponse }) {
 
   const snapshotMutation = useMutation({
     mutationFn: () => racesApi.snapshotCosts(race.id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['races', 'league'] }),
   })
 
   const isGrandTour = race.raceType === RaceType.GRAND_TOUR
@@ -195,14 +196,21 @@ function SyncPanel({ race }: { race: RaceResponse }) {
   return (
     <div className="sync-gt-wrap">
       {canSnapshot && (
-        <button
-          className="amr-btn ghost"
-          onClick={() => snapshotMutation.mutate()}
-          disabled={snapshotMutation.isPending}
-          title="Figer le classement PCS pour les coûts des pronostics"
-        >
-          {snapshotMutation.isPending ? 'Snapshot…' : snapshotMutation.isSuccess ? '✓ Coûts figés' : 'Snapshot coûts'}
-        </button>
+        <div className="snapshot-wrap">
+          <button
+            className="amr-btn ghost"
+            onClick={() => snapshotMutation.mutate()}
+            disabled={snapshotMutation.isPending || race.costsSnapshotted}
+            title={race.costsSnapshotted ? 'Les coûts ont déjà été figés pour cette course' : 'Figer le classement PCS pour les coûts des pronostics'}
+          >
+            {race.costsSnapshotted ? '✓ Coûts figés' : snapshotMutation.isPending ? 'Snapshot…' : snapshotMutation.isSuccess ? '✓ Coûts figés' : 'Snapshot coûts'}
+          </button>
+          {snapshotMutation.isError && (
+            <span className="snapshot-error">
+              {(snapshotMutation.error as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Erreur PCS, réessayez.'}
+            </span>
+          )}
+        </div>
       )}
       {canSync && (
       <button className="amr-btn ghost" onClick={() => setOpen((v) => !v)}>

@@ -418,6 +418,20 @@
   gap: 6px;
 }
 
+.snapshot-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.snapshot-error {
+  font-size: 11px;
+  color: #f87171;
+  max-width: 220px;
+  text-align: right;
+}
+
 .sync-gt-panel {
   background: #0e0e13;
   border: 0.5px solid rgba(255, 255, 255, 0.08);

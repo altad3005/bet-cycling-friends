@@ -3,6 +3,7 @@ import RaceTransformer from '#transformers/race_transformer'
 import { addRaceValidator } from '#validators/race'
 import Race from '#models/race'
 import LeagueRace from '#models/league_race'
+import RaceRiderCost from '#models/race_rider_cost'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LeagueRaceController {
@@ -14,8 +15,19 @@ export default class LeagueRaceController {
       return serialize({ races: [] })
     }
 
-    const races = await Race.query().whereIn('id', raceIds).orderBy('start_at', 'asc')
-    return serialize({ races: RaceTransformer.transform(races) })
+    const [races, snapshots] = await Promise.all([
+      Race.query().whereIn('id', raceIds).orderBy('start_at', 'asc'),
+      RaceRiderCost.query().whereIn('race_id', raceIds).distinct('race_id').select('race_id'),
+    ])
+
+    const snapshotRaceIds = new Set(snapshots.map((s) => s.raceId))
+
+    return serialize({
+      races: races.map((race) => ({
+        ...(RaceTransformer.transform(race) as object),
+        costsSnapshotted: snapshotRaceIds.has(race.id),
+      })),
+    })
   }
 
   async store({ params, request, auth, response, serialize }: HttpContext) {
@@ -23,7 +35,7 @@ export default class LeagueRaceController {
     const user = auth.getUserOrFail()
     const race = await new RaceService().addToLeague(user, params.id, slug)
     response.status(201)
-    return serialize({ race: RaceTransformer.transform(race) })
+    return serialize({ race: { ...(RaceTransformer.transform(race) as object), costsSnapshotted: false } })
   }
 
   async destroy({ params, auth, response }: HttpContext) {

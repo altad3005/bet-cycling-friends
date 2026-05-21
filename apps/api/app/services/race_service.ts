@@ -202,7 +202,9 @@ export default class RaceService {
 
   async snapshotRiderCosts(race: Race): Promise<void> {
     const pcsRiders = await this.pcs.getStartlistWithCosts(race.slug, race.seasonYear)
-    if (pcsRiders.length === 0) return
+    if (pcsRiders.length === 0) {
+      throw new Exception('Impossible de récupérer la startlist depuis PCS. Réessayez dans quelques instants.', { status: 422 })
+    }
 
     const riders = await Promise.all(
       pcsRiders.map((r) =>
