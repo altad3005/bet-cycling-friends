@@ -8,6 +8,7 @@ export interface RaceResponse {
   raceType: RaceType
   multiplierType: MultiplierType
   isGrandTour: boolean
+  costsSnapshotted: boolean
   stageCount: number | null
   status: RaceStatus
   resultsFinal: boolean
