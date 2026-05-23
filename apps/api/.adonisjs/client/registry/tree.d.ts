@@ -77,6 +77,7 @@ export interface ApiDefinition {
     monumentStandings: typeof routes['standings.monument_standings']
     grandTourStandings: typeof routes['standings.grand_tour_standings']
     classicStandings: typeof routes['standings.classic_standings']
+    stageRaceStandings: typeof routes['standings.stage_race_standings']
     championnatStandings: typeof routes['standings.championnat_standings']
     raceStandings: typeof routes['standings.race_standings']
     stageStandings: typeof routes['standings.stage_standings']
@@ -87,5 +88,8 @@ export interface ApiDefinition {
   }
   raceSnapshot: {
     snapshotCosts: typeof routes['race_snapshot.snapshot_costs']
+  }
+  raceStartTime: {
+    update: typeof routes['race_start_time.update']
   }
 }

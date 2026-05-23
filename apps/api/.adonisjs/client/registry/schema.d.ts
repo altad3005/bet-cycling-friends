@@ -487,6 +487,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['classicStandings']>>>
     }
   }
+  'standings.stage_race_standings': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/standings/stage-races'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['stageRaceStandings']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['stageRaceStandings']>>>
+    }
+  }
   'standings.championnat_standings': {
     methods: ["GET","HEAD"]
     pattern: '/api/leagues/:id/standings/championnats'
@@ -557,6 +569,18 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/race_snapshot_controller').default['snapshotCosts']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/race_snapshot_controller').default['snapshotCosts']>>>
+    }
+  }
+  'race_start_time.update': {
+    methods: ["PATCH"]
+    pattern: '/api/admin/races/:id/start-time'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/race_start_time_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/race_start_time_controller').default['update']>>>
     }
   }
 }

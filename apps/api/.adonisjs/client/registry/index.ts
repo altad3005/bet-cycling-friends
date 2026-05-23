@@ -246,6 +246,12 @@ const routes = {
     tokens: [{"old":"/api/leagues/:id/standings/classics","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/standings/classics","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/standings/classics","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/standings/classics","type":0,"val":"standings","end":""},{"old":"/api/leagues/:id/standings/classics","type":0,"val":"classics","end":""}],
     types: placeholder as Registry['standings.classic_standings']['types'],
   },
+  'standings.stage_race_standings': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/standings/stage-races',
+    tokens: [{"old":"/api/leagues/:id/standings/stage-races","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/standings/stage-races","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/standings/stage-races","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/standings/stage-races","type":0,"val":"standings","end":""},{"old":"/api/leagues/:id/standings/stage-races","type":0,"val":"stage-races","end":""}],
+    types: placeholder as Registry['standings.stage_race_standings']['types'],
+  },
   'standings.championnat_standings': {
     methods: ["GET","HEAD"],
     pattern: '/api/leagues/:id/standings/championnats',
@@ -281,6 +287,12 @@ const routes = {
     pattern: '/api/admin/races/:id/snapshot-costs',
     tokens: [{"old":"/api/admin/races/:id/snapshot-costs","type":0,"val":"api","end":""},{"old":"/api/admin/races/:id/snapshot-costs","type":0,"val":"admin","end":""},{"old":"/api/admin/races/:id/snapshot-costs","type":0,"val":"races","end":""},{"old":"/api/admin/races/:id/snapshot-costs","type":1,"val":"id","end":""},{"old":"/api/admin/races/:id/snapshot-costs","type":0,"val":"snapshot-costs","end":""}],
     types: placeholder as Registry['race_snapshot.snapshot_costs']['types'],
+  },
+  'race_start_time.update': {
+    methods: ["PATCH"],
+    pattern: '/api/admin/races/:id/start-time',
+    tokens: [{"old":"/api/admin/races/:id/start-time","type":0,"val":"api","end":""},{"old":"/api/admin/races/:id/start-time","type":0,"val":"admin","end":""},{"old":"/api/admin/races/:id/start-time","type":0,"val":"races","end":""},{"old":"/api/admin/races/:id/start-time","type":1,"val":"id","end":""},{"old":"/api/admin/races/:id/start-time","type":0,"val":"start-time","end":""}],
+    types: placeholder as Registry['race_start_time.update']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 

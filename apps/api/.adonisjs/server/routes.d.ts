@@ -44,12 +44,14 @@ export type ScannedRoutes = {
     'standings.monument_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.grand_tour_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.classic_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.stage_race_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.championnat_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
     'standings.global_standings': { paramsTuple?: []; params?: {} }
     'race_sync.sync': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'race_snapshot.snapshot_costs': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'race_start_time.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'auth.google_auth.redirect': { paramsTuple?: []; params?: {} }
@@ -74,6 +76,7 @@ export type ScannedRoutes = {
     'standings.monument_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.grand_tour_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.classic_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.stage_race_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.championnat_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
@@ -102,6 +105,7 @@ export type ScannedRoutes = {
     'standings.monument_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.grand_tour_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.classic_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'standings.stage_race_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.championnat_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
@@ -134,6 +138,7 @@ export type ScannedRoutes = {
   }
   PATCH: {
     'league_member.update': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
+    'race_start_time.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

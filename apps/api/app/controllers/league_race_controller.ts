@@ -1,10 +1,28 @@
 import RaceService from '#services/race_service'
-import RaceTransformer from '#transformers/race_transformer'
 import { addRaceValidator } from '#validators/race'
 import Race from '#models/race'
 import LeagueRace from '#models/league_race'
 import RaceRiderCost from '#models/race_rider_cost'
 import type { HttpContext } from '@adonisjs/core/http'
+import { type RaceStatus } from '@bcf/shared'
+
+function toRaceResponse(race: Race, costsSnapshotted: boolean) {
+  return {
+    id: race.id,
+    slug: race.slug,
+    name: race.name,
+    raceType: race.raceType,
+    multiplierType: race.multiplierType,
+    isGrandTour: race.isGrandTour,
+    stageCount: race.stageCount,
+    resultsFinal: race.resultsFinal,
+    startAt: race.startAt?.toISO() ?? null,
+    endAt: race.endAt?.toISO() ?? null,
+    seasonYear: race.seasonYear,
+    status: race.status as RaceStatus,
+    costsSnapshotted,
+  }
+}
 
 export default class LeagueRaceController {
   async index({ params, serialize }: HttpContext) {
@@ -23,10 +41,7 @@ export default class LeagueRaceController {
     const snapshotRaceIds = new Set(snapshots.map((s) => s.raceId))
 
     return serialize({
-      races: races.map((race) => ({
-        ...(RaceTransformer.transform(race) as object),
-        costsSnapshotted: snapshotRaceIds.has(race.id),
-      })),
+      races: races.map((race) => toRaceResponse(race, snapshotRaceIds.has(race.id))),
     })
   }
 
@@ -35,7 +50,7 @@ export default class LeagueRaceController {
     const user = auth.getUserOrFail()
     const race = await new RaceService().addToLeague(user, params.id, slug)
     response.status(201)
-    return serialize({ race: { ...(RaceTransformer.transform(race) as object), costsSnapshotted: false } })
+    return serialize({ race: toRaceResponse(race, false) })
   }
 
   async destroy({ params, auth, response }: HttpContext) {
