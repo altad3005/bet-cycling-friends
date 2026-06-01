@@ -4,9 +4,10 @@ import type { RaceStage } from '../../api/races'
 interface Props {
   raceId: string
   stages: RaceStage[]
+  gcSynced: boolean
 }
 
-export default function RaceGtStages({ raceId, stages }: Props) {
+export default function RaceGtStages({ raceId, stages, gcSynced }: Props) {
   const navigate = useNavigate()
 
   return (
@@ -37,6 +38,19 @@ export default function RaceGtStages({ raceId, stages }: Props) {
             </button>
           )
         })}
+
+        <button
+          className={`gt-stage-row-btn gt-stage-gc${gcSynced ? ' synced' : ''}`}
+          onClick={() => gcSynced && navigate(`/races/${raceId}/gc`)}
+        >
+          <span className="gt-stage-num">GC</span>
+          <span className="gt-stage-name">Classement général</span>
+          {gcSynced
+            ? <span className="gt-stage-status synced">Résultats</span>
+            : <span className="gt-stage-status pending">À venir</span>
+          }
+          {gcSynced && <span className="gt-stage-chevron">›</span>}
+        </button>
       </div>
     </section>
   )

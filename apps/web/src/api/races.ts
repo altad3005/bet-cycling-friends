@@ -62,7 +62,7 @@ export const racesApi = {
     api.delete(`/leagues/${leagueId}/races/${raceId}`),
 
   stages: (raceId: string) =>
-    api.get<{ data: { stageCount: number; stages: RaceStage[] } }>(`/races/${raceId}/stages`),
+    api.get<{ data: { stageCount: number; stages: RaceStage[]; gcSynced: boolean } }>(`/races/${raceId}/stages`),
 
   sync: (raceId: string, stageNumber?: number) =>
     api.post(`/admin/races/${raceId}/sync`, stageNumber !== undefined ? { stageNumber } : {}),

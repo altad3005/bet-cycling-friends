@@ -50,7 +50,12 @@ export default class ResultSyncService {
   async syncGrandTourGC(race: Race): Promise<void> {
     const results = await this.pcs.getRaceResults(race.slug, race.seasonYear)
     await this.upsertResults(race.id, results, 0, 'gc')
-    race.resultsFinal = true
+    // Ne finaliser que si le classement général a bien été récupéré.
+    // Sinon (scrape vide / GC pas encore publié) on laisse resultsFinal=false
+    // pour que les crons auto-sync/auto-status retentent le sync GC.
+    if (results.length > 0) {
+      race.resultsFinal = true
+    }
     race.lastSyncedAt = DateTime.now()
     await race.save()
   }

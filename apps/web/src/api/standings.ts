@@ -68,5 +68,8 @@ export const standingsApi = {
   stage: (leagueId: string, raceId: string, stageNumber: number) =>
     api.get<{ data: { standings: StageStanding[] } }>(`/leagues/${leagueId}/races/${raceId}/stage/${stageNumber}/standings`),
 
+  gc: (leagueId: string, raceId: string) =>
+    api.get<{ data: { standings: StageStanding[] } }>(`/leagues/${leagueId}/races/${raceId}/gc/standings`),
+
   global: () => api.get<{ data: { standings: GlobalStanding[] } }>('/standings/global'),
 }

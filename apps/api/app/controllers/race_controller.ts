@@ -25,13 +25,17 @@ export default class RaceController {
   async stages({ params, serialize }: HttpContext) {
     const race = await Race.findOrFail(params.id)
 
-    const [dbStages, syncedResults] = await Promise.all([
+    const [dbStages, syncedResults, gcResult] = await Promise.all([
       Stage.query().where('race_id', race.id).orderBy('number', 'asc'),
       StageResult.query()
         .where('race_id', race.id)
         .where('result_type', 'stage')
         .distinct('stage_number')
         .select('stage_number'),
+      StageResult.query()
+        .where('race_id', race.id)
+        .where('result_type', 'gc')
+        .first(),
     ])
 
     const syncedSet = new Set(syncedResults.map((r) => r.stageNumber))
@@ -44,7 +48,11 @@ export default class RaceController {
       synced: syncedSet.has(s.number),
     }))
 
-    return serialize({ stageCount: race.stageCount ?? stages.length, stages })
+    return serialize({
+      stageCount: race.stageCount ?? stages.length,
+      stages,
+      gcSynced: gcResult !== null,
+    })
   }
 
   async results({ params, serialize }: HttpContext) {

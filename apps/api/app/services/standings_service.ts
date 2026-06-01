@@ -92,6 +92,27 @@ export default class StandingsService {
       .where('rank', '<=', 10)
 
     const rankMap = new Map(stageResults.map((r) => [r.riderId, r.rank]))
+    return this.buildGtBreakdownStandings(leagueId, raceId, rankMap, MultiplierType.GT_STAGE)
+  }
+
+  async getGcStandings(leagueId: string, raceId: string) {
+    const gcResults = await StageResult.query()
+      .where('race_id', raceId)
+      .where('stage_number', 0)
+      .where('result_type', 'gc')
+      .where('rank', '<=', 10)
+
+    const rankMap = new Map(gcResults.map((r) => [r.riderId, r.rank]))
+    return this.buildGtBreakdownStandings(leagueId, raceId, rankMap, MultiplierType.GT_GC)
+  }
+
+  private async buildGtBreakdownStandings(
+    leagueId: string,
+    raceId: string,
+    rankMap: Map<string, number>,
+    multiplierType: MultiplierType
+  ) {
+    const multiplier = MULTIPLIERS[multiplierType]
 
     const memberIds = (await LeagueMember.query().where('league_id', leagueId).select('user_id')).map(
       (m) => m.userId
@@ -115,7 +136,7 @@ export default class StandingsService {
         let points = 0
         const riderBreakdown = bet.betRiders.map((betRider) => {
           const rank = rankMap.get(betRider.riderId)
-          const riderPoints = rank && SCORING_TABLE[rank] ? SCORING_TABLE[rank] * MULTIPLIERS[MultiplierType.GT_STAGE] : 0
+          const riderPoints = rank && SCORING_TABLE[rank] ? SCORING_TABLE[rank] * multiplier : 0
           points += riderPoints
           return {
             riderId: betRider.riderId,

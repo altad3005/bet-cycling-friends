@@ -102,6 +102,7 @@ router
         router.get('/:id/standings/championnats', [controllers.Standings, 'championnatStandings'])
         router.get('/:id/races/:raceId/standings', [controllers.Standings, 'raceStandings'])
         router.get('/:id/races/:raceId/stage/:n/standings', [controllers.Standings, 'stageStandings'])
+        router.get('/:id/races/:raceId/gc/standings', [controllers.Standings, 'gcStandings'])
       })
       .prefix('leagues')
       .use(middleware.auth())
