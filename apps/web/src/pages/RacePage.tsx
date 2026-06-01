@@ -80,7 +80,7 @@ export default function RacePage() {
             raceResults={raceResults}
           />
           {race.isGrandTour && stagesData && stagesData.stages.length > 0 && (
-            <RaceGtStages raceId={raceId!} stages={stagesData.stages} />
+            <RaceGtStages raceId={raceId!} stages={stagesData.stages} gcSynced={stagesData.gcSynced} />
           )}
           {startlist && startlist.length > 0 && (
             <RaceStartlist startlist={startlist} />

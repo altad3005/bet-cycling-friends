@@ -21,6 +21,11 @@ export default class StandingsController {
     return serialize({ standings })
   }
 
+  async gcStandings({ params, serialize }: HttpContext) {
+    const standings = await new StandingsService().getGcStandings(params.id, params.raceId)
+    return serialize({ standings })
+  }
+
   async monumentStandings({ params, serialize }: HttpContext) {
     const standings = await new StandingsService().getLeagueMonumentStandings(params.id)
     return serialize({ standings })
