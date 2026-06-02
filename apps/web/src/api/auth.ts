@@ -38,5 +38,8 @@ export const authApi = {
   profile: () => api.get<{ data: User }>('/account/profile'),
 
   updateProfile: (pseudo: string, icon?: string) =>
-    api.put<{ data: User }>('/account/profile', icon === undefined ? { pseudo } : { pseudo, icon }),
+    api.put<{ data: User }>(
+      '/account/profile',
+      icon === undefined ? { pseudo } : { pseudo, icon: icon === '' ? null : icon }
+    ),
 }

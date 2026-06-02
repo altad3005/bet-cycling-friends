@@ -8,7 +8,7 @@ import { PROFILE_ICONS } from '@bcf/shared'
 const updateProfileValidator = vine.compile(
   vine.object({
     pseudo: vine.string().trim().minLength(2).maxLength(50),
-    icon: vine.enum(PROFILE_ICONS).optional(),
+    icon: vine.enum(PROFILE_ICONS).nullable().optional(),
   })
 )
 
@@ -22,7 +22,7 @@ export default class ProfileController {
     const { pseudo, icon } = await request.validateUsing(updateProfileValidator)
     user.pseudo = pseudo
     if (icon !== undefined) {
-      user.icon = icon
+      user.icon = icon ?? ''
     }
     await user.save()
     return serialize(UserTransformer.transform(user))

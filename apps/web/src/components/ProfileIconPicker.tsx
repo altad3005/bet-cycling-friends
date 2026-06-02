@@ -6,16 +6,18 @@ interface ProfileIconPickerProps {
   onSelect: (icon: string) => void
 }
 
+const OPTIONS = ['', ...PROFILE_ICONS] as const
+
 export default function ProfileIconPicker({ value, onSelect }: ProfileIconPickerProps) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-      {PROFILE_ICONS.map((id) => {
+      {OPTIONS.map((id) => {
         const selected = id === value
         return (
           <button
-            key={id}
+            key={id || 'none'}
             type="button"
-            aria-label={id}
+            aria-label={id || 'initials'}
             aria-pressed={selected}
             onClick={() => onSelect(id)}
             style={{
@@ -28,20 +30,26 @@ export default function ProfileIconPicker({ value, onSelect }: ProfileIconPicker
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
+              fontSize: 15,
+              fontWeight: 600,
             }}
           >
-            <svg
-              viewBox="0 0 24 24"
-              width={26}
-              height={26}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.7}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              {PROFILE_ICON_PATHS[id]}
-            </svg>
+            {id === '' ? (
+              'Aa'
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                width={26}
+                height={26}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.7}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {PROFILE_ICON_PATHS[id]}
+              </svg>
+            )}
           </button>
         )
       })}
