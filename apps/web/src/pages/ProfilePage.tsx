@@ -3,6 +3,8 @@ import { authApi } from '../api/auth'
 import { useAuthStore } from '../stores/auth'
 import { usePushNotifications } from '../hooks/usePushNotifications'
 import AppShell from '../components/AppShell'
+import Avatar from '../components/Avatar'
+import ProfileIconPicker from '../components/ProfileIconPicker'
 
 export default function ProfilePage() {
   const setUser = useAuthStore((s) => s.setUser)
@@ -10,6 +12,7 @@ export default function ProfilePage() {
 
   const push = usePushNotifications()
   const [pseudo, setPseudo] = useState(user?.pseudo ?? '')
+  const [icon, setIcon] = useState(user?.icon ?? '')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -20,7 +23,7 @@ export default function ProfilePage() {
     setSuccess(false)
     setLoading(true)
     try {
-      const res = await authApi.updateProfile(pseudo)
+      const res = await authApi.updateProfile(pseudo, icon)
       setUser(res.data.data)
       setSuccess(true)
     } catch (err: unknown) {
@@ -54,6 +57,19 @@ export default function ProfilePage() {
               <div style={{ fontSize: 14, color: 'rgba(240,237,232,0.6)', padding: '0.6rem 0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: 8 }}>
                 {user?.email}
               </div>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: 12, color: 'rgba(240,237,232,0.5)', marginBottom: 6 }}>
+                Icône de profil
+              </label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
+                <Avatar pseudo={pseudo || (user?.pseudo ?? '?')} icon={icon} size={64} />
+                <span style={{ fontSize: 13, color: 'rgba(240,237,232,0.45)' }}>
+                  {icon ? 'Ton icône' : 'Tes initiales (par défaut)'}
+                </span>
+              </div>
+              <ProfileIconPicker value={icon} onSelect={(i) => { setIcon(i); setSuccess(false) }} />
             </div>
 
             <div>
