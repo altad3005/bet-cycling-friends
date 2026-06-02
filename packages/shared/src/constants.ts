@@ -36,3 +36,20 @@ export const GT_RIDER_COST_TIERS: { maxRank: number; cost: number }[] = [
 ]
 
 export const GT_RIDER_COST_DEFAULT = 2
+
+export const PROFILE_ICONS = [
+  'bike-road',
+  'bike-mtb',
+  'helmet',
+  'wheel',
+  'jersey-yellow',
+  'jersey-polka',
+  'jersey-green',
+  'cyclist',
+  'mountain',
+  'trophy',
+  'medal',
+  'stopwatch',
+] as const
+
+export type ProfileIcon = (typeof PROFILE_ICONS)[number]
