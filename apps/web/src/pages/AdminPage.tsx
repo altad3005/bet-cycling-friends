@@ -8,7 +8,7 @@ import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
 import { useLeagueStore } from '../stores/league'
 import AppShell from '../components/AppShell'
-import { initials, avatarColor } from '../utils/ui'
+import Avatar from '../components/Avatar'
 import './HomePage.css'
 import './AdminPage.css'
 
@@ -67,16 +67,13 @@ function MembersTab({ leagueId }: { leagueId: string }) {
     <div className="admin-list">
       {members.map((m, i) => {
         const isMe = m.userId === user?.id
-        const col = avatarColor(i)
         const isKicking = confirmKick === m.userId
         const canDemote = m.isAdmin && adminCount > 1
         const canKick = !isMe
 
         return (
           <div key={m.userId} className={`admin-member-row${isMe ? ' me' : ''}`}>
-            <div className="amr-avatar" style={{ background: col.bg, color: col.color }}>
-              {initials(m.pseudo ?? '?')}
-            </div>
+            <Avatar pseudo={m.pseudo ?? '?'} icon={m.icon} colorIndex={i} size={36} />
             <div className="amr-info">
               <div className="amr-name">
                 {m.pseudo}

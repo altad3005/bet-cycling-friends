@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { memberProfileApi, type MemberProfileRace } from '../api/memberProfile'
 import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
-import { initials, avatarColor } from '../utils/ui'
+import Avatar from '../components/Avatar'
 import AppShell from '../components/AppShell'
 
 const DATE_FMT = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -62,7 +62,6 @@ export default function MemberProfilePage() {
   })
 
   const isMe = data?.user.id === currentUser?.id
-  const col = avatarColor(0)
 
   return (
     <AppShell activePage="members" pageTitle={data?.user.pseudo ?? 'Profil'} backPath="-1">
@@ -83,14 +82,7 @@ export default function MemberProfilePage() {
             alignItems: 'center',
             gap: '1.25rem',
           }}>
-            <div style={{
-              width: 56, height: 56, borderRadius: '50%',
-              background: col.bg, color: col.color,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 20, fontWeight: 700, flexShrink: 0,
-            }}>
-              {initials(data.user.pseudo)}
-            </div>
+            <Avatar pseudo={data.user.pseudo} icon={data.user.icon} colorIndex={0} size={56} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                 <div style={{ fontSize: 18, fontWeight: 700, color: '#f0ede8' }}>{data.user.pseudo}</div>
