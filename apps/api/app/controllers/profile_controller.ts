@@ -3,10 +3,12 @@ import LeagueMember from '#models/league_member'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import vine from '@vinejs/vine'
+import { PROFILE_ICONS } from '@bcf/shared'
 
 const updateProfileValidator = vine.compile(
   vine.object({
     pseudo: vine.string().trim().minLength(2).maxLength(50),
+    icon: vine.enum(PROFILE_ICONS).optional(),
   })
 )
 
@@ -17,8 +19,11 @@ export default class ProfileController {
 
   async update({ auth, request, serialize }: HttpContext) {
     const user = auth.getUserOrFail()
-    const { pseudo } = await request.validateUsing(updateProfileValidator)
+    const { pseudo, icon } = await request.validateUsing(updateProfileValidator)
     user.pseudo = pseudo
+    if (icon !== undefined) {
+      user.icon = icon
+    }
     await user.save()
     return serialize(UserTransformer.transform(user))
   }
