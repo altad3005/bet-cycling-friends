@@ -12,3 +12,6 @@ __pycache__/
 
 # TypeScript incremental build info
 *.tsbuildinfo
+
+# Brainstorming visual companion
+.superpowers/
