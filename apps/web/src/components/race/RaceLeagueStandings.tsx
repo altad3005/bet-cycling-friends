@@ -107,7 +107,7 @@ export default function RaceLeagueStandings({
                       <div className="result-rank-col">
                         <span className={`result-rank${row.rank <= 3 ? ` r${row.rank}` : ''}`}>{row.rank}</span>
                       </div>
-                      <Avatar pseudo={row.pseudo} icon={row.icon} colorIndex={row.rank - 1} size={30} />
+                      <Avatar pseudo={row.pseudo} icon={row.icon} colorIndex={row.rank - 1} size={32} />
                       <div className="result-main">
                         <div className="result-name">
                           {row.pseudo}

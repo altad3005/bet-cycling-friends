@@ -15,6 +15,8 @@ export default function ProfileIconPicker({ value, onSelect }: ProfileIconPicker
           <button
             key={id}
             type="button"
+            aria-label={id}
+            aria-pressed={selected}
             onClick={() => onSelect(id)}
             style={{
               aspectRatio: '1',
