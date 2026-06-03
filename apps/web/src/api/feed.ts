@@ -15,9 +15,17 @@ export interface FeedEvent {
   winnerPoints?: number
 }
 
+export interface FeedPage {
+  events: FeedEvent[]
+  hasMore: boolean
+}
+
 export const feedApi = {
-  league: (leagueId: string, limit?: number) =>
-    api.get<{ data: { events: FeedEvent[] } }>(
-      `/leagues/${leagueId}/feed${limit ? `?limit=${limit}` : ''}`
-    ),
+  league: (leagueId: string, params?: { limit?: number; offset?: number }) => {
+    const qs = new URLSearchParams()
+    if (params?.limit != null) qs.set('limit', String(params.limit))
+    if (params?.offset != null) qs.set('offset', String(params.offset))
+    const suffix = qs.toString() ? `?${qs.toString()}` : ''
+    return api.get<{ data: FeedPage }>(`/leagues/${leagueId}/feed${suffix}`)
+  },
 }
