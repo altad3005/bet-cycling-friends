@@ -216,6 +216,12 @@ const routes = {
     tokens: [{"old":"/api/leagues/:id/feed","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/feed","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/feed","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/feed","type":0,"val":"feed","end":""}],
     types: placeholder as Registry['feed.league_feed']['types'],
   },
+  'form.league_form': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/form',
+    tokens: [{"old":"/api/leagues/:id/form","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/form","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/form","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/form","type":0,"val":"form","end":""}],
+    types: placeholder as Registry['form.league_form']['types'],
+  },
   'member_profile.show': {
     methods: ["GET","HEAD"],
     pattern: '/api/leagues/:id/members/:userId/profile',
@@ -269,6 +275,12 @@ const routes = {
     pattern: '/api/leagues/:id/races/:raceId/stage/:n/standings',
     tokens: [{"old":"/api/leagues/:id/races/:raceId/stage/:n/standings","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/races/:raceId/stage/:n/standings","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/races/:raceId/stage/:n/standings","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/races/:raceId/stage/:n/standings","type":0,"val":"races","end":""},{"old":"/api/leagues/:id/races/:raceId/stage/:n/standings","type":1,"val":"raceId","end":""},{"old":"/api/leagues/:id/races/:raceId/stage/:n/standings","type":0,"val":"stage","end":""},{"old":"/api/leagues/:id/races/:raceId/stage/:n/standings","type":1,"val":"n","end":""},{"old":"/api/leagues/:id/races/:raceId/stage/:n/standings","type":0,"val":"standings","end":""}],
     types: placeholder as Registry['standings.stage_standings']['types'],
+  },
+  'standings.gc_standings': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/leagues/:id/races/:raceId/gc/standings',
+    tokens: [{"old":"/api/leagues/:id/races/:raceId/gc/standings","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/races/:raceId/gc/standings","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/races/:raceId/gc/standings","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/races/:raceId/gc/standings","type":0,"val":"races","end":""},{"old":"/api/leagues/:id/races/:raceId/gc/standings","type":1,"val":"raceId","end":""},{"old":"/api/leagues/:id/races/:raceId/gc/standings","type":0,"val":"gc","end":""},{"old":"/api/leagues/:id/races/:raceId/gc/standings","type":0,"val":"standings","end":""}],
+    types: placeholder as Registry['standings.gc_standings']['types'],
   },
   'standings.global_standings': {
     methods: ["GET","HEAD"],

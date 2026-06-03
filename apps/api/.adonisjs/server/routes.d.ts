@@ -39,6 +39,7 @@ export type ScannedRoutes = {
     'bet.league_bets': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'stats.league_stats': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'feed.league_feed': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'form.league_form': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'member_profile.show': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.monument_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -48,6 +49,7 @@ export type ScannedRoutes = {
     'standings.championnat_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
+    'standings.gc_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.global_standings': { paramsTuple?: []; params?: {} }
     'race_sync.sync': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'race_snapshot.snapshot_costs': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -71,6 +73,7 @@ export type ScannedRoutes = {
     'bet.league_bets': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'stats.league_stats': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'feed.league_feed': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'form.league_form': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'member_profile.show': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.monument_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -80,6 +83,7 @@ export type ScannedRoutes = {
     'standings.championnat_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
+    'standings.gc_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.global_standings': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
@@ -100,6 +104,7 @@ export type ScannedRoutes = {
     'bet.league_bets': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'stats.league_stats': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'feed.league_feed': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'form.league_form': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'member_profile.show': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'userId': ParamValue} }
     'standings.league_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.monument_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -109,6 +114,7 @@ export type ScannedRoutes = {
     'standings.championnat_standings': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'standings.race_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.stage_standings': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue,'n': ParamValue} }
+    'standings.gc_standings': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'raceId': ParamValue} }
     'standings.global_standings': { paramsTuple?: []; params?: {} }
   }
   POST: {
