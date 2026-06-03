@@ -7,6 +7,7 @@ export interface LeagueStanding {
   icon: string
   totalPoints: number
   racesPlayed: number
+  rankDelta?: number | null
 }
 
 export interface GlobalStanding {
