@@ -7,7 +7,7 @@ import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
 import { useLeagueStore } from '../stores/league'
 import AppShell from '../components/AppShell'
-import { initials, avatarColor } from '../utils/ui'
+import Avatar from '../components/Avatar'
 import './HomePage.css'
 import './MembersPage.css'
 import './AdminPage.css'
@@ -98,16 +98,13 @@ export default function MembersPage() {
           {enriched.map((m) => {
             const isMe = m.userId === user?.id
             const rankIdx = (m.rank ?? 999) - 1
-            const col = avatarColor(m.colorIndex)
             return (
               <div key={m.userId} className={`members-row${isMe ? ' me' : ''}`} style={{ cursor: 'pointer' }} onClick={() => navigate(`/members/${m.userId}`)}>
                 <div className={`mcol-rank rank-num ${RANK_CLASSES[rankIdx] ?? ''}`}>
                   {m.rank ?? '—'}
                 </div>
                 <div className="mcol-avatar">
-                  <div className="m-avatar" style={{ background: col.bg, color: col.color }}>
-                    {initials(m.pseudo ?? '?')}
-                  </div>
+                  <Avatar pseudo={m.pseudo ?? '?'} icon={m.icon} colorIndex={m.colorIndex} size={32} />
                 </div>
                 <div className="mcol-name">
                   <span className="m-pseudo">{m.pseudo}</span>

@@ -1,5 +1,5 @@
 import type { LeagueStanding } from '../../api/standings'
-import { initials, avatarColor } from '../../utils/ui'
+import Avatar from '../Avatar'
 
 const PODIUM_CLASSES = ['g', 's', 'b', '']
 
@@ -21,13 +21,10 @@ export default function Top4Panel({ standings, userId }: Props) {
         <div className="last-race-label">Points cumulés</div>
         {top4.map((row, i) => {
           const isMe = row.userId === userId
-          const col  = avatarColor(i)
           return (
             <div key={row.userId} className="podium-row">
               <div className={`podium-pos ${PODIUM_CLASSES[i] ?? ''}`}>{row.rank}</div>
-              <div className="podium-av" style={{ background: col.bg, color: col.color }}>
-                {initials(row.pseudo ?? '?')}
-              </div>
+              <Avatar pseudo={row.pseudo ?? '?'} icon={row.icon} colorIndex={i} size={26} />
               <div className="podium-info">
                 <div className="podium-name">
                   {row.pseudo}

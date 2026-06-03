@@ -5,7 +5,7 @@ import { standingsApi, type StageStanding } from '../api/standings'
 import { useLeague } from '../hooks/useLeague'
 import { useAuthStore } from '../stores/auth'
 import AppShell from '../components/AppShell'
-import { initials, avatarColor } from '../utils/ui'
+import Avatar from '../components/Avatar'
 import './RacePage.css'
 
 export default function StageResultPage() {
@@ -75,14 +75,11 @@ export default function StageResultPage() {
               <div className="gt-stage-standings">
                 {stageStandings.map((row: StageStanding) => {
                   const isMe = row.userId === user?.id
-                  const col = avatarColor(row.rank - 1)
                   return (
                     <div key={row.userId} className={`gt-stage-row${isMe ? ' me' : ''}`}>
                       <div className="gt-stage-header">
                         <div className="rs-rank">{row.rank}</div>
-                        <div className="rs-avatar" style={{ background: col.bg, color: col.color }}>
-                          {initials(row.pseudo)}
-                        </div>
+                        <Avatar pseudo={row.pseudo} icon={row.icon} colorIndex={row.rank - 1} size={30} />
                         <div className="rs-pseudo">
                           {row.pseudo}
                           {isMe && <span className="me-badge">Moi</span>}

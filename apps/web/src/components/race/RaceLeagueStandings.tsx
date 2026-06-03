@@ -3,7 +3,8 @@ import { RaceStatus } from '@bcf/shared'
 import type { RaceResponse } from '../../api/races'
 import type { RaceStanding } from '../../api/standings'
 import type { BetResponse, BetClassicResponse, BetGrandTourResponse } from '../../api/bets'
-import { initials, avatarColor, DATE_FMT, TIME_FMT } from '../../utils/ui'
+import { DATE_FMT, TIME_FMT } from '../../utils/ui'
+import Avatar from '../Avatar'
 
 interface RaceResult {
   rank: number
@@ -92,7 +93,6 @@ export default function RaceLeagueStandings({
             <div className="results-list">
               {raceStandings.map((row) => {
                 const isMe = row.userId === userId
-                const col  = avatarColor(row.rank - 1)
                 const bet  = leagueBetsData?.raceStarted
                   ? leagueBetsData.bets.find((b) => b.userId === row.userId)
                   : undefined
@@ -107,9 +107,7 @@ export default function RaceLeagueStandings({
                       <div className="result-rank-col">
                         <span className={`result-rank${row.rank <= 3 ? ` r${row.rank}` : ''}`}>{row.rank}</span>
                       </div>
-                      <div className="result-avatar" style={{ background: col.bg, color: col.color }}>
-                        {initials(row.pseudo)}
-                      </div>
+                      <Avatar pseudo={row.pseudo} icon={row.icon} colorIndex={row.rank - 1} size={32} />
                       <div className="result-main">
                         <div className="result-name">
                           {row.pseudo}
@@ -179,7 +177,6 @@ export default function RaceLeagueStandings({
           <div className="results-list">
             {raceStandings.map((row) => {
               const isMe = row.userId === userId
-              const col  = avatarColor(row.rank - 1)
               const bet  = leagueBetsData?.raceStarted
                 ? leagueBetsData.bets.find((b) => b.userId === row.userId)
                 : undefined
@@ -189,9 +186,7 @@ export default function RaceLeagueStandings({
                   <div className="result-rank-col">
                     <span className={`result-rank${row.rank <= 3 ? ` r${row.rank}` : ''}`}>{row.rank}</span>
                   </div>
-                  <div className="result-avatar" style={{ background: col.bg, color: col.color }}>
-                    {initials(row.pseudo)}
-                  </div>
+                  <Avatar pseudo={row.pseudo} icon={row.icon} colorIndex={row.rank - 1} size={32} />
                   <div className="result-main">
                     <div className="result-name">
                       {row.pseudo}

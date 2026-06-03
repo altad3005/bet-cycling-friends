@@ -6,7 +6,7 @@ import { useLeague } from '../hooks/useLeague'
 import { useLeagueStore } from '../stores/league'
 import { standingsApi, type LeagueStanding } from '../api/standings'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { initials, avatarColor } from '../utils/ui'
+import Avatar from './Avatar'
 import '../pages/HomePage.css'
 
 export type ActivePage = 'dashboard' | 'standings' | 'calendar' | 'bets' | 'stats' | 'members' | 'admin' | 'profile'
@@ -122,7 +122,7 @@ export default function AppShell({ activePage, pageTitle, topbarRight, backPath,
       ) : (
         <div className="mobile-logo">BCF</div>
       )}
-      <div className="mobile-avatar" onClick={() => handleNav('/profile')} style={{ cursor: 'pointer' }}>{initials(user?.pseudo ?? '?')}</div>
+      <div className="mobile-avatar" onClick={() => handleNav('/profile')} style={{ cursor: 'pointer' }}><Avatar pseudo={user?.pseudo ?? '?'} icon={user?.icon} colorIndex={0} size={26} /></div>
     </div>
   )
 
@@ -253,7 +253,7 @@ export default function AppShell({ activePage, pageTitle, topbarRight, backPath,
           onClick={() => handleNav('/profile')}
           title="Mon profil"
         >
-          {initials(user?.pseudo ?? '?')}
+          <Avatar pseudo={user?.pseudo ?? '?'} icon={user?.icon} colorIndex={0} size={30} />
         </div>
         <div className="me-info" style={{ cursor: 'pointer' }} onClick={() => handleNav('/profile')}>
           <div className="me-name">{user?.pseudo}</div>

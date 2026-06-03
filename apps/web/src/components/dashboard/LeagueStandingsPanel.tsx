@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import type { LeagueStanding } from '../../api/standings'
-import { initials, avatarColor } from '../../utils/ui'
+import Avatar from '../Avatar'
 
 const RANK_CLASSES = ['g', 's', 'b']
 
@@ -40,15 +40,12 @@ export default function LeagueStandingsPanel({ standings, userId }: Props) {
 
           {visible.map((row, i) => {
             const isMe     = row.userId === userId
-            const col      = avatarColor(i)
             const barPct   = maxPts > 0 ? Math.round((row.totalPoints / maxPts) * 100) : 0
             const barColor = i === 0 ? '#e8c96d' : i === 1 ? '#b0b8c8' : i === 2 ? '#cd7f32' : '#e8c96d'
             return (
               <div key={row.userId} className={`standings-row${isMe ? ' me' : ''}`} style={{ cursor: 'pointer' }} onClick={() => navigate(`/members/${row.userId}`)}>
                 <div className={`s-rank ${RANK_CLASSES[i] ?? ''}`}>{row.rank}</div>
-                <div className="s-avatar" style={{ background: col.bg, color: col.color }}>
-                  {initials(row.pseudo ?? '?')}
-                </div>
+                <Avatar pseudo={row.pseudo ?? '?'} icon={row.icon} colorIndex={i} size={28} />
                 <div className="s-name">
                   {row.pseudo}
                   {isMe && <span className="me-badge">Moi</span>}

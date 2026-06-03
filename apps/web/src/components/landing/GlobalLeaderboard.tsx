@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type { GlobalStanding } from '../../api/standings'
-import { initials, avatarColor } from '../../utils/ui'
+import Avatar from '../Avatar'
 
 const RANK_CLASSES = ['gold', 'silver', 'bronze', '', '', '']
 const BAR_COLORS   = ['#e8c96d', '#b0b8c8', '#cd7f32', '#e8c96d', '#e8c96d', '#e8c96d']
@@ -44,7 +44,6 @@ export default function GlobalLeaderboard() {
         <tbody>
           {top6.length > 0 ? (
             top6.map((row, i) => {
-              const col = avatarColor(i)
               return (
                 <tr key={row.userId}>
                   <td>
@@ -52,9 +51,7 @@ export default function GlobalLeaderboard() {
                   </td>
                   <td>
                     <div className="bcf-player-cell">
-                      <div className="bcf-avatar" style={{ background: col.bg, color: col.color }}>
-                        {initials(row.pseudo ?? '?')}
-                      </div>
+                      <Avatar pseudo={row.pseudo ?? '?'} icon={row.icon} colorIndex={i} size={32} />
                       <div className="bcf-player-name">
                         {row.pseudo}
                         {i === 0 && <span className="bcf-badge">Top 1</span>}

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { standingsApi, type LeagueStanding, type GlobalStanding } from '../api/standings'
 import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
-import { initials, avatarColor } from '../utils/ui'
+import Avatar from '../components/Avatar'
 import AppShell from '../components/AppShell'
 import './StandingsPage.css'
 
@@ -185,12 +185,9 @@ export default function StandingsPage() {
       {!search && top3.length > 0 && (
         <div className="standings-hero">
           {top3.map((row, i) => {
-            const col = avatarColor(i)
             return (
               <div key={row.userId} className={`hero-card${row.userId === user?.id ? ' highlight' : ''}`} style={{ cursor: tab !== 'global' ? 'pointer' : 'default' }} onClick={() => tab !== 'global' && navigate(`/members/${row.userId}`)}>
-                <div className="hero-avatar" style={{ background: col.bg, color: col.color }}>
-                  {initials(row.pseudo)}
-                </div>
+                <Avatar pseudo={row.pseudo} icon={row.icon} colorIndex={i} size={36} />
                 <div className="hero-info">
                   <div className="hero-label">{i === 0 ? '1er' : i === 1 ? '2e' : '3e'}</div>
                   <div className="hero-name">{row.pseudo}</div>
@@ -219,7 +216,6 @@ export default function StandingsPage() {
         ) : (
           filtered.map((row, i) => {
             const isMe = row.userId === user?.id
-            const col = avatarColor(i)
             const val = rowVal(row)
             const pct = maxVal > 0 ? (val / maxVal) * 100 : 0
             const bColor = barColor(row.rank)
@@ -229,9 +225,7 @@ export default function StandingsPage() {
                 <div className={`full-rank ${rankClass(row.rank)}`}>{row.rank}</div>
 
                 <div className="full-player">
-                  <div className="full-avatar" style={{ background: col.bg, color: col.color }}>
-                    {initials(row.pseudo)}
-                  </div>
+                  <Avatar pseudo={row.pseudo} icon={row.icon} colorIndex={i} size={30} />
                   <div className="full-name">
                     {row.pseudo}
                     {isMe && <span className="me-badge" style={{ marginLeft: 6 }}>Moi</span>}
@@ -261,16 +255,13 @@ export default function StandingsPage() {
           </div>
           <div className="standings-panel">
             {(() => {
-              const col = avatarColor(myRow.rank - 1)
               const val = rowVal(myRow)
               const pct = maxVal > 0 ? (val / maxVal) * 100 : 0
               return (
                 <div className="standings-full-row me" style={{ cursor: tab !== 'global' ? 'pointer' : 'default' }} onClick={() => tab !== 'global' && navigate(`/members/${myRow.userId}`)}>
                   <div className={`full-rank ${rankClass(myRow.rank)}`}>{myRow.rank}</div>
                   <div className="full-player">
-                    <div className="full-avatar" style={{ background: col.bg, color: col.color }}>
-                      {initials(myRow.pseudo)}
-                    </div>
+                    <Avatar pseudo={myRow.pseudo} icon={myRow.icon} colorIndex={myRow.rank - 1} size={30} />
                     <div className="full-name">
                       {myRow.pseudo}
                       <span className="me-badge" style={{ marginLeft: 6 }}>Moi</span>

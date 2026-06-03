@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { statsApi, type RaceStat, type PlayerStat } from '../api/stats'
 import { useLeague } from '../hooks/useLeague'
-import { initials, avatarColor } from '../utils/ui'
+import Avatar from '../components/Avatar'
 import AppShell from '../components/AppShell'
 import './StatsPage.css'
 
@@ -401,17 +401,11 @@ export default function StatsPage() {
                   </thead>
                   <tbody>
                     {stats.players.map((player, i) => {
-                      const col = avatarColor(i)
                       return (
                         <tr key={player.userId}>
                           <td>
                             <div className="player-cell">
-                              <div
-                                className="player-avatar-sm"
-                                style={{ background: col.bg, color: col.color }}
-                              >
-                                {initials(player.pseudo)}
-                              </div>
+                              <Avatar pseudo={player.pseudo} icon={player.icon} colorIndex={i} size={26} />
                               <span className="player-name">{player.pseudo}</span>
                             </div>
                           </td>

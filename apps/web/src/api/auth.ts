@@ -37,6 +37,9 @@ export const authApi = {
   // GET /account/profile: { data: { id, pseudo, ... } } (no user wrapper)
   profile: () => api.get<{ data: User }>('/account/profile'),
 
-  updateProfile: (pseudo: string) =>
-    api.put<{ data: User }>('/account/profile', { pseudo }),
+  updateProfile: (pseudo: string, icon?: string) =>
+    api.put<{ data: User }>(
+      '/account/profile',
+      icon === undefined ? { pseudo } : { pseudo, icon: icon === '' ? null : icon }
+    ),
 }
