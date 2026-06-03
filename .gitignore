@@ -12,6 +12,3 @@ __pycache__/
 
 # TypeScript incremental build info
 *.tsbuildinfo
-
-# AdonisJS generated codegen
-apps/api/.adonisjs/
