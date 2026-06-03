@@ -36,11 +36,12 @@ export default function HomePage() {
     enabled: !!activeLeague,
   })
 
-  const { data: feedEvents = [] } = useQuery({
-    queryKey: ['feed', 'league', activeLeague?.id, 5],
-    queryFn: () => feedApi.league(activeLeague!.id, 5).then((r) => r.data.data.events),
+  const { data: feed } = useQuery({
+    queryKey: ['feed', 'league', activeLeague?.id, 'preview'],
+    queryFn: () => feedApi.league(activeLeague!.id, { limit: 5 }).then((r) => r.data.data),
     enabled: !!activeLeague,
   })
+  const feedEvents = feed?.events ?? []
 
   if (isLoading) return null
 
@@ -107,7 +108,7 @@ export default function HomePage() {
         <UpcomingRacesPanel races={leagueRaces} />
       </div>
 
-      <ActivityFeedPanel events={feedEvents} hasMore={feedEvents.length >= 5} />
+      <ActivityFeedPanel events={feedEvents} hasMore={feed?.hasMore ?? false} />
 
     </AppShell>
 

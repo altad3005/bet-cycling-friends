@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
+import { useEffect, useRef } from 'react'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { feedApi, type FeedEvent } from '../api/feed'
 import { useLeague } from '../hooks/useLeague'
 import { initials, avatarColor } from '../utils/ui'
@@ -97,14 +98,34 @@ function FeedEventCard({ event, isLast }: { event: FeedEvent; isLast?: boolean }
   )
 }
 
+const PAGE_SIZE = 20
+
 export default function FeedPage() {
   const { activeLeague } = useLeague()
 
-  const { data: events = [], isLoading } = useQuery({
-    queryKey: ['feed', 'league', activeLeague?.id, 50],
-    queryFn: () => feedApi.league(activeLeague!.id, 50).then((r) => r.data.data.events),
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery({
+    queryKey: ['feed', 'league', activeLeague?.id],
+    queryFn: ({ pageParam }) =>
+      feedApi.league(activeLeague!.id, { limit: PAGE_SIZE, offset: pageParam }).then((r) => r.data.data),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => (lastPage.hasMore ? allPages.length * PAGE_SIZE : undefined),
     enabled: !!activeLeague,
   })
+
+  const events = data?.pages.flatMap((p) => p.events) ?? []
+
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const node = sentinelRef.current
+    if (!node) return
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage()
+      }
+    })
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   return (
     <AppShell activePage="dashboard" pageTitle="Activité" backPath="-1">
@@ -115,9 +136,15 @@ export default function FeedPage() {
           ) : events.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '2rem', fontSize: 13, color: 'rgba(240,237,232,0.3)' }}>Aucune activité pour l'instant.</div>
           ) : (
-            events.map((event, i) => (
-              <FeedEventCard key={`${event.type}-${event.at}-${i}`} event={event} isLast={i === events.length - 1} />
-            ))
+            <>
+              {events.map((event, i) => (
+                <FeedEventCard key={`${event.type}-${event.at}-${i}`} event={event} isLast={i === events.length - 1} />
+              ))}
+              <div ref={sentinelRef} style={{ height: 1 }} />
+              {isFetchingNextPage && (
+                <div style={{ textAlign: 'center', padding: '1rem', fontSize: 12, color: 'rgba(240,237,232,0.3)' }}>Chargement…</div>
+              )}
+            </>
           )}
         </div>
       </div>
