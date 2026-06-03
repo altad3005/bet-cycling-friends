@@ -7,3 +7,11 @@ __pycache__/
 *.pyc
 .venv/
 .claude/
+# Turbo
+.turbo/
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# AdonisJS generated codegen
+apps/api/.adonisjs/
