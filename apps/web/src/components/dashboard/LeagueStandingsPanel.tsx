@@ -9,6 +9,17 @@ interface Props {
   userId:    string
 }
 
+function RankArrow({ delta }: { delta?: number | null }) {
+  if (!delta) return null
+  const up = delta > 0
+  return (
+    <span style={{ marginLeft: 6, fontSize: 11, fontWeight: 600, color: up ? '#82c99a' : '#f0816a' }}>
+      {up ? '▲' : '▼'}
+      {Math.abs(delta)}
+    </span>
+  )
+}
+
 export default function LeagueStandingsPanel({ standings, userId }: Props) {
   const navigate   = useNavigate()
   const maxPts     = standings[0]?.totalPoints ?? 1
@@ -49,6 +60,7 @@ export default function LeagueStandingsPanel({ standings, userId }: Props) {
                 <div className="s-name">
                   {row.pseudo}
                   {isMe && <span className="me-badge">Moi</span>}
+                  <RankArrow delta={row.rankDelta} />
                 </div>
                 <div className="s-races">{row.racesPlayed}</div>
                 <div className="s-bar">
