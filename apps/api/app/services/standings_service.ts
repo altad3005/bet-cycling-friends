@@ -1,5 +1,6 @@
 import { SCORING_TABLE, MULTIPLIERS, MultiplierType } from '@bcf/shared'
 import db from '@adonisjs/lucid/services/db'
+import { computeRankDeltas } from '#services/rank_movement'
 import StageResult from '#models/stage_result'
 import BetGrandTour from '#models/bet_grand_tour'
 import LeagueMember from '#models/league_member'
@@ -32,7 +33,7 @@ export default class StandingsService {
       [leagueId, leagueId, leagueId]
     )
 
-    return this.withSharedRanks(
+    const standings = this.withSharedRanks(
       result.rows.map((row) => ({
         userId: row.user_id,
         pseudo: row.pseudo,
@@ -42,6 +43,49 @@ export default class StandingsService {
       })),
       (a, b) => a.totalPoints === b.totalPoints && a.racesPlayed === b.racesPlayed
     )
+
+    const previousRankByUser = await this.getPreviousRankByUser(leagueId, standings)
+    const currentRankByUser = new Map(standings.map((s) => [s.userId, s.rank]))
+    const deltas = computeRankDeltas(currentRankByUser, previousRankByUser)
+
+    return standings.map((s) => ({ ...s, rankDelta: deltas.get(s.userId) ?? null }))
+  }
+
+  private async getPreviousRankByUser(
+    leagueId: string,
+    standings: { userId: string; totalPoints: number }[]
+  ): Promise<Map<string, number>> {
+    const scoredRaces = await db
+      .from('scores')
+      .join('races', 'races.id', 'scores.race_id')
+      .where('scores.league_id', leagueId)
+      .distinct('scores.race_id')
+      .select('scores.race_id', 'races.start_at')
+      .orderBy('races.start_at', 'desc')
+
+    if (scoredRaces.length < 2) return new Map()
+
+    const latestRaceId = scoredRaces[0].race_id as string
+
+    const latestScores = await db
+      .from('scores')
+      .where('league_id', leagueId)
+      .where('race_id', latestRaceId)
+      .select('user_id', 'points')
+
+    const latestPointsByUser = new Map<string, number>(
+      latestScores.map((s: any) => [s.user_id as string, Number(s.points)])
+    )
+
+    const previousTotals = standings
+      .map((s) => ({
+        userId: s.userId,
+        totalPoints: s.totalPoints - (latestPointsByUser.get(s.userId) ?? 0),
+      }))
+      .sort((a, b) => b.totalPoints - a.totalPoints)
+
+    const ranked = this.withSharedRanks(previousTotals, (a, b) => a.totalPoints === b.totalPoints)
+    return new Map(ranked.map((r) => [r.userId, r.rank]))
   }
 
   async getRaceStandings(leagueId: string, raceId: string) {
