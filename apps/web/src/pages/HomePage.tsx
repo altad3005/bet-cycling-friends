@@ -11,6 +11,7 @@ import AppShell from '../components/AppShell'
 import NoLeagueState from '../components/dashboard/NoLeagueState'
 import NextRaceBanner from '../components/dashboard/NextRaceBanner'
 import StatGrid from '../components/dashboard/StatGrid'
+import FormPanel from '../components/dashboard/FormPanel'
 import LeagueStandingsPanel from '../components/dashboard/LeagueStandingsPanel'
 import UpcomingRacesPanel from '../components/dashboard/UpcomingRacesPanel'
 import ActivityFeedPanel from '../components/dashboard/ActivityFeedPanel'
@@ -98,6 +99,8 @@ export default function HomePage() {
         memberCount={activeLeague.memberCount ?? 0}
         userId={user?.id ?? ''}
       />
+
+      <FormPanel />
 
       <div className="two-col">
         <LeagueStandingsPanel

@@ -7,6 +7,7 @@ export const controllers = {
   AccessToken: () => import('#controllers/access_token_controller'),
   Bet: () => import('#controllers/bet_controller'),
   Feed: () => import('#controllers/feed_controller'),
+  Form: () => import('#controllers/form_controller'),
   GoogleAuth: () => import('#controllers/google_auth_controller'),
   League: () => import('#controllers/league_controller'),
   LeagueMember: () => import('#controllers/league_member_controller'),

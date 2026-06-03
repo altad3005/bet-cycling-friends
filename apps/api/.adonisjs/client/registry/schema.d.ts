@@ -427,6 +427,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/feed_controller').default['leagueFeed']>>>
     }
   }
+  'form.league_form': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/form'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/form_controller').default['leagueForm']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/form_controller').default['leagueForm']>>>
+    }
+  }
   'member_profile.show': {
     methods: ["GET","HEAD"]
     pattern: '/api/leagues/:id/members/:userId/profile'
@@ -533,6 +545,18 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['stageStandings']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['stageStandings']>>>
+    }
+  }
+  'standings.gc_standings': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/leagues/:id/races/:raceId/gc/standings'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; raceId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['gcStandings']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/standings_controller').default['gcStandings']>>>
     }
   }
   'standings.global_standings': {

@@ -69,6 +69,9 @@ export interface ApiDefinition {
   feed: {
     leagueFeed: typeof routes['feed.league_feed']
   }
+  form: {
+    leagueForm: typeof routes['form.league_form']
+  }
   memberProfile: {
     show: typeof routes['member_profile.show']
   }
@@ -81,6 +84,7 @@ export interface ApiDefinition {
     championnatStandings: typeof routes['standings.championnat_standings']
     raceStandings: typeof routes['standings.race_standings']
     stageStandings: typeof routes['standings.stage_standings']
+    gcStandings: typeof routes['standings.gc_standings']
     globalStandings: typeof routes['standings.global_standings']
   }
   raceSync: {
