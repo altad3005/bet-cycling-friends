@@ -69,9 +69,6 @@ export interface ApiDefinition {
   feed: {
     leagueFeed: typeof routes['feed.league_feed']
   }
-  form: {
-    leagueForm: typeof routes['form.league_form']
-  }
   memberProfile: {
     show: typeof routes['member_profile.show']
   }

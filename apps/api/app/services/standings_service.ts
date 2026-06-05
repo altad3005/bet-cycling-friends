@@ -53,12 +53,20 @@ export default class StandingsService {
 
   private async getPreviousRankByUser(
     leagueId: string,
-    standings: { userId: string; totalPoints: number }[]
+    standings: { userId: string; totalPoints: number }[],
+    filterKey?: 'monument' | 'grand-tour' | 'classic' | 'stage-race' | 'championnat'
   ): Promise<Map<string, number>> {
-    const scoredRaces = await db
+    const scoredRacesQuery = db
       .from('scores')
       .join('races', 'races.id', 'scores.race_id')
       .where('scores.league_id', leagueId)
+
+    if (filterKey) {
+      const { sql, bindings } = this.buildRaceFilter(filterKey, 'races')
+      scoredRacesQuery.whereRaw(sql, bindings)
+    }
+
+    const scoredRaces = await scoredRacesQuery
       .distinct('scores.race_id')
       .select('scores.race_id', 'races.start_at')
       .orderBy('races.start_at', 'desc')
@@ -224,14 +232,15 @@ export default class StandingsService {
   }
 
   private buildRaceFilter(
-    key: 'monument' | 'grand-tour' | 'classic' | 'stage-race' | 'championnat'
-  ): { sql: string; bindings: unknown[] } {
+    key: 'monument' | 'grand-tour' | 'classic' | 'stage-race' | 'championnat',
+    alias = 'r'
+  ): { sql: string; bindings: (string | boolean)[] } {
     switch (key) {
-      case 'monument':   return { sql: 'r.multiplier_type = ?',                      bindings: ['monument'] }
-      case 'grand-tour': return { sql: 'r.is_grand_tour = ?',                         bindings: [true] }
-      case 'classic':    return { sql: 'r.multiplier_type = ?',                      bindings: ['wt_classic'] }
-      case 'stage-race': return { sql: 'r.race_type = ? AND r.is_grand_tour = ?',    bindings: ['stage_race', false] }
-      case 'championnat':return { sql: 'r.race_type IN (?, ?)',                       bindings: ['national', 'worlds'] }
+      case 'monument':   return { sql: `${alias}.multiplier_type = ?`,                          bindings: ['monument'] }
+      case 'grand-tour': return { sql: `${alias}.is_grand_tour = ?`,                            bindings: [true] }
+      case 'classic':    return { sql: `${alias}.multiplier_type = ?`,                          bindings: ['wt_classic'] }
+      case 'stage-race': return { sql: `${alias}.race_type = ? AND ${alias}.is_grand_tour = ?`, bindings: ['stage_race', false] }
+      case 'championnat':return { sql: `${alias}.race_type IN (?, ?)`,                           bindings: ['national', 'worlds'] }
     }
   }
 
@@ -265,7 +274,7 @@ export default class StandingsService {
       [...filterBindings, leagueId, leagueId]
     )
 
-    return this.withSharedRanks(
+    const standings = this.withSharedRanks(
       result.rows.map((row) => ({
         userId: row.user_id,
         pseudo: row.pseudo,
@@ -275,6 +284,12 @@ export default class StandingsService {
       })),
       (a, b) => a.totalPoints === b.totalPoints && a.racesPlayed === b.racesPlayed
     )
+
+    const previousRankByUser = await this.getPreviousRankByUser(leagueId, standings, filterKey)
+    const currentRankByUser = new Map(standings.map((s) => [s.userId, s.rank]))
+    const deltas = computeRankDeltas(currentRankByUser, previousRankByUser)
+
+    return standings.map((s) => ({ ...s, rankDelta: deltas.get(s.userId) ?? null }))
   }
 
   async getGlobalStandings() {

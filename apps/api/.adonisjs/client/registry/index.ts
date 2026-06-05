@@ -216,12 +216,6 @@ const routes = {
     tokens: [{"old":"/api/leagues/:id/feed","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/feed","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/feed","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/feed","type":0,"val":"feed","end":""}],
     types: placeholder as Registry['feed.league_feed']['types'],
   },
-  'form.league_form': {
-    methods: ["GET","HEAD"],
-    pattern: '/api/leagues/:id/form',
-    tokens: [{"old":"/api/leagues/:id/form","type":0,"val":"api","end":""},{"old":"/api/leagues/:id/form","type":0,"val":"leagues","end":""},{"old":"/api/leagues/:id/form","type":1,"val":"id","end":""},{"old":"/api/leagues/:id/form","type":0,"val":"form","end":""}],
-    types: placeholder as Registry['form.league_form']['types'],
-  },
   'member_profile.show': {
     methods: ["GET","HEAD"],
     pattern: '/api/leagues/:id/members/:userId/profile',

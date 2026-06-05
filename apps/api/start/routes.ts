@@ -89,10 +89,6 @@ router
       .use(middleware.auth())
 
     router
-      .get('/leagues/:id/form', [controllers.Form, 'leagueForm'])
-      .use(middleware.auth())
-
-    router
       .get('/leagues/:id/members/:userId/profile', [controllers.MemberProfile, 'show'])
       .use(middleware.auth())
 

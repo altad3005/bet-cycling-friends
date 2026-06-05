@@ -6,6 +6,7 @@ import { useAuthStore } from '../stores/auth'
 import { useLeague } from '../hooks/useLeague'
 import Avatar from '../components/Avatar'
 import AppShell from '../components/AppShell'
+import RankDelta from '../components/RankDelta'
 import './StandingsPage.css'
 
 type Tab = 'global' | 'league'
@@ -229,6 +230,7 @@ export default function StandingsPage() {
                   <div className="full-name">
                     {row.pseudo}
                     {isMe && <span className="me-badge" style={{ marginLeft: 6 }}>Moi</span>}
+                    {tab === 'league' && <RankDelta delta={(row as LeagueStanding).rankDelta} />}
                   </div>
                 </div>
 
@@ -265,6 +267,7 @@ export default function StandingsPage() {
                     <div className="full-name">
                       {myRow.pseudo}
                       <span className="me-badge" style={{ marginLeft: 6 }}>Moi</span>
+                      {tab === 'league' && <RankDelta delta={(myRow as LeagueStanding).rankDelta} />}
                     </div>
                   </div>
                   <div className="full-races">{myRow.racesPlayed}</div>

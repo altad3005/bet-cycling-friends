@@ -1,23 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import type { LeagueStanding } from '../../api/standings'
 import Avatar from '../Avatar'
+import RankDelta from '../RankDelta'
 
 const RANK_CLASSES = ['g', 's', 'b']
 
 interface Props {
   standings: LeagueStanding[]
   userId:    string
-}
 
-function RankArrow({ delta }: { delta?: number | null }) {
-  if (!delta) return null
-  const up = delta > 0
-  return (
-    <span style={{ marginLeft: 6, fontSize: 11, fontWeight: 600, color: up ? '#82c99a' : '#f0816a' }}>
-      {up ? '▲' : '▼'}
-      {Math.abs(delta)}
-    </span>
-  )
 }
 
 export default function LeagueStandingsPanel({ standings, userId }: Props) {
@@ -60,7 +51,7 @@ export default function LeagueStandingsPanel({ standings, userId }: Props) {
                 <div className="s-name">
                   {row.pseudo}
                   {isMe && <span className="me-badge">Moi</span>}
-                  <RankArrow delta={row.rankDelta} />
+                  <RankDelta delta={row.rankDelta} />
                 </div>
                 <div className="s-races">{row.racesPlayed}</div>
                 <div className="s-bar">
