@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import type { FeedEvent } from '../../api/feed'
-import { initials, avatarColor } from '../../utils/ui'
 
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { DateTime } from 'luxon'
-import Race from '#models/race'
+import type Race from '#models/race'
 import Rider from '#models/rider'
 import StageResult from '#models/stage_result'
 import PcsService, { type PcsStageResult } from '#services/pcs_service'

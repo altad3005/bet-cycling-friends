@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { RaceStatus, BetStatus, MultiplierType } from '@bcf/shared'
+import { useQuery } from '@tanstack/react-query'
+import { RaceStatus, MultiplierType } from '@bcf/shared'
 import { racesApi, type RaceResponse } from '../api/races'
 import { betsApi, type BetClassicResponse, type BetGrandTourResponse } from '../api/bets'
 import { standingsApi } from '../api/standings'
@@ -92,7 +92,7 @@ function BetDetail({ race }: { race: RaceResponse }) {
 
 // ── Race bet card ──────────────────────────────────────────────────────
 
-function BetCard({ race, tab, onBet, onNavigate }: { race: RaceResponse; tab: Tab; onBet?: () => void; onNavigate?: () => void }) {
+function BetCard({ race, tab, onBet }: { race: RaceResponse; tab: Tab; onBet?: () => void; onNavigate?: () => void }) {
   const [expanded, setExpanded] = useState(false)
   const urgent = isUrgent(race)
   const mult = multProps(race)

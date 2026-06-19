@@ -57,7 +57,10 @@ export default class PcsService {
     }
   }
 
-  async getStartlistWithCosts(slug: string, year = DateTime.now().year): Promise<PcsRiderWithCost[]> {
+  async getStartlistWithCosts(
+    slug: string,
+    year = DateTime.now().year
+  ): Promise<PcsRiderWithCost[]> {
     try {
       const response = await fetch(
         `${this.baseUrl}/internal/races/${slug}/startlist-with-costs?year=${year}`
@@ -69,14 +72,25 @@ export default class PcsService {
     }
   }
 
-  async getStagesInfo(slug: string, year = DateTime.now().year): Promise<{ number: number; name: string; date: string | null; profileIcon: string | null }[]> {
+  async getStagesInfo(
+    slug: string,
+    year = DateTime.now().year
+  ): Promise<{ number: number; name: string; date: string | null; profileIcon: string | null }[]> {
     try {
-      const response = await fetch(
-        `${this.baseUrl}/internal/races/${slug}/stages?year=${year}`
-      )
+      const response = await fetch(`${this.baseUrl}/internal/races/${slug}/stages?year=${year}`)
       if (!response.ok) return []
-      const data = await response.json() as { number: number; name: string; date: string | null; profile_icon: string | null }[]
-      return data.map((s) => ({ number: s.number, name: s.name, date: s.date ?? null, profileIcon: s.profile_icon ?? null }))
+      const data = (await response.json()) as {
+        number: number
+        name: string
+        date: string | null
+        profile_icon: string | null
+      }[]
+      return data.map((s) => ({
+        number: s.number,
+        name: s.name,
+        date: s.date ?? null,
+        profileIcon: s.profile_icon ?? null,
+      }))
     } catch {
       return []
     }

@@ -82,22 +82,18 @@ export default class BetService {
   private async checkGrandTourBudget(raceId: string, riderIds: string[]): Promise<void> {
     const snapshotExists = await RaceRiderCost.query().where('race_id', raceId).first()
     if (!snapshotExists) {
-      throw new Exception(
-        'Les coûts des coureurs ne sont pas encore définis pour cette course.',
-        { status: 422 }
-      )
+      throw new Exception('Les coûts des coureurs ne sont pas encore définis pour cette course.', {
+        status: 422,
+      })
     }
 
-    const costs = await RaceRiderCost.query()
-      .where('race_id', raceId)
-      .whereIn('rider_id', riderIds)
+    const costs = await RaceRiderCost.query().where('race_id', raceId).whereIn('rider_id', riderIds)
 
     const total = costs.reduce((sum, c) => sum + c.cost, 0)
     if (total > GT_RIDER_BUDGET) {
-      throw new Exception(
-        `Budget dépassé : ${total} crédits pour ${GT_RIDER_BUDGET} autorisés.`,
-        { status: 422 }
-      )
+      throw new Exception(`Budget dépassé : ${total} crédits pour ${GT_RIDER_BUDGET} autorisés.`, {
+        status: 422,
+      })
     }
   }
 

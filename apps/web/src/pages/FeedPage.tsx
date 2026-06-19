@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { feedApi, type FeedEvent } from '../api/feed'
 import { useLeague } from '../hooks/useLeague'
-import { initials, avatarColor } from '../utils/ui'
 import AppShell from '../components/AppShell'
 
 function timeAgo(dateStr: string): string {

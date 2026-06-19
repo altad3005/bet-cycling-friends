@@ -24,9 +24,8 @@ export default class ScoringService {
   }
 
   private async scoreLeagueRace(race: Race, leagueId: string): Promise<void> {
-    const memberIds = (await LeagueMember.query().where('league_id', leagueId).select('user_id')).map(
-      (m) => m.userId
-    )
+    const members = await LeagueMember.query().where('league_id', leagueId).select('user_id')
+    const memberIds = members.map((m) => m.userId)
     if (race.isGrandTour) {
       await this.scoreGrandTour(race, leagueId, memberIds)
     } else {

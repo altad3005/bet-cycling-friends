@@ -8,7 +8,11 @@ export default class StatsService {
     const totalMembers = memberIds.length
 
     if (totalMembers === 0) {
-      return { overview: { totalRaces: 0, activePlayers: 0, totalPoints: 0, avgParticipation: 0 }, races: [], players: [] }
+      return {
+        overview: { totalRaces: 0, activePlayers: 0, totalPoints: 0, avgParticipation: 0 },
+        races: [],
+        players: [],
+      }
     }
 
     // League races with race info, ordered chronologically
@@ -22,11 +26,21 @@ export default class StatsService {
     const raceIds = leagueRaceRows.map((r: any) => r.id as string)
 
     if (raceIds.length === 0) {
-      return { overview: { totalRaces: 0, activePlayers: 0, totalPoints: 0, avgParticipation: 0 }, races: [], players: [] }
+      return {
+        overview: { totalRaces: 0, activePlayers: 0, totalPoints: 0, avgParticipation: 0 },
+        races: [],
+        players: [],
+      }
     }
 
     // Scores
-    const scores: { user_id: string; race_id: string; points: string; pseudo: string; icon: string }[] = await db
+    const scores: {
+      user_id: string
+      race_id: string
+      points: string
+      pseudo: string
+      icon: string
+    }[] = await db
       .from('scores')
       .join('users', 'users.id', 'scores.user_id')
       .where('scores.league_id', leagueId)
@@ -35,8 +49,16 @@ export default class StatsService {
 
     // Bets (for participation)
     const [classicBets, gtBets] = await Promise.all([
-      db.from('bets_classic').whereIn('race_id', raceIds).whereIn('user_id', memberIds).select('user_id', 'race_id'),
-      db.from('bets_grand_tour').whereIn('race_id', raceIds).whereIn('user_id', memberIds).select('user_id', 'race_id'),
+      db
+        .from('bets_classic')
+        .whereIn('race_id', raceIds)
+        .whereIn('user_id', memberIds)
+        .select('user_id', 'race_id'),
+      db
+        .from('bets_grand_tour')
+        .whereIn('race_id', raceIds)
+        .whereIn('user_id', memberIds)
+        .select('user_id', 'race_id'),
     ])
 
     const bettedSet = new Set<string>()
@@ -48,7 +70,12 @@ export default class StatsService {
     const perRace = leagueRaceRows.map((race: any) => {
       const raceScores = scores
         .filter((s) => s.race_id === race.id)
-        .map((s) => ({ userId: s.user_id, pseudo: s.pseudo, icon: s.icon, points: Number(s.points) }))
+        .map((s) => ({
+          userId: s.user_id,
+          pseudo: s.pseudo,
+          icon: s.icon,
+          points: Number(s.points),
+        }))
 
       const bettorCount = memberIds.filter((uid) => bettedSet.has(`${uid}:${race.id}`)).length
 
@@ -64,11 +91,19 @@ export default class StatsService {
     })
 
     // Per-player
-    const playerMap = new Map<string, { userId: string; pseudo: string; icon: string; scoresByRace: Map<string, number> }>()
+    const playerMap = new Map<
+      string,
+      { userId: string; pseudo: string; icon: string; scoresByRace: Map<string, number> }
+    >()
 
     for (const s of scores) {
       if (!playerMap.has(s.user_id)) {
-        playerMap.set(s.user_id, { userId: s.user_id, pseudo: s.pseudo, icon: s.icon, scoresByRace: new Map() })
+        playerMap.set(s.user_id, {
+          userId: s.user_id,
+          pseudo: s.pseudo,
+          icon: s.icon,
+          scoresByRace: new Map(),
+        })
       }
       playerMap.get(s.user_id)!.scoresByRace.set(s.race_id, Number(s.points))
     }
@@ -100,7 +135,8 @@ export default class StatsService {
           racesPlayed,
           avgPoints,
           bestRace,
-          participationRate: raceIds.length > 0 ? Math.round((betsCount / raceIds.length) * 100) : 0,
+          participationRate:
+            raceIds.length > 0 ? Math.round((betsCount / raceIds.length) * 100) : 0,
         }
       })
       .sort((a, b) => b.totalPoints - a.totalPoints)
@@ -115,7 +151,13 @@ export default class StatsService {
         : 0
 
     return {
-      overview: { totalRaces: racesWithScores, activePlayers, totalPoints, avgParticipation, totalMembers },
+      overview: {
+        totalRaces: racesWithScores,
+        activePlayers,
+        totalPoints,
+        avgParticipation,
+        totalMembers,
+      },
       races: perRace,
       players,
     }

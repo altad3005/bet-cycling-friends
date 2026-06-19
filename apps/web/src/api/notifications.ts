@@ -1,15 +1,15 @@
-import { api } from './client'
+import { api } from "./client";
 
 export const notificationsApi = {
   vapidPublicKey: () =>
-    api.get<{ publicKey: string }>('/push/vapid-public-key'),
+    api.get<{ publicKey: string }>("/push/vapid-public-key"),
 
   subscribe: (subscription: PushSubscriptionJSON) =>
-    api.post('/account/push-subscription', {
+    api.post("/account/push-subscription", {
       endpoint: subscription.endpoint,
       keys: subscription.keys,
     }),
 
   unsubscribe: (endpoint: string) =>
-    api.delete('/account/push-subscription', { data: { endpoint } }),
-}
+    api.delete("/account/push-subscription", { data: { endpoint } }),
+};

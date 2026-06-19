@@ -31,10 +31,7 @@ export default class PushSubscriptionController {
     const user = await auth.authenticate()
     const { endpoint } = request.only(['endpoint'])
 
-    await PushSubscription.query()
-      .where('user_id', user.id)
-      .where('endpoint', endpoint)
-      .delete()
+    await PushSubscription.query().where('user_id', user.id).where('endpoint', endpoint).delete()
 
     return response.noContent()
   }

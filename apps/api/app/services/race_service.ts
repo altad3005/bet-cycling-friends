@@ -43,7 +43,11 @@ function determineRaceAttrs(
   }
 
   if (WORLDS_SLUGS.some((s) => slug.includes(s))) {
-    return { raceType: RaceType.WORLDS, multiplierType: MultiplierType.MONUMENT, isGrandTour: false }
+    return {
+      raceType: RaceType.WORLDS,
+      multiplierType: MultiplierType.MONUMENT,
+      isGrandTour: false,
+    }
   }
 
   if (MONUMENT_SLUGS.some((s) => slug.includes(s))) {
@@ -100,7 +104,9 @@ export default class RaceService {
 
     const attrs = determineRaceAttrs(slug, info)
     const startAt = info.start_date ? DateTime.fromISO(info.start_date, { zone: 'utc' }) : null
-    const endAt = info.end_date ? DateTime.fromISO(info.end_date, { zone: 'utc' }).set({ hour: 17 }) : null
+    const endAt = info.end_date
+      ? DateTime.fromISO(info.end_date, { zone: 'utc' }).set({ hour: 17 })
+      : null
     const stagesInfo = attrs.isGrandTour ? await this.pcs.getStagesInfo(slug, info.year) : []
     const stageCount = stagesInfo.length || null
 
@@ -122,7 +128,16 @@ export default class RaceService {
     )
 
     // Always refresh metadata from PCS and recompute status from dates
-    race.merge({ name: info.name, raceType: attrs.raceType, multiplierType: attrs.multiplierType, isGrandTour: attrs.isGrandTour, stageCount: stageCount ?? race.stageCount, startAt, endAt, status: computeStatus(startAt, endAt) })
+    race.merge({
+      name: info.name,
+      raceType: attrs.raceType,
+      multiplierType: attrs.multiplierType,
+      isGrandTour: attrs.isGrandTour,
+      stageCount: stageCount ?? race.stageCount,
+      startAt,
+      endAt,
+      status: computeStatus(startAt, endAt),
+    })
     await race.save()
 
     // Upsert stages in DB for GT
@@ -168,7 +183,10 @@ export default class RaceService {
 
       const costs = await RaceRiderCost.query()
         .where('race_id', race.id)
-        .whereIn('rider_id', riders.map((r) => r.id))
+        .whereIn(
+          'rider_id',
+          riders.map((r) => r.id)
+        )
 
       const costMap = new Map(costs.map((c) => [c.riderId, c]))
 
@@ -186,9 +204,7 @@ export default class RaceService {
     }
 
     // PCS indisponible : fallback sur le snapshot stocké en base
-    const snapshots = await RaceRiderCost.query()
-      .where('race_id', race.id)
-      .preload('rider')
+    const snapshots = await RaceRiderCost.query().where('race_id', race.id).preload('rider')
 
     return snapshots.map((snap) => ({
       id: snap.rider.id,
@@ -203,7 +219,10 @@ export default class RaceService {
   async snapshotRiderCosts(race: Race): Promise<void> {
     const pcsRiders = await this.pcs.getStartlistWithCosts(race.slug, race.seasonYear)
     if (pcsRiders.length === 0) {
-      throw new Exception('Impossible de récupérer la startlist depuis PCS. Réessayez dans quelques instants.', { status: 422 })
+      throw new Exception(
+        'Impossible de récupérer la startlist depuis PCS. Réessayez dans quelques instants.',
+        { status: 422 }
+      )
     }
 
     const riders = await Promise.all(

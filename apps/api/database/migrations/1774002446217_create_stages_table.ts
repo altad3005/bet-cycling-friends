@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.uuid('race_id').notNullable().references('id').inTable('races').onDelete('CASCADE')
       table.integer('number').notNullable()
       table.string('name', 200).notNullable()
-      table.string('date', 10).nullable()        // MM-DD format from PCS
+      table.string('date', 10).nullable() // MM-DD format from PCS
       table.string('profile_icon', 10).nullable() // p1..p5
       table.timestamps(true, true)
       table.unique(['race_id', 'number'])
