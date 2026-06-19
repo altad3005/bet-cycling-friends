@@ -8,7 +8,12 @@ export default class extends BaseSchema {
       table.uuid('id').primary().defaultTo(this.db.rawQuery('gen_random_uuid()').knexQuery)
       table.string('name', 100).notNullable()
       table.string('code', 20).notNullable().unique()
-      table.integer('season').notNullable().references('year').inTable('seasons').onDelete('RESTRICT')
+      table
+        .integer('season')
+        .notNullable()
+        .references('year')
+        .inTable('seasons')
+        .onDelete('RESTRICT')
       table.uuid('created_by').notNullable().references('id').inTable('users').onDelete('RESTRICT')
       table.timestamps(true, true)
     })

@@ -14,10 +14,7 @@ export default class LeagueController {
   }
 
   async show({ params, serialize }: HttpContext) {
-    const league = await League.query()
-      .where('id', params.id)
-      .withCount('members')
-      .firstOrFail()
+    const league = await League.query().where('id', params.id).withCount('members').firstOrFail()
     await league.load('members', (q) => q.preload('user'))
     await league.load('races')
     return serialize({ league: LeagueTransformer.transform(league) })
