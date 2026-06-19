@@ -1,95 +1,76 @@
-import { api } from "./client";
+import { api } from './client'
 
 export interface LeagueStanding {
-  rank: number;
-  userId: string;
-  pseudo: string;
-  icon: string;
-  totalPoints: number;
-  racesPlayed: number;
-  rankDelta?: number | null;
+  rank: number
+  userId: string
+  pseudo: string
+  icon: string
+  totalPoints: number
+  racesPlayed: number
+  rankDelta?: number | null
 }
 
 export interface GlobalStanding {
-  rank: number;
-  userId: string;
-  pseudo: string;
-  icon: string;
-  percentage: number;
-  racesPlayed: number;
+  rank: number
+  userId: string
+  pseudo: string
+  icon: string
+  percentage: number
+  racesPlayed: number
 }
 
 export interface RaceStanding {
-  rank: number;
-  userId: string;
-  pseudo: string;
-  icon: string;
-  points: number;
-  placedAt: string;
+  rank: number
+  userId: string
+  pseudo: string
+  icon: string
+  points: number
+  placedAt: string
 }
 
 export interface StageRiderBreakdown {
-  riderId: string;
-  name: string;
-  stageRank: number | null;
-  points: number;
+  riderId: string
+  name: string
+  stageRank: number | null
+  points: number
 }
 
 export interface StageStanding {
-  rank: number;
-  userId: string;
-  pseudo: string;
-  icon: string;
-  points: number;
-  riders: StageRiderBreakdown[];
+  rank: number
+  userId: string
+  pseudo: string
+  icon: string
+  points: number
+  riders: StageRiderBreakdown[]
 }
 
 export const standingsApi = {
   league: (leagueId: string) =>
-    api.get<{ data: { standings: LeagueStanding[] } }>(
-      `/leagues/${leagueId}/standings`,
-    ),
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings`),
 
   monuments: (leagueId: string) =>
-    api.get<{ data: { standings: LeagueStanding[] } }>(
-      `/leagues/${leagueId}/standings/monuments`,
-    ),
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/monuments`),
 
   grandTours: (leagueId: string) =>
-    api.get<{ data: { standings: LeagueStanding[] } }>(
-      `/leagues/${leagueId}/standings/grand-tours`,
-    ),
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/grand-tours`),
 
   classics: (leagueId: string) =>
-    api.get<{ data: { standings: LeagueStanding[] } }>(
-      `/leagues/${leagueId}/standings/classics`,
-    ),
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/classics`),
 
   stageRaces: (leagueId: string) =>
-    api.get<{ data: { standings: LeagueStanding[] } }>(
-      `/leagues/${leagueId}/standings/stage-races`,
-    ),
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/stage-races`),
 
   championnats: (leagueId: string) =>
-    api.get<{ data: { standings: LeagueStanding[] } }>(
-      `/leagues/${leagueId}/standings/championnats`,
-    ),
+    api.get<{ data: { standings: LeagueStanding[] } }>(`/leagues/${leagueId}/standings/championnats`),
 
   race: (leagueId: string, raceId: string) =>
-    api.get<{ data: { standings: RaceStanding[] } }>(
-      `/leagues/${leagueId}/races/${raceId}/standings`,
-    ),
+    api.get<{ data: { standings: RaceStanding[] } }>(`/leagues/${leagueId}/races/${raceId}/standings`),
 
   stage: (leagueId: string, raceId: string, stageNumber: number) =>
-    api.get<{ data: { standings: StageStanding[] } }>(
-      `/leagues/${leagueId}/races/${raceId}/stage/${stageNumber}/standings`,
-    ),
+    api.get<{ data: { standings: StageStanding[] } }>(`/leagues/${leagueId}/races/${raceId}/stage/${stageNumber}/standings`),
 
   gc: (leagueId: string, raceId: string) =>
-    api.get<{ data: { standings: StageStanding[] } }>(
-      `/leagues/${leagueId}/races/${raceId}/gc/standings`,
-    ),
+    api.get<{ data: { standings: StageStanding[] } }>(`/leagues/${leagueId}/races/${raceId}/gc/standings`),
 
-  global: () =>
-    api.get<{ data: { standings: GlobalStanding[] } }>("/standings/global"),
-};
+  global: () => api.get<{ data: { standings: GlobalStanding[] } }>('/standings/global'),
+}

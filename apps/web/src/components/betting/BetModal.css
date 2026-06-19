@@ -11,9 +11,7 @@
 }
 
 @media (min-width: 640px) {
-  .bet-overlay {
-    align-items: center;
-  }
+  .bet-overlay { align-items: center; }
 }
 
 /* ── Modal shell ───────────────────────────────── */
@@ -74,9 +72,7 @@
   flex-shrink: 0;
   transition: background 0.15s;
 }
-.bet-modal-close:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
+.bet-modal-close:hover { background: rgba(255, 255, 255, 0.1); }
 
 /* ── Form body ─────────────────────────────────── */
 .bet-form {
@@ -102,9 +98,7 @@
   border-radius: 10px;
   padding: 12px;
   cursor: pointer;
-  transition:
-    border-color 0.15s,
-    background 0.15s;
+  transition: border-color 0.15s, background 0.15s;
   min-height: 74px;
   display: flex;
   flex-direction: column;
@@ -123,9 +117,7 @@
   text-transform: uppercase;
   color: rgba(240, 237, 232, 0.3);
 }
-.bet-slot.active .bet-slot-label {
-  color: #e8c96d;
-}
+.bet-slot.active .bet-slot-label { color: #e8c96d; }
 
 .bet-slot-rider {
   font-size: 13px;
@@ -148,14 +140,8 @@
   align-self: flex-start;
   margin-top: auto;
 }
-.bet-slot-coeff.fav {
-  background: rgba(232, 201, 109, 0.12);
-  color: #e8c96d;
-}
-.bet-slot-coeff.bonus {
-  background: rgba(94, 160, 220, 0.12);
-  color: #5ea0dc;
-}
+.bet-slot-coeff.fav   { background: rgba(232, 201, 109, 0.12); color: #e8c96d; }
+.bet-slot-coeff.bonus { background: rgba(94, 160, 220, 0.12);  color: #5ea0dc; }
 
 .bet-slot-max-pts {
   font-size: 10px;
@@ -216,9 +202,7 @@
   font-weight: 600;
   color: #f0ede8;
 }
-.gt-budget-value.over {
-  color: #f87171;
-}
+.gt-budget-value.over { color: #f87171; }
 
 .gt-budget-sep {
   color: rgba(240, 237, 232, 0.3);
@@ -236,13 +220,9 @@
   height: 100%;
   background: #e8c96d;
   border-radius: 2px;
-  transition:
-    width 0.2s ease,
-    background 0.2s;
+  transition: width 0.2s ease, background 0.2s;
 }
-.gt-budget-bar-fill.warn {
-  background: #f87171;
-}
+.gt-budget-bar-fill.warn { background: #f87171; }
 
 /* ── GT: points preview ─────────────────────────── */
 .gt-points-preview {
@@ -291,26 +271,11 @@
   padding: 1px 5px;
 }
 
-.gt-cost-badge.cost-tier-1 {
-  background: rgba(248, 113, 113, 0.15);
-  color: #f87171;
-}
-.gt-cost-badge.cost-tier-2 {
-  background: rgba(251, 146, 60, 0.15);
-  color: #fb923c;
-}
-.gt-cost-badge.cost-tier-3 {
-  background: rgba(232, 201, 109, 0.15);
-  color: #e8c96d;
-}
-.gt-cost-badge.cost-tier-4 {
-  background: rgba(94, 211, 153, 0.15);
-  color: #5ed399;
-}
-.gt-cost-badge.cost-tier-5 {
-  background: rgba(255, 255, 255, 0.07);
-  color: rgba(240, 237, 232, 0.4);
-}
+.gt-cost-badge.cost-tier-1 { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+.gt-cost-badge.cost-tier-2 { background: rgba(251, 146, 60, 0.15);  color: #fb923c; }
+.gt-cost-badge.cost-tier-3 { background: rgba(232, 201, 109, 0.15); color: #e8c96d; }
+.gt-cost-badge.cost-tier-4 { background: rgba(94, 211, 153, 0.15);  color: #5ed399; }
+.gt-cost-badge.cost-tier-5 { background: rgba(255, 255, 255, 0.07); color: rgba(240, 237, 232, 0.4); }
 
 /* ── GT: 8-slot team grid ──────────────────────── */
 .bet-team-header {
@@ -332,10 +297,7 @@
   font-size: 12px;
   color: rgba(240, 237, 232, 0.35);
 }
-.bet-team-count span {
-  color: #e8c96d;
-  font-weight: 700;
-}
+.bet-team-count span { color: #e8c96d; font-weight: 700; }
 
 .bet-team-grid {
   display: grid;
@@ -382,9 +344,7 @@
   flex-shrink: 0;
   transition: color 0.12s;
 }
-.bet-team-remove:hover {
-  color: #f87171;
-}
+.bet-team-remove:hover { color: #f87171; }
 
 /* ── Search ────────────────────────────────────── */
 .bet-search-wrap {
@@ -412,16 +372,12 @@
   padding: 9px 12px 9px 32px;
   font-size: 13px;
   color: #f0ede8;
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
   outline: none;
   box-sizing: border-box;
 }
-.bet-search::placeholder {
-  color: rgba(240, 237, 232, 0.22);
-}
-.bet-search:focus {
-  border-color: rgba(232, 201, 109, 0.35);
-}
+.bet-search::placeholder { color: rgba(240, 237, 232, 0.22); }
+.bet-search:focus { border-color: rgba(232, 201, 109, 0.35); }
 
 /* ── Rider list ────────────────────────────────── */
 .bet-rider-list {
@@ -442,12 +398,8 @@
   cursor: pointer;
   transition: background 0.1s;
 }
-.bet-rider-row:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-.bet-rider-row.selected {
-  background: rgba(232, 201, 109, 0.07);
-}
+.bet-rider-row:hover { background: rgba(255, 255, 255, 0.05); }
+.bet-rider-row.selected { background: rgba(232, 201, 109, 0.07); }
 
 .bet-rider-row-left {
   display: flex;
@@ -471,9 +423,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.bet-rider-row.selected .bet-rider-name {
-  color: #e8c96d;
-}
+.bet-rider-row.selected .bet-rider-name { color: #e8c96d; }
 
 .bet-rider-rank {
   font-size: 10px;
@@ -487,9 +437,7 @@
   flex-shrink: 0;
   text-align: right;
 }
-.bet-rider-row.selected .bet-rider-hint {
-  color: rgba(232, 201, 109, 0.6);
-}
+.bet-rider-row.selected .bet-rider-hint { color: rgba(232, 201, 109, 0.6); }
 
 .bet-list-empty {
   text-align: center;

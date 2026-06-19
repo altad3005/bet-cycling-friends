@@ -1,36 +1,36 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import LoginPage from "./pages/auth/LoginPage";
-import SignupPage from "./pages/auth/SignupPage";
-import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
-import AuthCallbackPage from "./pages/auth/AuthCallbackPage";
-import HomePage from "./pages/HomePage";
-import LandingPage from "./pages/LandingPage";
-import StandingsPage from "./pages/StandingsPage";
-import CalendarPage from "./pages/CalendarPage";
-import BetsPage from "./pages/BetsPage";
-import MembersPage from "./pages/MembersPage";
-import AdminPage from "./pages/AdminPage";
-import RacePage from "./pages/RacePage";
-import StageResultPage from "./pages/StageResultPage";
-import GcResultPage from "./pages/GcResultPage";
-import ProfilePage from "./pages/ProfilePage";
-import StatsPage from "./pages/StatsPage";
-import FeedPage from "./pages/FeedPage";
-import MemberProfilePage from "./pages/MemberProfilePage";
-import SetupProfilePage from "./pages/auth/SetupProfilePage";
-import ProtectedRoute from "./components/ProtectedRoute";
-import { useBootstrap } from "./hooks/useBootstrap";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import LoginPage from './pages/auth/LoginPage'
+import SignupPage from './pages/auth/SignupPage'
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage'
+import ResetPasswordPage from './pages/auth/ResetPasswordPage'
+import AuthCallbackPage from './pages/auth/AuthCallbackPage'
+import HomePage from './pages/HomePage'
+import LandingPage from './pages/LandingPage'
+import StandingsPage from './pages/StandingsPage'
+import CalendarPage from './pages/CalendarPage'
+import BetsPage from './pages/BetsPage'
+import MembersPage from './pages/MembersPage'
+import AdminPage from './pages/AdminPage'
+import RacePage from './pages/RacePage'
+import StageResultPage from './pages/StageResultPage'
+import GcResultPage from './pages/GcResultPage'
+import ProfilePage from './pages/ProfilePage'
+import StatsPage from './pages/StatsPage'
+import FeedPage from './pages/FeedPage'
+import MemberProfilePage from './pages/MemberProfilePage'
+import SetupProfilePage from './pages/auth/SetupProfilePage'
+import ProtectedRoute from './components/ProtectedRoute'
+import { useBootstrap } from './hooks/useBootstrap'
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: 1, staleTime: 30_000 },
   },
-});
+})
 
 function AppRoutes() {
-  useBootstrap();
+  useBootstrap()
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
@@ -153,7 +153,7 @@ function AppRoutes() {
       />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  );
+  )
 }
 
 export default function App() {
@@ -163,5 +163,5 @@ export default function App() {
         <AppRoutes />
       </BrowserRouter>
     </QueryClientProvider>
-  );
+  )
 }

@@ -1,38 +1,33 @@
-import { PROFILE_ICONS, type ProfileIcon } from "@bcf/shared";
-import { initials, avatarColor } from "../utils/ui";
-import { PROFILE_ICON_PATHS } from "./profileIcons";
+import { PROFILE_ICONS, type ProfileIcon } from '@bcf/shared'
+import { initials, avatarColor } from '../utils/ui'
+import { PROFILE_ICON_PATHS } from './profileIcons'
 
 interface AvatarProps {
-  pseudo: string;
-  icon?: string;
-  colorIndex?: number;
-  size?: number;
+  pseudo: string
+  icon?: string
+  colorIndex?: number
+  size?: number
 }
 
 function isProfileIcon(value: string): value is ProfileIcon {
-  return (PROFILE_ICONS as readonly string[]).includes(value);
+  return (PROFILE_ICONS as readonly string[]).includes(value)
 }
 
-export default function Avatar({
-  pseudo,
-  icon,
-  colorIndex = 0,
-  size = 36,
-}: AvatarProps) {
-  const col = avatarColor(colorIndex);
-  const hasIcon = !!icon && isProfileIcon(icon);
+export default function Avatar({ pseudo, icon, colorIndex = 0, size = 36 }: AvatarProps) {
+  const col = avatarColor(colorIndex)
+  const hasIcon = !!icon && isProfileIcon(icon)
 
   return (
     <div
       style={{
         width: size,
         height: size,
-        borderRadius: "50%",
+        borderRadius: '50%',
         background: col.bg,
         color: col.color,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         flexShrink: 0,
         fontSize: size * 0.4,
         fontWeight: 600,
@@ -55,5 +50,5 @@ export default function Avatar({
         initials(pseudo)
       )}
     </div>
-  );
+  )
 }
