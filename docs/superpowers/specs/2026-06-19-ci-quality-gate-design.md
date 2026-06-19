@@ -7,18 +7,23 @@ Statut : validé (design), prêt pour le plan d'implémentation
 
 BetCyclingFriends est un monorepo Turborepo/pnpm avec trois apps : `api` (AdonisJS),
 `web` (React/Vite) et `pcs-service` (FastAPI). Le déploiement de production passe par
-**Dokploy**, configuré en **auto-deploy sur push** vers `main` (webhook).
+**Dokploy**, aujourd'hui configuré en **auto-deploy sur push** vers `main` (webhook).
 
 Problème actuel : **chaque push redéploie la prod sans aucune vérification** — ni tests,
 ni build, ni lint. Déployer est donc stressant, et il est facile de casser la prod sans
 s'en rendre compte. Il n'existe aucune CI (`.github/` absent) et la couverture de tests est
 quasi nulle (3 tests côté `api`, 0 côté `web` et `pcs`).
 
+De plus, l'auto-deploy sur `main` confond « merger » et « déployer ». On veut faire du
+déploiement un **acte volontaire et versionné** : on déploie en posant un **tag de release**
+(`vX.Y.Z`), pas à chaque merge.
+
 ## Objectif
 
-Insérer une **barrière de qualité automatisée entre le code et la prod**, sans coupler la
-CI à la plateforme de déploiement. À l'issue de ce sous-projet, rien n'atteint `main` sans
-avoir passé lint + build + tests, et donc rien n'est déployé sans avoir été vérifié.
+Insérer une **barrière de qualité automatisée entre le code et la prod**, et faire du
+déploiement un **acte versionné déclenché par un tag**, sans coupler la *CI* à la plateforme
+de déploiement. À l'issue de ce sous-projet, rien n'atteint `main` sans avoir passé
+lint + build + tests, et la prod n'est déployée que lorsqu'on pose un tag de release.
 
 Ce sous-projet est le premier d'une série. La montée en couverture de tests par domaine
 (scoring, paris, ligues, pages web, parseurs PCS) fera l'objet de sous-projets ultérieurs
@@ -34,10 +39,13 @@ Ce sous-projet est le premier d'une série. La montée en couverture de tests pa
 ## Principes de design
 
 1. **`main` est sacrée** : protégée, atteignable uniquement via une PR dont la CI est verte.
-2. **CI ≠ CD** : GitHub Actions *vérifie* ; Dokploy *déploie* en réagissant à `main`. Les
-   deux sont découplés. La CI ne pousse jamais vers Dokploy → changer de plateforme de
-   déploiement n'impacte pas la CI (portabilité).
-3. **Environnement reproductible** : versions d'outils pinnées, lockfile gelé.
+   `main` n'est **plus** déployée automatiquement.
+2. **Merger ≠ déployer** : le déploiement est déclenché par un **tag de release `vX.Y.Z`**,
+   acte volontaire et versionné.
+3. **CI ≠ CD** : la **CI** (vérification sur PR) est totalement agnostique de la plateforme.
+   Seul le **workflow de déploiement** connaît Dokploy ; le couplage est isolé à ce seul
+   fichier → changer de plateforme n'impacte que `deploy.yml` (portabilité préservée).
+4. **Environnement reproductible** : versions d'outils pinnées, lockfile gelé.
 
 ## Architecture du pipeline
 
@@ -45,7 +53,7 @@ Ce sous-projet est le premier d'une série. La montée en couverture de tests pa
    feature branch ──push──> PR vers main
                               │
                               ▼
-                   GitHub Actions (CI)   ← barrière
+                   GitHub Actions — ci.yml   ← barrière
               ┌───────────────┬───────────────────┐
            job js          (parallèle)          job python
         lint+build+test                          pytest
@@ -54,11 +62,16 @@ Ce sous-projet est le premier d'une série. La montée en couverture de tests pa
                     toutes vertes ? ──non──> merge bloqué
                               │ oui
                               ▼
-                     merge dans main
+                     merge dans main   (verte, NON déployée)
                               │
-                       push sur main
+              quand prêt à release :
+              git tag vX.Y.Z && git push --tags
+                              │
                               ▼
-                  Dokploy (webhook) ──> déploie
+              GitHub Actions — deploy.yml (sur tag v*)
+                  appelle l'API/webhook Dokploy
+                              ▼
+                        Dokploy ──> déploie
 ```
 
 ## Composants
@@ -100,7 +113,29 @@ Notes :
 Objectif : socle **minimal mais réel** — chaque harnais a au moins un vrai test qui passe,
 afin que la CI ait quelque chose de significatif à exécuter dès le départ.
 
-### 3. Protection de `main` (GitHub)
+### 3. CD — `.github/workflows/deploy.yml`
+
+Déclencheur : `push` de tag correspondant à `v*` (ex. `v1.2.0`).
+
+Étapes :
+- Appeler l'**API/webhook de déploiement de Dokploy** pour déclencher le déploiement de la
+  prod (Dokploy rebuild les images depuis le repo).
+- (Optionnel) Créer une **GitHub Release** associée au tag.
+
+Configuration requise :
+- Reconfigurer Dokploy pour **désactiver l'auto-deploy sur push `main`** (le déploiement
+  passe désormais par ce workflow).
+- Stocker les identifiants Dokploy nécessaires (token d'API, identifiant de l'application /
+  URL de webhook) dans les **secrets GitHub** du repo.
+
+Notes :
+- C'est le **seul** fichier du repo couplé à Dokploy. Changer de plateforme = ne réécrire
+  que ce workflow.
+- À vérifier lors de l'implémentation : l'endpoint exact de l'API Dokploy (ou l'URL de
+  webhook de déploiement) et le format d'authentification.
+- Garde-fou possible (optionnel) : vérifier que le tag pointe sur un commit de `main`.
+
+### 4. Protection de `main` (GitHub)
 
 - PR obligatoire (pas de push direct sur `main`).
 - **Status checks requis** : jobs `js` et `python` verts pour pouvoir merger.
@@ -110,25 +145,29 @@ afin que la CI ait quelque chose de significatif à exécuter dès le départ.
 Réalisé via l'UI GitHub ou `gh`. À documenter pas à pas ; **peut nécessiter une intervention
 manuelle de l'utilisateur** (droits admin du repo).
 
-### 4. Nettoyage `Dockerfile`
+### 5. Nettoyage `Dockerfile`
 
 `apps/api` contient à la fois `Dockerfile` et `DockerFile` (doublon dangereux) ;
 `apps/web` et `apps/pcs-service` utilisent `DockerFile`. Standardiser **tout en `Dockerfile`**
 et mettre à jour les références dans `docker-compose.yml`. Vérifier au préalable lequel des
 deux fichiers de `apps/api` est le bon (référencé par le compose : `apps/api/Dockerfile`).
 
-### 5. Documentation
+### 6. Documentation
 
-Documenter le flux dans le `README` : `PR → CI verte → merge → Dokploy déploie`, et les
-réglages de protection de `main`.
+Documenter dans le `README` :
+- Le flux complet : `PR → CI verte → merge dans main → tag vX.Y.Z → deploy.yml → Dokploy`.
+- La convention de tags de release (versionnage `vX.Y.Z`).
+- Les réglages de protection de `main` et les secrets GitHub requis pour le déploiement.
 
 ## Critères de succès
 
 - Une PR avec du code cassé (lint, build ou test KO) **ne peut pas être mergée**.
+- Un push sur `main` ne déclenche **plus** de déploiement automatique.
+- Pousser un tag `vX.Y.Z` déclenche le déploiement de la prod via `deploy.yml`.
 - `web` et `pcs-service` disposent d'un harnais de test fonctionnel avec au moins un test réel.
 - `apps/api` ne contient plus qu'un seul `Dockerfile` ; le compose pointe vers des chemins corrects.
 - La CI tourne en parallèle (js / python) et se termine en un temps raisonnable.
-- Le `README` décrit le flux de déploiement et la protection de branche.
+- Le `README` décrit le flux de déploiement par tag et la protection de branche.
 
 ## Risques & points à vérifier
 
@@ -137,3 +176,7 @@ réglages de protection de `main`.
 - **Protection de branche** : peut requérir une action manuelle de l'utilisateur (droits admin).
 - **Cohérence Node** : `.nvmrc` à 22 alors que la machine locale est en 25 — acceptable, mais
   à garder en tête pour reproduire la CI en local.
+- **API/webhook de déploiement Dokploy** : confirmer l'endpoint exact et l'authentification ;
+  créer les secrets GitHub correspondants.
+- **Désactivation de l'auto-deploy `main`** dans Dokploy : action manuelle dans l'UI Dokploy,
+  à ne pas oublier sinon le déploiement se ferait à la fois sur merge et sur tag.
