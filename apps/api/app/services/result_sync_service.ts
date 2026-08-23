@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto'
+import logger from '@adonisjs/core/services/logger'
 import { DateTime } from 'luxon'
 import Race from '#models/race'
 import Rider from '#models/rider'
@@ -10,7 +11,10 @@ export default class ResultSyncService {
 
   async syncStartlist(race: Race): Promise<void> {
     const riders = await this.pcs.getStartlist(race.slug, race.seasonYear)
-    if (riders.length === 0) return
+    if (riders.length === 0) {
+      logger.warn({ raceId: race.id, slug: race.slug }, 'Empty startlist scrape, nothing imported')
+      return
+    }
 
     const pcsUrls = riders.map((r) => r.pcs_url)
     const existing = await Rider.query().whereIn('pcs_url', pcsUrls)
@@ -31,6 +35,13 @@ export default class ResultSyncService {
 
   async syncClassicRaceResults(race: Race): Promise<void> {
     const results = await this.pcs.getRaceResults(race.slug, race.seasonYear)
+    if (results.length === 0) {
+      logger.warn(
+        { raceId: race.id, slug: race.slug },
+        'Empty results scrape, race not marked as synced'
+      )
+      return
+    }
     await this.upsertResults(race.id, results, 0, 'result')
     if (results.length >= 10) {
       race.resultsFinal = true
@@ -42,6 +53,13 @@ export default class ResultSyncService {
 
   async syncGrandTourStage(race: Race, stageNumber: number): Promise<void> {
     const results = await this.pcs.getStageResults(race.slug, race.seasonYear, stageNumber)
+    if (results.length === 0) {
+      logger.warn(
+        { raceId: race.id, slug: race.slug, stageNumber },
+        'Empty stage scrape, race not marked as synced'
+      )
+      return
+    }
     await this.upsertResults(race.id, results, stageNumber, 'stage')
     race.lastSyncedAt = DateTime.now()
     await race.save()
@@ -49,13 +67,15 @@ export default class ResultSyncService {
 
   async syncGrandTourGC(race: Race): Promise<void> {
     const results = await this.pcs.getRaceResults(race.slug, race.seasonYear)
-    await this.upsertResults(race.id, results, 0, 'gc')
-    // Ne finaliser que si le classement général a bien été récupéré.
-    // Sinon (scrape vide / GC pas encore publié) on laisse resultsFinal=false
-    // pour que les crons auto-sync/auto-status retentent le sync GC.
-    if (results.length > 0) {
-      race.resultsFinal = true
+    if (results.length === 0) {
+      logger.warn(
+        { raceId: race.id, slug: race.slug },
+        'Empty GC scrape, race left unfinalized and not marked as synced'
+      )
+      return
     }
+    await this.upsertResults(race.id, results, 0, 'gc')
+    race.resultsFinal = true
     race.lastSyncedAt = DateTime.now()
     await race.save()
   }
