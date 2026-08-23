@@ -2,28 +2,28 @@ from procyclingstats import Race, RaceStartlist, Stage, Ranking
 from procyclingstats.errors import ExpectedParsingError
 from app.models import RaceInfoModel, RiderModel, StageResultModel, StageInfoModel, RiderWithCostModel
 from typing import Optional
-import cloudscraper
+from curl_cffi import requests as curl_requests
 import logging
 
 logger = logging.getLogger(__name__)
 
 BASE_URL = "https://www.procyclingstats.com"
 REQUEST_TIMEOUT_SECONDS = 30
+BROWSER_IMPERSONATION = "chrome"
 
-_scraper = None
+_session = None
 
-def _get_scraper():
-    """Shared cloudscraper session: procyclingstats is behind a Cloudflare
-    challenge that plain requests cannot pass (403 on every page)."""
-    global _scraper
-    if _scraper is None:
-        _scraper = cloudscraper.create_scraper(
-            browser={"browser": "chrome", "platform": "windows", "desktop": True}
-        )
-    return _scraper
+def _get_session():
+    """Shared curl_cffi session: procyclingstats sits behind Cloudflare, which
+    fingerprints the TLS handshake itself. Only a client reproducing a real
+    browser signature gets past it; a stock Python one gets a 403."""
+    global _session
+    if _session is None:
+        _session = curl_requests.Session(impersonate=BROWSER_IMPERSONATION)
+    return _session
 
 def fetch_html(path: str) -> str:
-    resp = _get_scraper().get(f"{BASE_URL}/{path}", timeout=REQUEST_TIMEOUT_SECONDS)
+    resp = _get_session().get(f"{BASE_URL}/{path}", timeout=REQUEST_TIMEOUT_SECONDS)
     resp.raise_for_status()
     return resp.text
 
