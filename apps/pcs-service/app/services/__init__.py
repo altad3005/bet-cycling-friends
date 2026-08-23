@@ -2,23 +2,28 @@ from procyclingstats import Race, RaceStartlist, Stage, Ranking
 from procyclingstats.errors import ExpectedParsingError
 from app.models import RaceInfoModel, RiderModel, StageResultModel, StageInfoModel, RiderWithCostModel
 from typing import Optional
-import requests
+import cloudscraper
 import logging
 
 logger = logging.getLogger(__name__)
 
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate',
-    'Accept-Language': 'en-US,en;q=0.5',
-}
-
 BASE_URL = "https://www.procyclingstats.com"
+REQUEST_TIMEOUT_SECONDS = 30
+
+_scraper = None
+
+def _get_scraper():
+    """Shared cloudscraper session: procyclingstats is behind a Cloudflare
+    challenge that plain requests cannot pass (403 on every page)."""
+    global _scraper
+    if _scraper is None:
+        _scraper = cloudscraper.create_scraper(
+            browser={"browser": "chrome", "platform": "windows", "desktop": True}
+        )
+    return _scraper
 
 def fetch_html(path: str) -> str:
-    url = f"{BASE_URL}/{path}"
-    resp = requests.get(url, headers=HEADERS)
+    resp = _get_scraper().get(f"{BASE_URL}/{path}", timeout=REQUEST_TIMEOUT_SECONDS)
     resp.raise_for_status()
     return resp.text
 
