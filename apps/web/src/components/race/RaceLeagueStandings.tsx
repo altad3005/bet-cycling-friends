@@ -37,6 +37,7 @@ export default function RaceLeagueStandings({
   const [expandedMember, setExpandedMember] = useState<string | null>(null)
 
   const canBet = race.status === RaceStatus.UPCOMING
+  const hasStandings = !!raceStandings && raceStandings.length > 0
   const classicBet = myBet && 'favoriteRider' in myBet ? (myBet as BetClassicResponse) : null
   const gtBet      = myBet && 'riders' in myBet        ? (myBet as BetGrandTourResponse) : null
 
@@ -87,7 +88,7 @@ export default function RaceLeagueStandings({
             Classement · Ligue
             {!race.resultsFinal && <span className="race-section-badge">provisoire</span>}
           </div>
-          {!raceStandings || raceStandings.length === 0 ? (
+          {!hasStandings ? (
             <div className="race-empty">Aucun résultat disponible.</div>
           ) : (
             <div className="results-list">
@@ -132,18 +133,45 @@ export default function RaceLeagueStandings({
         </section>
       )}
 
-      {/* ── GT upcoming: Paris masqués ── */}
-      {race.isGrandTour && race.status === RaceStatus.UPCOMING && (
+      {/* ── GT: Paris des membres, tant qu'aucun score n'alimente le classement ── */}
+      {race.isGrandTour && !hasStandings && (
         <section className="race-section">
           <div className="race-section-title">
             Paris des membres
             {leagueBetsData && (
               <span className="race-section-badge masked">
-                {leagueBetsData.bets.length} pari{leagueBetsData.bets.length !== 1 ? 's' : ''} · masqués
+                {leagueBetsData.bets.length} pari{leagueBetsData.bets.length !== 1 ? 's' : ''}
+                {!leagueBetsData.raceStarted && ' · masqués'}
               </span>
             )}
           </div>
-          <div className="race-empty">Les paris seront révélés au départ de la course.</div>
+          {!leagueBetsData || leagueBetsData.bets.length === 0 ? (
+            <div className="race-empty">Aucun pari placé dans cette ligue.</div>
+          ) : !leagueBetsData.raceStarted ? (
+            <div className="race-empty">Les paris seront révélés au départ de la course.</div>
+          ) : (
+            <div className="member-bets">
+              {leagueBetsData.bets.map((bet) => {
+                const gb = 'riders' in bet ? (bet as BetGrandTourResponse) : null
+                const isMe = bet.userId === userId
+                return (
+                  <div key={bet.userId} className={`member-bet-card${isMe ? ' me' : ''}`}>
+                    <div className="member-bet-pseudo">
+                      {bet.user?.pseudo ?? (isMe ? 'Moi' : '—')}
+                      {isMe && <span className="me-badge">Moi</span>}
+                    </div>
+                    {gb?.riders && (
+                      <div className="bet-gt-riders">
+                        {gb.riders.map((r) => (
+                          <div key={r.id} className="bet-gt-rider">{r.name}</div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </section>
       )}
 
@@ -165,7 +193,7 @@ export default function RaceLeagueStandings({
       )}
 
       {/* ── Classics: Résultats ligue ── */}
-      {!race.isGrandTour && race.status !== RaceStatus.UPCOMING && raceStandings && raceStandings.length > 0 && (
+      {!race.isGrandTour && race.status !== RaceStatus.UPCOMING && hasStandings && (
         <section className="race-section">
           <div className="race-section-title">
             Résultats · Ligue
