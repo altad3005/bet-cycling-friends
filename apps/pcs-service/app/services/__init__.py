@@ -2,23 +2,28 @@ from procyclingstats import Race, RaceStartlist, Stage, Ranking
 from procyclingstats.errors import ExpectedParsingError
 from app.models import RaceInfoModel, RiderModel, StageResultModel, StageInfoModel, RiderWithCostModel
 from typing import Optional
-import requests
+from curl_cffi import requests as curl_requests
 import logging
 
 logger = logging.getLogger(__name__)
 
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate',
-    'Accept-Language': 'en-US,en;q=0.5',
-}
-
 BASE_URL = "https://www.procyclingstats.com"
+REQUEST_TIMEOUT_SECONDS = 30
+BROWSER_IMPERSONATION = "chrome"
+
+_session = None
+
+def _get_session():
+    """Shared curl_cffi session: procyclingstats sits behind Cloudflare, which
+    fingerprints the TLS handshake itself. Only a client reproducing a real
+    browser signature gets past it; a stock Python one gets a 403."""
+    global _session
+    if _session is None:
+        _session = curl_requests.Session(impersonate=BROWSER_IMPERSONATION)
+    return _session
 
 def fetch_html(path: str) -> str:
-    url = f"{BASE_URL}/{path}"
-    resp = requests.get(url, headers=HEADERS)
+    resp = _get_session().get(f"{BASE_URL}/{path}", timeout=REQUEST_TIMEOUT_SECONDS)
     resp.raise_for_status()
     return resp.text
 
