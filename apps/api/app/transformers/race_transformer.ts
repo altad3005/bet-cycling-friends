@@ -1,5 +1,5 @@
 import type Race from '#models/race'
-import { RaceStatus } from '@bcf/shared'
+import { type RaceStatus } from '@bcf/shared'
 import { BaseTransformer } from '@adonisjs/core/transformers'
 
 export default class RaceTransformer extends BaseTransformer<Race> {

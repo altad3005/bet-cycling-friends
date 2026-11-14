@@ -35,7 +35,7 @@ services:
   pcs-service:
     build:
       context: apps/pcs-service
-      dockerfile: DockerFile
+      dockerfile: Dockerfile
     environment:
       - DEBUG=false
     restart: unless-stopped
@@ -84,7 +84,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: apps/web/DockerFile
+      dockerfile: apps/web/Dockerfile
     depends_on:
       - api
     restart: unless-stopped

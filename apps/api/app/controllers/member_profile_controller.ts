@@ -11,7 +11,13 @@ export default class MemberProfileController {
       .join('users', 'users.id', 'league_members.user_id')
       .where('league_members.league_id', leagueId)
       .where('league_members.user_id', userId)
-      .select('users.id', 'users.pseudo', 'users.icon', 'league_members.joined_at', 'league_members.is_admin')
+      .select(
+        'users.id',
+        'users.pseudo',
+        'users.icon',
+        'league_members.joined_at',
+        'league_members.is_admin'
+      )
       .first()
 
     if (!member) {
@@ -30,7 +36,8 @@ export default class MemberProfileController {
 
     // This user's scores
     const userScores: { race_id: string; points: number }[] = raceIds.length
-      ? await db.from('scores')
+      ? await db
+          .from('scores')
           .where('league_id', leagueId)
           .where('user_id', userId)
           .whereIn('race_id', raceIds)
@@ -39,7 +46,8 @@ export default class MemberProfileController {
 
     // All scores per race (to compute league rank per race)
     const allScores: { race_id: string; user_id: string; points: number }[] = raceIds.length
-      ? await db.from('scores')
+      ? await db
+          .from('scores')
           .where('league_id', leagueId)
           .whereIn('race_id', raceIds)
           .select('race_id', 'user_id', 'points')
@@ -48,8 +56,16 @@ export default class MemberProfileController {
     // Bets placed (for participation)
     const [classicBets, gtBets]: { race_id: string }[][] = raceIds.length
       ? await Promise.all([
-          db.from('bets_classic').where('user_id', userId).whereIn('race_id', raceIds).select('race_id'),
-          db.from('bets_grand_tour').where('user_id', userId).whereIn('race_id', raceIds).select('race_id'),
+          db
+            .from('bets_classic')
+            .where('user_id', userId)
+            .whereIn('race_id', raceIds)
+            .select('race_id'),
+          db
+            .from('bets_grand_tour')
+            .where('user_id', userId)
+            .whereIn('race_id', raceIds)
+            .select('race_id'),
         ])
       : [[], []]
 
@@ -95,7 +111,8 @@ export default class MemberProfileController {
       if (!best || r.points > best.points) return { raceName: r.raceName, points: r.points }
       return best
     }, null)
-    const participationRate = raceIds.length > 0 ? Math.round((bettedRaceIds.size / raceIds.length) * 100) : 0
+    const participationRate =
+      raceIds.length > 0 ? Math.round((bettedRaceIds.size / raceIds.length) * 100) : 0
 
     // League rank (overall)
     const leagueStandings = await db

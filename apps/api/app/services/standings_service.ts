@@ -9,7 +9,13 @@ import Rider from '#models/rider'
 export default class StandingsService {
   async getLeagueStandings(leagueId: string) {
     const result = await db.rawQuery<{
-      rows: { user_id: string; pseudo: string; icon: string; total_points: number; races_played: number }[]
+      rows: {
+        user_id: string
+        pseudo: string
+        icon: string
+        total_points: number
+        races_played: number
+      }[]
     }>(
       `SELECT
         lm.user_id,
@@ -166,9 +172,8 @@ export default class StandingsService {
   ) {
     const multiplier = MULTIPLIERS[multiplierType]
 
-    const memberIds = (await LeagueMember.query().where('league_id', leagueId).select('user_id')).map(
-      (m) => m.userId
-    )
+    const members = await LeagueMember.query().where('league_id', leagueId).select('user_id')
+    const memberIds = members.map((m) => m.userId)
 
     const bets = await BetGrandTour.query()
       .whereIn('user_id', memberIds)
@@ -236,11 +241,19 @@ export default class StandingsService {
     alias = 'r'
   ): { sql: string; bindings: (string | boolean)[] } {
     switch (key) {
-      case 'monument':   return { sql: `${alias}.multiplier_type = ?`,                          bindings: ['monument'] }
-      case 'grand-tour': return { sql: `${alias}.is_grand_tour = ?`,                            bindings: [true] }
-      case 'classic':    return { sql: `${alias}.multiplier_type = ?`,                          bindings: ['wt_classic'] }
-      case 'stage-race': return { sql: `${alias}.race_type = ? AND ${alias}.is_grand_tour = ?`, bindings: ['stage_race', false] }
-      case 'championnat':return { sql: `${alias}.race_type IN (?, ?)`,                           bindings: ['national', 'worlds'] }
+      case 'monument':
+        return { sql: `${alias}.multiplier_type = ?`, bindings: ['monument'] }
+      case 'grand-tour':
+        return { sql: `${alias}.is_grand_tour = ?`, bindings: [true] }
+      case 'classic':
+        return { sql: `${alias}.multiplier_type = ?`, bindings: ['wt_classic'] }
+      case 'stage-race':
+        return {
+          sql: `${alias}.race_type = ? AND ${alias}.is_grand_tour = ?`,
+          bindings: ['stage_race', false],
+        }
+      case 'championnat':
+        return { sql: `${alias}.race_type IN (?, ?)`, bindings: ['national', 'worlds'] }
     }
   }
 
@@ -251,7 +264,13 @@ export default class StandingsService {
     const { sql: filterSql, bindings: filterBindings } = this.buildRaceFilter(filterKey)
 
     const result = await db.rawQuery<{
-      rows: { user_id: string; pseudo: string; icon: string; total_points: number; races_played: number }[]
+      rows: {
+        user_id: string
+        pseudo: string
+        icon: string
+        total_points: number
+        races_played: number
+      }[]
     }>(
       `SELECT
         lm.user_id,
@@ -294,7 +313,14 @@ export default class StandingsService {
 
   async getGlobalStandings() {
     const result = await db.rawQuery<{
-      rows: { user_id: string; pseudo: string; icon: string; total_points: number; total_max: number; races_played: number }[]
+      rows: {
+        user_id: string
+        pseudo: string
+        icon: string
+        total_points: number
+        total_max: number
+        races_played: number
+      }[]
     }>(`
       SELECT
         u.id                          AS user_id,
@@ -331,7 +357,10 @@ export default class StandingsService {
     )
   }
 
-  private withSharedRanks<T>(items: T[], isTied: (a: T, b: T) => boolean): (T & { rank: number })[] {
+  private withSharedRanks<T>(
+    items: T[],
+    isTied: (a: T, b: T) => boolean
+  ): (T & { rank: number })[] {
     let rank = 1
     return items.map((item, index) => {
       if (index > 0 && !isTied(items[index - 1], item)) {

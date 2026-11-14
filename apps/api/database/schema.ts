@@ -8,7 +8,18 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class AuthAccessTokenSchema extends BaseModel {
-  static $columns = ['abilities', 'createdAt', 'expiresAt', 'hash', 'id', 'lastUsedAt', 'name', 'tokenableId', 'type', 'updatedAt'] as const
+  static $columns = [
+    'abilities',
+    'createdAt',
+    'expiresAt',
+    'hash',
+    'id',
+    'lastUsedAt',
+    'name',
+    'tokenableId',
+    'type',
+    'updatedAt',
+  ] as const
   $columns = AuthAccessTokenSchema.$columns
   @column()
   declare abilities: string
@@ -33,7 +44,17 @@ export class AuthAccessTokenSchema extends BaseModel {
 }
 
 export class BetsClassicSchema extends BaseModel {
-  static $columns = ['bonusRiderId', 'createdAt', 'favoriteRiderId', 'id', 'placedAt', 'raceId', 'status', 'updatedAt', 'userId'] as const
+  static $columns = [
+    'bonusRiderId',
+    'createdAt',
+    'favoriteRiderId',
+    'id',
+    'placedAt',
+    'raceId',
+    'status',
+    'updatedAt',
+    'userId',
+  ] as const
   $columns = BetsClassicSchema.$columns
   @column()
   declare bonusRiderId: string
@@ -56,7 +77,15 @@ export class BetsClassicSchema extends BaseModel {
 }
 
 export class BetsGrandTourSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'placedAt', 'raceId', 'status', 'updatedAt', 'userId'] as const
+  static $columns = [
+    'createdAt',
+    'id',
+    'placedAt',
+    'raceId',
+    'status',
+    'updatedAt',
+    'userId',
+  ] as const
   $columns = BetsGrandTourSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -86,7 +115,15 @@ export class BetsGrandTourRiderSchema extends BaseModel {
 }
 
 export class LeagueMemberSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'isAdmin', 'joinedAt', 'leagueId', 'updatedAt', 'userId'] as const
+  static $columns = [
+    'createdAt',
+    'id',
+    'isAdmin',
+    'joinedAt',
+    'leagueId',
+    'updatedAt',
+    'userId',
+  ] as const
   $columns = LeagueMemberSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -152,7 +189,15 @@ export class PasswordResetTokenSchema extends BaseModel {
 }
 
 export class PushSubscriptionSchema extends BaseModel {
-  static $columns = ['auth', 'createdAt', 'endpoint', 'id', 'p256Dh', 'updatedAt', 'userId'] as const
+  static $columns = [
+    'auth',
+    'createdAt',
+    'endpoint',
+    'id',
+    'p256Dh',
+    'updatedAt',
+    'userId',
+  ] as const
   $columns = PushSubscriptionSchema.$columns
   @column()
   declare auth: string
@@ -188,7 +233,26 @@ export class RaceRiderCostSchema extends BaseModel {
 }
 
 export class RaceSchema extends BaseModel {
-  static $columns = ['createdAt', 'endAt', 'id', 'isGrandTour', 'lastSyncedAt', 'multiplierType', 'name', 'raceType', 'reminder1HSentAt', 'reminder24HSentAt', 'reminder5HSentAt', 'resultsFinal', 'seasonYear', 'slug', 'stageCount', 'startAt', 'status', 'updatedAt'] as const
+  static $columns = [
+    'createdAt',
+    'endAt',
+    'id',
+    'isGrandTour',
+    'lastSyncedAt',
+    'multiplierType',
+    'name',
+    'raceType',
+    'reminder1HSentAt',
+    'reminder24HSentAt',
+    'reminder5HSentAt',
+    'resultsFinal',
+    'seasonYear',
+    'slug',
+    'stageCount',
+    'startAt',
+    'status',
+    'updatedAt',
+  ] as const
   $columns = RaceSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -246,7 +310,15 @@ export class RiderSchema extends BaseModel {
 }
 
 export class ScoreSchema extends BaseModel {
-  static $columns = ['id', 'leagueId', 'maxPossible', 'points', 'raceId', 'updatedAt', 'userId'] as const
+  static $columns = [
+    'id',
+    'leagueId',
+    'maxPossible',
+    'points',
+    'raceId',
+    'updatedAt',
+    'userId',
+  ] as const
   $columns = ScoreSchema.$columns
   @column({ isPrimary: true })
   declare id: string
@@ -276,7 +348,17 @@ export class SeasonSchema extends BaseModel {
 }
 
 export class StageResultSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'raceId', 'rank', 'resultAt', 'resultType', 'riderId', 'stageNumber', 'updatedAt'] as const
+  static $columns = [
+    'createdAt',
+    'id',
+    'raceId',
+    'rank',
+    'resultAt',
+    'resultType',
+    'riderId',
+    'stageNumber',
+    'updatedAt',
+  ] as const
   $columns = StageResultSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -299,7 +381,16 @@ export class StageResultSchema extends BaseModel {
 }
 
 export class StageSchema extends BaseModel {
-  static $columns = ['createdAt', 'date', 'id', 'name', 'number', 'profileIcon', 'raceId', 'updatedAt'] as const
+  static $columns = [
+    'createdAt',
+    'date',
+    'id',
+    'name',
+    'number',
+    'profileIcon',
+    'raceId',
+    'updatedAt',
+  ] as const
   $columns = StageSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -320,7 +411,18 @@ export class StageSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'googleId', 'icon', 'id', 'isSuperAdmin', 'notificationsEnabled', 'passwordHash', 'pseudo', 'updatedAt'] as const
+  static $columns = [
+    'createdAt',
+    'email',
+    'googleId',
+    'icon',
+    'id',
+    'isSuperAdmin',
+    'notificationsEnabled',
+    'passwordHash',
+    'pseudo',
+    'updatedAt',
+  ] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

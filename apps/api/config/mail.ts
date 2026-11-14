@@ -22,7 +22,7 @@ const mailConfig = defineConfig({
    * the brand name to be used within the emails
    */
   globals: {
-    brandName: 'Acme'
+    brandName: 'Acme',
   },
 
   /**
@@ -30,7 +30,7 @@ const mailConfig = defineConfig({
    * each using a different transport or same transport with different
    * options.
    */
-  mailers: { 
+  mailers: {
     smtp: transports.smtp({
       host: env.get('SMTP_HOST'),
       port: env.get('SMTP_PORT'),
@@ -40,7 +40,6 @@ const mailConfig = defineConfig({
         pass: env.get('SMTP_PASSWORD'),
       },
     }),
-		     
   },
 })
 

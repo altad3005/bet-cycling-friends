@@ -38,9 +38,7 @@ export default class QueueProvider {
           for (const race of races) {
             if (race.isGrandTour) {
               // Sync GT stages whose date has passed and have no results yet
-              const stages = await Stage.query()
-                .where('race_id', race.id)
-                .whereNotNull('date')
+              const stages = await Stage.query().where('race_id', race.id).whereNotNull('date')
 
               const syncedRows = await StageResult.query()
                 .where('race_id', race.id)

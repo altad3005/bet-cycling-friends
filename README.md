@@ -167,3 +167,28 @@ Caddy gère automatiquement les certificats TLS via Let's Encrypt.
 
 - `docs/BetCyclingFriends_CDC.pdf` — cahier des charges complet
 - `docs/BetCyclingFriends_API_Design.pdf` — design de l'API
+
+## Development & deployment workflow
+
+1. Branch from `main` and open a Pull Request.
+2. CI (`.github/workflows/ci.yml`) runs on every PR: lint + build + tests
+   (`js` job for api/web/shared, `python` job for pcs-service).
+3. `main` is protected: a PR can only be merged once both checks are green.
+4. Merging to `main` does **not** deploy. `main` always stays releasable.
+5. To deploy to production, create and push a release tag:
+
+   ```bash
+   git tag v1.2.0
+   git push --tags
+   ```
+
+   This triggers `.github/workflows/deploy.yml`, which calls the Dokploy
+   deploy webhook and creates a GitHub Release.
+
+### Required configuration
+
+- GitHub secret `DOKPLOY_DEPLOY_WEBHOOK`: the Dokploy application deploy
+  webhook URL.
+- Branch protection on `main` requiring the `js` and `python` checks.
+- Dokploy: disable auto-deploy on push to `main` (deployment now goes
+  through the tag workflow).

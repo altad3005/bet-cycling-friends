@@ -35,7 +35,12 @@ export default class BetController {
   async storeClassic({ params, request, auth, response, serialize }: HttpContext) {
     const { favoriteRiderId, bonusRiderId } = await request.validateUsing(betClassicValidator)
     const user = auth.getUserOrFail()
-    const bet = await new BetService().placeClassicBet(user, params.id, favoriteRiderId, bonusRiderId)
+    const bet = await new BetService().placeClassicBet(
+      user,
+      params.id,
+      favoriteRiderId,
+      bonusRiderId
+    )
     await bet.load('favoriteRider')
     await bet.load('bonusRider')
     response.status(201)
@@ -55,9 +60,7 @@ export default class BetController {
     const race = await Race.findOrFail(params.raceId)
     const masked = race.startAt ? race.startAt > DateTime.now() : true
 
-    const memberIds = await LeagueMember.query()
-      .where('league_id', params.id)
-      .select('user_id')
+    const memberIds = await LeagueMember.query().where('league_id', params.id).select('user_id')
 
     const userIds = memberIds.map((m) => m.userId)
 

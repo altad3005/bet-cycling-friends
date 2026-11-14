@@ -6,7 +6,11 @@ export default class BetClassicTransformer extends BaseTransformer<BetClassic> {
     return {
       ...this.pick(this.resource, ['id', 'userId', 'raceId', 'status', 'placedAt']),
       user: this.resource.user
-        ? { id: this.resource.user.id, pseudo: this.resource.user.pseudo, icon: this.resource.user.icon }
+        ? {
+            id: this.resource.user.id,
+            pseudo: this.resource.user.pseudo,
+            icon: this.resource.user.icon,
+          }
         : undefined,
       favoriteRider: this.serializeRider(this.resource.favoriteRider),
       bonusRider: this.serializeRider(this.resource.bonusRider),

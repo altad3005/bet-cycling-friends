@@ -32,10 +32,7 @@ export default class RaceController {
         .where('result_type', 'stage')
         .distinct('stage_number')
         .select('stage_number'),
-      StageResult.query()
-        .where('race_id', race.id)
-        .where('result_type', 'gc')
-        .first(),
+      StageResult.query().where('race_id', race.id).where('result_type', 'gc').first(),
     ])
 
     const syncedSet = new Set(syncedResults.map((r) => r.stageNumber))

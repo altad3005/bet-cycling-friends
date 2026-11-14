@@ -62,7 +62,7 @@ export default class ReminderService {
 
     if (unbetUserIds.length > 0) {
       await this.push.sendToUsers(unbetUserIds, {
-        title: '🚴 Tu n\'as pas encore parié !',
+        title: "🚴 Tu n'as pas encore parié !",
         body: `${race.name} commence dans 24h — place ton pronostic avant le départ !`,
         url: `/races/${race.id}`,
       })
@@ -104,7 +104,7 @@ export default class ReminderService {
 
     const isUrgent = window === '1h'
     const payload = {
-      title: isUrgent ? '⚠️ Dernier rappel !' : '🚴 N\'oublie pas de pronostiquer !',
+      title: isUrgent ? '⚠️ Dernier rappel !' : "🚴 N'oublie pas de pronostiquer !",
       body: isUrgent
         ? `${race.name} démarre dans 1h — il te reste peu de temps pour placer ton pari.`
         : `${race.name} démarre dans 5h — place ton pronostic avant le départ !`,

@@ -32,10 +32,7 @@ export default class LeagueService {
   }
 
   async previewByCode(code: string): Promise<League> {
-    return League.query()
-      .where('code', code)
-      .withCount('members')
-      .firstOrFail()
+    return League.query().where('code', code).withCount('members').firstOrFail()
   }
 
   async join(user: User, code: string): Promise<League> {
@@ -50,9 +47,7 @@ export default class LeagueService {
       throw new Exception('Vous êtes déjà membre de cette ligue.', { status: 409 })
     }
 
-    const memberCount = await LeagueMember.query()
-      .where('league_id', league.id)
-      .count('* as total')
+    const memberCount = await LeagueMember.query().where('league_id', league.id).count('* as total')
 
     if (Number(memberCount[0].$extras.total) >= MAX_LEAGUE_MEMBERS) {
       throw new Exception('La ligue est pleine.', { status: 409 })
@@ -74,9 +69,7 @@ export default class LeagueService {
       .where('user_id', user.id)
       .firstOrFail()
 
-    const memberCount = await LeagueMember.query()
-      .where('league_id', leagueId)
-      .count('* as total')
+    const memberCount = await LeagueMember.query().where('league_id', leagueId).count('* as total')
 
     // Dernier membre → supprimer la ligue entière
     if (Number(memberCount[0].$extras.total) <= 1) {

@@ -80,13 +80,9 @@ router
       .get('/leagues/:id/races/:raceId/bets', [controllers.Bet, 'leagueBets'])
       .use(middleware.auth())
 
-    router
-      .get('/leagues/:id/stats', [controllers.Stats, 'leagueStats'])
-      .use(middleware.auth())
+    router.get('/leagues/:id/stats', [controllers.Stats, 'leagueStats']).use(middleware.auth())
 
-    router
-      .get('/leagues/:id/feed', [controllers.Feed, 'leagueFeed'])
-      .use(middleware.auth())
+    router.get('/leagues/:id/feed', [controllers.Feed, 'leagueFeed']).use(middleware.auth())
 
     router
       .get('/leagues/:id/members/:userId/profile', [controllers.MemberProfile, 'show'])
@@ -101,7 +97,10 @@ router
         router.get('/:id/standings/stage-races', [controllers.Standings, 'stageRaceStandings'])
         router.get('/:id/standings/championnats', [controllers.Standings, 'championnatStandings'])
         router.get('/:id/races/:raceId/standings', [controllers.Standings, 'raceStandings'])
-        router.get('/:id/races/:raceId/stage/:n/standings', [controllers.Standings, 'stageStandings'])
+        router.get('/:id/races/:raceId/stage/:n/standings', [
+          controllers.Standings,
+          'stageStandings',
+        ])
         router.get('/:id/races/:raceId/gc/standings', [controllers.Standings, 'gcStandings'])
       })
       .prefix('leagues')
@@ -117,6 +116,5 @@ router
       })
       .prefix('admin')
       .use(middleware.admin())
-
   })
   .prefix('/api')

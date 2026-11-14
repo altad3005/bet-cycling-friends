@@ -12,28 +12,30 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     const token = searchParams.get('token')
-    const err   = searchParams.get('error')
-
-    if (err || !token) {
-      setError('La connexion avec Google a échoué. Réessaie.')
-      return
-    }
-
-    // Store token temporarily to make the profile request
-    localStorage.setItem('token', token)
-
+    const authErr = searchParams.get('error')
     const setup = searchParams.get('setup') === '1'
 
-    authApi.profile()
-      .then((res) => {
+    const run = async () => {
+      if (authErr || !token) {
+        setError('La connexion avec Google a échoué. Réessaie.')
+        return
+      }
+
+      // Store token temporarily to make the profile request
+      localStorage.setItem('token', token)
+
+      try {
+        const res = await authApi.profile()
         setAuth(token, res.data.data)
         navigate(setup ? '/setup-profile' : '/dashboard', { replace: true })
-      })
-      .catch(() => {
+      } catch {
         localStorage.removeItem('token')
         setError('Impossible de récupérer le profil. Réessaie.')
-      })
-  }, [])
+      }
+    }
+
+    run()
+  }, [navigate, searchParams, setAuth])
 
   if (error) {
     return (
